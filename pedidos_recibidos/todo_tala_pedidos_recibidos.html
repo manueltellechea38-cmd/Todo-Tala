@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!-- Declara HTML5. -->
+<html lang="es">
+<!-- Define idioma español. -->
+<head>
+    <!-- Configura caracteres. -->
+    <meta charset="UTF-8">
+    <!-- Activa responsive. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título. -->
+    <title>Todo Tala | Pedidos recibidos</title>
+    <!-- Carga estilos. -->
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<!-- Comienza interfaz. -->
+<body>
+    <!-- Contenedor. -->
+    <main class="app-page">
+        <!-- Tarjeta principal. -->
+        <section class="app-card">
+            <!-- Encabezado. -->
+            <header class="app-header">
+                <!-- Agrupa volver y título. -->
+                <div class="app-header__title"><button id="btn-volver" class="icon-button" type="button" aria-label="Volver">←</button><div><h1>Pedidos recibidos</h1><p class="muted">Actualizá estados y validá el código cuando el cliente retire.</p></div></div>
+            </header>
+            <!-- Contenido. -->
+            <section class="content">
+                <!-- Filtros. -->
+                <nav class="tabs"><button class="tab active" data-estado="" type="button">Todos</button><button class="tab" data-estado="Pendiente" type="button">Pendientes</button><button class="tab" data-estado="En preparación" type="button">Preparación</button><button class="tab" data-estado="Listo para retirar" type="button">Listos</button></nav>
+                <!-- Lista dinámica. -->
+                <section id="lista-pedidos"></section>
+            </section>
+        </section>
+    </main>
+    <!-- Carga utilidades. -->
+    <script src="../assets/app.js"></script>
+    <!-- Carga lógica. -->
+    <script src="pedidos-recibidos.js"></script>
+</body>
+<!-- Finaliza. -->
+</html>

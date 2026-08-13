@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo producto</title>
+
+    <link rel="stylesheet" href="/agregar_editar_producto/estilos.css">
+</head>
+
+<body>
+
+<main class="profile-page">
+
+    <section class="profile-card">
+
+        <header class="profile-header">
+
+            <button class="back-button" aria-label="Volver">
+                ←
+            </button>
+
+            <h1>Nuevo producto</h1>
+
+        </header>
+
+        <form class="product-form" id="form-producto" novalidate onsubmit="return guardar(event)">
+
+            <button type="button" class="image-upload">
+
+                <span class="image-icon">🖼️</span>
+
+                <span>Agregar imagen</span>
+
+            </button>
+
+            <p class="helper-text">
+                Opcional. Podés publicar el producto sin foto.
+            </p>
+
+            <label for="nombre">Nombre del producto *</label>
+
+            <input
+                type="text"
+                id="nombre"
+                placeholder="Ej: Torta de chocolate">
+
+            <p id="error-nombre" class="error-msg">
+                El nombre es obligatorio.
+            </p>
+
+            <label for="descripcion">Descripción</label>
+
+            <textarea
+                id="descripcion"
+                rows="3"
+                placeholder="Contale al cliente de qué se trata el producto"></textarea>
+
+            <section class="form-row">
+
+                <article>
+
+                    <label for="precio">Precio *</label>
+
+                    <input
+                        type="number"
+                        id="precio"
+                        placeholder="0">
+
+                    <p id="error-precio" class="error-msg">
+                        El precio es obligatorio.
+                    </p>
+
+                </article>
+
+                <article>
+
+                    <label for="stock">Stock *</label>
+
+                    <input
+                        type="number"
+                        id="stock"
+                        placeholder="0">
+
+                    <p id="error-stock" class="error-msg">
+                        El stock no puede ser negativo.
+                    </p>
+
+                </article>
+
+            </section>
+
+            <label for="categoria">Categoría</label>
+
+            <select id="categoria">
+
+                <option>Sin categoría</option>
+                <option>Panadería</option>
+                <option>Repostería</option>
+                <option>Almacén</option>
+                <option>Indumentaria</option>
+                <option>Tecnología</option>
+                <option>Ferretería</option>
+
+            </select>
+
+            <button class="btn" type="submit">
+                Guardar producto
+            </button>
+
+        </form>
+
+    </section>
+
+</main>
+
+<script src="producto.js"></script>
+
+</body>
+
+</html>

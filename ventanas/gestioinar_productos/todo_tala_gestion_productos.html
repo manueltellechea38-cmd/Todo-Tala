@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Mis productos</title>
+
+    <link rel="stylesheet"
+          href="/gestioinar_productos/estilos.css">
+
+</head>
+
+<body>
+
+<main class="profile-page">
+
+    <section class="profile-card">
+
+        <header class="profile-header">
+
+            <button class="back-button"
+                    aria-label="Volver">
+
+                ←
+
+            </button>
+
+            <h1>
+                Mis productos
+            </h1>
+
+            <button class="btn btn-small"
+                    onclick="agregarProducto()">
+
+                Agregar
+
+            </button>
+
+        </header>
+
+        <section class="products-section">
+
+            <ul id="lista-productos"
+                class="products-list">
+
+            </ul>
+
+        </section>
+
+    </section>
+
+</main>
+
+<script src="mis-productos.js"></script>
+
+</body>
+
+</html>

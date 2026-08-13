@@ -1,0 +1,87 @@
+/* Importa el sistema visual común. */
+@import url("../assets/estilos_globales.css");
+
+/* Organiza el resumen del comercio. */
+.summary-grid {
+    /* Usa una grilla adaptable. */
+    display: grid;
+    /* Crea tres columnas. */
+    grid-template-columns: repeat(3, 1fr);
+    /* Separa tarjetas. */
+    gap: 12px;
+}
+
+/* Destaca las métricas. */
+.metric {
+    /* Agrega padding. */
+    padding: 16px;
+    /* Redondea. */
+    border-radius: 16px;
+    /* Usa fondo suave. */
+    background: #f8fafc;
+    /* Dibuja borde. */
+    border: 1px solid var(--color-border);
+}
+
+/* Aumenta el número de cada métrica. */
+.metric strong {
+    /* Muestra en bloque. */
+    display: block;
+    /* Aumenta tamaño. */
+    font-size: 1.65rem;
+    /* Usa azul. */
+    color: var(--color-primary);
+}
+
+/* Organiza accesos rápidos. */
+.quick-grid {
+    /* Usa dos columnas. */
+    display: grid;
+    /* Reparte el espacio. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    /* Separa botones. */
+    gap: 12px;
+    /* Agrega margen superior. */
+    margin-top: 14px;
+}
+
+/* Hace que cada acceso se vea como tarjeta. */
+.quick-card {
+    /* Alinea texto a la izquierda. */
+    text-align: left;
+    /* Agrega padding amplio. */
+    padding: 18px;
+    /* Dibuja borde. */
+    border: 1px solid var(--color-border);
+    /* Redondea. */
+    border-radius: 16px;
+    /* Usa fondo blanco. */
+    background: white;
+    /* Permite clic. */
+    cursor: pointer;
+    /* Agrega transición. */
+    transition: 160ms ease;
+}
+
+/* Respuesta visual al hover. */
+.quick-card:hover {
+    /* Cambia borde. */
+    border-color: #b9cceb;
+    /* Mueve levemente. */
+    transform: translateY(-2px);
+}
+
+/* Ajusta en celular. */
+@media (max-width: 650px) {
+    /* Reduce métricas a una columna. */
+    .summary-grid {
+        /* Usa una columna. */
+        grid-template-columns: 1fr;
+    }
+
+    /* Reduce accesos a una columna. */
+    .quick-grid {
+        /* Usa una columna. */
+        grid-template-columns: 1fr;
+    }
+}

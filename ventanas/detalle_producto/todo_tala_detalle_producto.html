@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del producto</title>
+
+    <link rel="stylesheet" href="/detalle_producto/estilos.css">
+</head>
+
+<body>
+
+<main class="profile-page">
+
+    <article class="profile-card">
+
+        <header class="detail-header">
+
+            <button class="back-button" aria-label="Volver">
+                ←
+            </button>
+
+            <button class="favorite-button" aria-label="Agregar a favoritos">
+                ♡
+            </button>
+
+        </header>
+
+        <figure class="product-image">
+
+            <span class="discount-badge">
+                -15% hoy
+            </span>
+
+            <span class="image-placeholder">
+                🎧
+            </span>
+
+        </figure>
+
+        <section class="detail-content">
+
+            <header class="product-title">
+
+                <h1>Auriculares BT</h1>
+
+                <span class="badge badge-success">
+                    Disponible
+                </span>
+
+            </header>
+
+            <p class="product-store">
+                TecnoTala
+            </p>
+
+            <p class="product-price">
+
+                <strong>$722</strong>
+
+                <span class="old-price">
+                    $850
+                </span>
+
+            </p>
+
+            <p class="stock">
+                Stock: 12 unidades
+            </p>
+
+            <p class="product-description">
+                Auriculares inalámbricos con Bluetooth 5.0, hasta 20 horas de batería y micrófono integrado. Ideales para uso diario y llamadas.
+            </p>
+
+            <section class="quantity-selector">
+
+                <p>Cantidad</p>
+
+                <nav>
+
+                    <button onclick="cambiarCantidad(-1)">
+                        -
+                    </button>
+
+                    <span id="cantidad">
+                        1
+                    </span>
+
+                    <button onclick="cambiarCantidad(1)">
+                        +
+                    </button>
+
+                </nav>
+
+            </section>
+
+        </section>
+
+        <footer class="profile-actions">
+
+            <button
+                class="btn"
+                id="btn-agregar"
+                onclick="agregarPedido()">
+
+                <span id="btn-texto">
+                    Agregar al pedido · $722
+                </span>
+
+            </button>
+
+        </footer>
+
+    </article>
+
+</main>
+
+<script src="detalle-producto.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!-- Declara HTML5. -->
+<html lang="es">
+<!-- Define el idioma. -->
+<head>
+    <!-- Configura caracteres. -->
+    <meta charset="UTF-8">
+    <!-- Activa responsive. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título de pestaña. -->
+    <title>Todo Tala | Crear cuenta</title>
+    <!-- Carga estilos de registro. -->
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<!-- Comienza el contenido. -->
+<body>
+    <!-- Centra la ventana. -->
+    <main class="app-page">
+        <!-- Tarjeta del registro. -->
+        <section class="app-card app-card--narrow">
+            <!-- Encabezado. -->
+            <header class="app-header">
+                <!-- Agrupa botón y título. -->
+                <div class="app-header__title">
+                    <!-- Vuelve al login. -->
+                    <button id="btn-volver" class="icon-button" type="button" aria-label="Volver">←</button>
+                    <!-- Título principal. -->
+                    <h1>Crear cuenta</h1>
+                </div>
+            </header>
+            <!-- Contenido del formulario. -->
+            <section class="content">
+                <!-- Formulario de registro simulado. -->
+                <form id="registro-form" class="form-grid" novalidate>
+                    <!-- Selector del tipo de cuenta. -->
+                    <div class="form-group form-grid__full">
+                        <!-- Etiqueta del selector. -->
+                        <label>Tipo de cuenta</label>
+                        <!-- Botones de selección. -->
+                        <div class="account-selector">
+                            <!-- Cliente puede registrarse directamente. -->
+                            <button id="btn-cliente" class="active" type="button">Cliente</button>
+                            <!-- Jefe requiere datos comerciales y RUT. -->
+                            <button id="btn-jefe" type="button">Jefe / Comercio</button>
+                        </div>
+                        <!-- Aclara que los empleados los crea el jefe. -->
+                        <p class="helper">Los empleados no se registran desde aquí: son agregados posteriormente por el jefe del comercio.</p>
+                    </div>
+                    <!-- Nombre del usuario. -->
+                    <div class="form-group form-grid__full">
+                        <!-- Etiqueta. -->
+                        <label for="nombre">Nombre y apellido *</label>
+                        <!-- Campo. -->
+                        <input id="nombre" type="text" placeholder="Ej: Ana Pérez">
+                    </div>
+                    <!-- Correo. -->
+                    <div class="form-group form-grid__full">
+                        <!-- Etiqueta. -->
+                        <label for="email">Correo electrónico *</label>
+                        <!-- Campo. -->
+                        <input id="email" type="email" placeholder="nombre@correo.com">
+                        <!-- Error. -->
+                        <p id="error-email" class="error-message">Ingresá un correo válido.</p>
+                    </div>
+                    <!-- Contraseña. -->
+                    <div class="form-group">
+                        <!-- Etiqueta. -->
+                        <label for="password">Contraseña *</label>
+                        <!-- Campo. -->
+                        <input id="password" type="password" placeholder="Mínimo 8 caracteres">
+                    </div>
+                    <!-- Confirmación. -->
+                    <div class="form-group">
+                        <!-- Etiqueta. -->
+                        <label for="confirm-password">Confirmar *</label>
+                        <!-- Campo. -->
+                        <input id="confirm-password" type="password" placeholder="Repetir contraseña">
+                    </div>
+                    <!-- Error de contraseñas. -->
+                    <p id="error-password" class="error-message form-grid__full">Las contraseñas deben coincidir y tener al menos 8 caracteres.</p>
+                    <!-- Campos exclusivos del jefe. -->
+                    <section id="campos-comercio" class="business-fields form-grid__full">
+                        <!-- Título de la sección comercial. -->
+                        <h2>Datos del comercio</h2>
+                        <!-- Nombre comercial. -->
+                        <div class="form-group">
+                            <!-- Etiqueta. -->
+                            <label for="nombre-comercio">Nombre del comercio *</label>
+                            <!-- Campo. -->
+                            <input id="nombre-comercio" type="text" placeholder="Ej: Panadería El Sol">
+                        </div>
+                        <!-- RUT obligatorio para jefe. -->
+                        <div class="form-group">
+                            <!-- Etiqueta. -->
+                            <label for="rut">RUT *</label>
+                            <!-- Campo. -->
+                            <input id="rut" type="text" inputmode="numeric" placeholder="12 dígitos">
+                            <!-- Ayuda. -->
+                            <p class="helper">En el MVP se valida únicamente que contenga 12 números.</p>
+                        </div>
+                        <!-- Rubro. -->
+                        <div class="form-group">
+                            <!-- Etiqueta. -->
+                            <label for="rubro">Rubro</label>
+                            <!-- Selector. -->
+                            <select id="rubro">
+                                <!-- Opciones del MVP. -->
+                                <option>Alimentación</option>
+                                <option>Indumentaria</option>
+                                <option>Ferretería</option>
+                                <option>Tecnología</option>
+                                <option>Otro</option>
+                            </select>
+                        </div>
+                        <!-- Dirección. -->
+                        <div class="form-group">
+                            <!-- Etiqueta. -->
+                            <label for="direccion">Dirección</label>
+                            <!-- Campo. -->
+                            <input id="direccion" type="text" placeholder="Calle y número">
+                        </div>
+                    </section>
+                    <!-- Error general. -->
+                    <p id="error-general" class="error-message form-grid__full">Completá los campos obligatorios.</p>
+                    <!-- Botón de registro. -->
+                    <button class="btn btn--primary btn--block form-grid__full" type="submit">Registrarse</button>
+                    <!-- Botón hacia login. -->
+                    <button id="btn-login" class="btn btn--secondary btn--block form-grid__full" type="button">Ya tengo cuenta</button>
+                </form>
+            </section>
+        </section>
+    </main>
+    <!-- Carga funciones comunes. -->
+    <script src="../assets/app.js"></script>
+    <!-- Carga lógica del registro. -->
+    <script src="reguistro.js"></script>
+</body>
+<!-- Finaliza la página. -->
+</html>

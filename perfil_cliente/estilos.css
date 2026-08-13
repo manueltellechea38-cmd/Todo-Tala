@@ -1,0 +1,50 @@
+/* Importa estilos globales. */
+@import url("../assets/estilos_globales.css");
+
+/* Centra los datos principales del perfil. */
+.profile-summary {
+    /* Centra el texto. */
+    text-align: center;
+    /* Agrega margen inferior. */
+    margin-bottom: 22px;
+}
+
+/* Crea un avatar textual simple. */
+.avatar {
+    /* Define ancho. */
+    width: 76px;
+    /* Define alto. */
+    height: 76px;
+    /* Redondea totalmente. */
+    border-radius: 50%;
+    /* Usa fondo azul suave. */
+    background: var(--color-primary-soft);
+    /* Usa texto azul. */
+    color: var(--color-primary);
+    /* Centra contenido. */
+    display: grid;
+    /* Centra totalmente. */
+    place-items: center;
+    /* Centra el bloque. */
+    margin: 0 auto 12px;
+    /* Usa negrita. */
+    font-weight: 850;
+    /* Aumenta tamaño. */
+    font-size: 1.2rem;
+}
+
+/* Sección de edición oculta al inicio. */
+.edit-panel {
+    /* Oculta inicialmente. */
+    display: none;
+    /* Agrega margen superior. */
+    margin-top: 18px;
+}
+
+/* Muestra el formulario cuando se activa. */
+.edit-panel.is-visible {
+    /* Usa grilla. */
+    display: grid;
+    /* Separa campos. */
+    gap: 14px;
+}

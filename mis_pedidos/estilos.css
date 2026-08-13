@@ -1,0 +1,92 @@
+/* Importa los estilos compartidos. */
+@import url("../assets/estilos_globales.css");
+
+/* Organiza las pestañas de estados. */
+.tabs {
+    /* Usa flexbox. */
+    display: flex;
+    /* Permite bajar botones en móvil. */
+    flex-wrap: wrap;
+    /* Separa pestañas. */
+    gap: 8px;
+    /* Agrega margen inferior. */
+    margin-bottom: 16px;
+}
+
+/* Estilo base de pestaña. */
+.tab {
+    /* Quita borde. */
+    border: 0;
+    /* Usa fondo suave. */
+    background: #eef1f5;
+    /* Redondea. */
+    border-radius: 999px;
+    /* Agrega padding. */
+    padding: 8px 12px;
+    /* Permite clic. */
+    cursor: pointer;
+    /* Usa peso medio. */
+    font-weight: 700;
+    /* Usa color secundario. */
+    color: var(--color-muted);
+}
+
+/* Marca la pestaña activa. */
+.tab.active {
+    /* Usa fondo azul. */
+    background: var(--color-primary);
+    /* Usa texto blanco. */
+    color: white;
+}
+
+/* Define cada tarjeta de pedido. */
+.order-card {
+    /* Dibuja borde. */
+    border: 1px solid var(--color-border);
+    /* Redondea. */
+    border-radius: 16px;
+    /* Agrega padding. */
+    padding: 16px;
+    /* Agrega margen inferior. */
+    margin-bottom: 12px;
+}
+
+/* Organiza encabezado del pedido. */
+.order-head {
+    /* Usa flexbox. */
+    display: flex;
+    /* Separa extremos. */
+    justify-content: space-between;
+    /* Separa elementos. */
+    gap: 10px;
+    /* Permite wrap. */
+    flex-wrap: wrap;
+}
+
+/* Destaca el código de retiro. */
+.pickup-code {
+    /* Usa fondo azul suave. */
+    background: var(--color-primary-soft);
+    /* Dibuja borde. */
+    border: 1px dashed #9ab9e8;
+    /* Redondea. */
+    border-radius: 12px;
+    /* Agrega padding. */
+    padding: 12px;
+    /* Centra texto. */
+    text-align: center;
+    /* Agrega margen superior. */
+    margin-top: 12px;
+}
+
+/* Hace grande el código. */
+.pickup-code strong {
+    /* Muestra como bloque. */
+    display: block;
+    /* Aumenta tamaño. */
+    font-size: 1.35rem;
+    /* Aumenta espaciado entre letras. */
+    letter-spacing: 0.08em;
+    /* Usa color azul. */
+    color: var(--color-primary);
+}

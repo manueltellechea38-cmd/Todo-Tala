@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!-- Declara HTML5. -->
+<html lang="es">
+<!-- Define el idioma del contenido. -->
+<head>
+    <!-- Configura caracteres especiales. -->
+    <meta charset="UTF-8">
+    <!-- Activa el diseño responsive. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título mostrado en el navegador. -->
+    <title>Todo Tala | Buscar</title>
+    <!-- Carga estilos de búsqueda. -->
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<!-- Comienza el contenido. -->
+<body>
+    <!-- Contenedor de la ventana. -->
+    <main class="app-page">
+        <!-- Tarjeta principal. -->
+        <section class="app-card">
+            <!-- Encabezado. -->
+            <header class="app-header">
+                <!-- Agrupa volver y título. -->
+                <div class="app-header__title">
+                    <!-- Regresa al inicio. -->
+                    <button id="btn-volver" class="icon-button" type="button" aria-label="Volver">←</button>
+                    <!-- Título. -->
+                    <div>
+                        <!-- Nombre de la pantalla. -->
+                        <h1>Buscar productos</h1>
+                        <!-- Explicación breve. -->
+                        <p class="muted">Filtrá por categoría, precio o disponibilidad.</p>
+                    </div>
+                </div>
+            </header>
+            <!-- Contenido. -->
+            <section class="content">
+                <!-- Controles de búsqueda. -->
+                <section class="search-controls">
+                    <!-- Campo principal. -->
+                    <div class="form-group">
+                        <!-- Etiqueta. -->
+                        <label for="search-input">Producto, marca o comercio</label>
+                        <!-- Campo. -->
+                        <input id="search-input" type="search" placeholder="Ej: auriculares, pan, ferretería...">
+                    </div>
+                    <!-- Filtro de categoría. -->
+                    <div class="form-group">
+                        <!-- Etiqueta. -->
+                        <label for="categoria">Categoría</label>
+                        <!-- Selector. -->
+                        <select id="categoria"><option value="">Todas</option></select>
+                    </div>
+                    <!-- Filtro de precio máximo. -->
+                    <div class="form-group">
+                        <!-- Etiqueta. -->
+                        <label for="precio-max">Precio máximo</label>
+                        <!-- Campo. -->
+                        <input id="precio-max" type="number" min="0" placeholder="Sin límite">
+                    </div>
+                    <!-- Botón de búsqueda. -->
+                    <button id="btn-buscar" class="btn btn--primary" type="button">Buscar</button>
+                </section>
+                <!-- Filtro rápido de stock. -->
+                <label style="display:flex; gap:8px; align-items:center; margin-bottom:14px;">
+                    <!-- Casilla. -->
+                    <input id="solo-stock" type="checkbox">
+                    <!-- Texto de la casilla. -->
+                    Mostrar solo productos con stock
+                </label>
+                <!-- Resumen de resultados. -->
+                <p id="resumen" class="muted" style="margin-bottom:12px;"></p>
+                <!-- Contenedor donde JS inserta resultados. -->
+                <section id="lista-resultados"></section>
+            </section>
+            <!-- Navegación inferior del cliente. -->
+            <nav class="bottom-nav">
+                <!-- Inicio. -->
+                <a href="../pantalla_inicio/todo_tala_pantalla_inicio.html">Inicio</a>
+                <!-- Buscar activo. -->
+                <a class="active" href="todo_tala_resultados_busqueda.html">Buscar</a>
+                <!-- Catálogo. -->
+                <a href="../catalogo_cliente/todo_tala_catalogo_cliente.html">Catálogo</a>
+                <!-- Perfil. -->
+                <a href="../perfil_cliente/tala_perfil_cliente.html">Perfil</a>
+            </nav>
+        </section>
+    </main>
+    <!-- Carga funciones generales. -->
+    <script src="../assets/app.js"></script>
+    <!-- Carga lógica de búsqueda. -->
+    <script src="buscar-productos.js"></script>
+</body>
+<!-- Finaliza el documento. -->
+</html>

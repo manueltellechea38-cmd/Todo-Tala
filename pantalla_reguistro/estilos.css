@@ -1,0 +1,60 @@
+/* Importa los estilos globales. */
+@import url("../assets/estilos_globales.css");
+
+/* Organiza los botones de tipo de cuenta. */
+.account-selector {
+    /* Usa dos columnas. */
+    display: grid;
+    /* Reparte el espacio. */
+    grid-template-columns: repeat(2, 1fr);
+    /* Separa los botones. */
+    gap: 10px;
+}
+
+/* Estilo base de cada tipo de cuenta. */
+.account-selector button {
+    /* Dibuja un borde. */
+    border: 1px solid var(--color-border);
+    /* Usa fondo blanco. */
+    background: white;
+    /* Redondea. */
+    border-radius: 12px;
+    /* Agrega padding. */
+    padding: 12px;
+    /* Permite clic. */
+    cursor: pointer;
+    /* Usa peso medio. */
+    font-weight: 700;
+}
+
+/* Marca la opción activa. */
+.account-selector button.active {
+    /* Usa borde azul. */
+    border-color: var(--color-primary);
+    /* Usa fondo azul suave. */
+    background: var(--color-primary-soft);
+    /* Usa texto azul. */
+    color: var(--color-primary);
+}
+
+/* Oculta inicialmente los campos exclusivos del jefe. */
+.business-fields {
+    /* No se muestran hasta seleccionar jefe. */
+    display: none;
+    /* Usa fondo suave. */
+    background: #f8fafc;
+    /* Dibuja borde. */
+    border: 1px solid var(--color-border);
+    /* Redondea. */
+    border-radius: 14px;
+    /* Agrega padding. */
+    padding: 15px;
+}
+
+/* Muestra los campos comerciales cuando JS agrega la clase. */
+.business-fields.is-visible {
+    /* Hace visible la sección. */
+    display: grid;
+    /* Separa los campos. */
+    gap: 14px;
+}

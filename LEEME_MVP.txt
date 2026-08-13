@@ -1,0 +1,63 @@
+TODO TALA - MVP DE VENTANAS
+===========================
+
+PUNTO DE INICIO
+---------------
+Abrir con Live Server:
+pantalla_inicio/todo_tala_pantalla_inicio.html
+
+QUE SE MEJORO
+-------------
+- Diseño visual unificado y responsive.
+- Navegación real entre las 15 ventanas.
+- Interactividad con JavaScript en las pantallas que la necesitaban.
+- Búsqueda y filtros del catálogo.
+- Detalle de producto y favoritos.
+- Carrito con cantidades, eliminación y cálculo del total.
+- Creación de pedidos con código de retiro (NO QR).
+- Visualización de pedidos del cliente.
+- Panel del comercio con resumen y aviso de stock bajo.
+- Alta, edición, ocultamiento y eliminación de productos.
+- Gestión simple de promociones.
+- Gestión de pedidos recibidos y cambio de estados.
+- Validación del código del cliente al entregar el pedido.
+- Edición simple del perfil del cliente.
+- Formularios de login y registro con validaciones básicas.
+
+IMPORTANTE SOBRE LOS DATOS
+--------------------------
+Este sigue siendo un MVP sin backend ni base de datos.
+Para conectar las ventanas se usa localStorage del navegador.
+Eso permite que un producto agregado, un pedido o un cambio de estado se mantenga al pasar de una pantalla a otra.
+No debe presentarse localStorage como la base de datos definitiva del proyecto.
+
+LOGIN DE DEMOSTRACION
+---------------------
+El formulario acepta cualquier correo con formato valido y una contraseña de 8 o mas caracteres.
+Luego se selecciona un rol de demostracion:
+- Cliente -> abre el catalogo.
+- Jefe -> abre el panel del comercio.
+- Empleado -> abre el panel del comercio.
+
+PEDIDOS Y CODIGO DE RETIRO
+--------------------------
+Al confirmar un pedido se genera un codigo con formato parecido a TT-4821.
+El cliente lo ve en "Mis pedidos".
+Cuando el comercio marca un pedido como "Listo para retirar", puede ingresar ese codigo en "Pedidos recibidos" y marcarlo como entregado.
+No se utiliza QR.
+
+REINICIAR LA DEMOSTRACION
+-------------------------
+Si durante las pruebas se modifican muchos datos, abrir la consola del navegador y ejecutar:
+TodoTala.reiniciarDemo()
+Luego recargar la pagina.
+
+MAPA DE NAVEGACION
+------------------
+MAPA_NAVEGACION.png -> version grafica lista para ver o insertar en un documento.
+MAPA_NAVEGACION.svg -> version vectorial de mayor calidad.
+MAPA_NAVEGACION.dot -> archivo fuente del diagrama.
+
+NOTA SOBRE COMENTARIOS
+----------------------
+El codigo fue comentado de forma muy detallada, explicando practicamente cada instruccion y cada bloque para facilitar la defensa oral del MVP.

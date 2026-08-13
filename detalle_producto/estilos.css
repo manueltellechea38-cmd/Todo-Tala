@@ -1,0 +1,121 @@
+/* Importa los estilos comunes del MVP. */
+@import url("../assets/estilos_globales.css");
+
+/* Organiza el detalle en dos columnas en pantallas amplias. */
+.detail-layout {
+    /* Usa CSS Grid. */
+    display: grid;
+    /* Crea una columna visual y otra de contenido. */
+    grid-template-columns: minmax(240px, 0.8fr) 1.2fr;
+    /* Separa ambas columnas. */
+    gap: 24px;
+}
+
+/* Simula la imagen del producto mientras no existe carga real de archivos. */
+.detail-image {
+    /* Define una altura mínima. */
+    min-height: 310px;
+    /* Redondea. */
+    border-radius: 18px;
+    /* Usa fondo suave. */
+    background: linear-gradient(145deg, #eef2f7, #e6effd);
+    /* Centra el contenido. */
+    display: grid;
+    /* Centra totalmente. */
+    place-items: center;
+    /* Usa azul principal. */
+    color: var(--color-primary);
+    /* Aumenta tamaño. */
+    font-size: 3rem;
+    /* Usa negrita. */
+    font-weight: 900;
+}
+
+/* Organiza el título con el estado. */
+.detail-title-row {
+    /* Usa flexbox. */
+    display: flex;
+    /* Separa los extremos. */
+    justify-content: space-between;
+    /* Centra verticalmente. */
+    align-items: flex-start;
+    /* Separa elementos. */
+    gap: 12px;
+}
+
+/* Destaca el precio actual. */
+.detail-price {
+    /* Aumenta tamaño. */
+    font-size: 1.8rem;
+    /* Usa peso fuerte. */
+    font-weight: 850;
+    /* Agrega margen vertical. */
+    margin: 12px 0 4px;
+}
+
+/* Estilo del precio anterior. */
+.old-price {
+    /* Tacha el texto. */
+    text-decoration: line-through;
+    /* Usa color secundario. */
+    color: var(--color-muted);
+    /* Reduce tamaño. */
+    font-size: 0.95rem;
+    /* Agrega margen izquierdo. */
+    margin-left: 8px;
+}
+
+/* Organiza el selector de cantidad. */
+.quantity-control {
+    /* Usa flexbox. */
+    display: inline-flex;
+    /* Centra verticalmente. */
+    align-items: center;
+    /* Agrega borde. */
+    border: 1px solid var(--color-border);
+    /* Redondea. */
+    border-radius: 12px;
+    /* Oculta bordes internos fuera del radio. */
+    overflow: hidden;
+}
+
+/* Estilo de botones de cantidad. */
+.quantity-control button {
+    /* Define tamaño. */
+    width: 42px;
+    /* Define altura. */
+    height: 42px;
+    /* Quita borde. */
+    border: 0;
+    /* Usa fondo suave. */
+    background: #f3f5f7;
+    /* Permite clic. */
+    cursor: pointer;
+    /* Aumenta tamaño del signo. */
+    font-size: 1.1rem;
+}
+
+/* Estilo del número de cantidad. */
+.quantity-control span {
+    /* Define ancho mínimo. */
+    min-width: 48px;
+    /* Centra texto. */
+    text-align: center;
+    /* Usa negrita. */
+    font-weight: 750;
+}
+
+/* Apila el detalle en celular. */
+@media (max-width: 700px) {
+    /* Cambia a una columna. */
+    .detail-layout {
+        /* Usa una sola columna. */
+        grid-template-columns: 1fr;
+    }
+
+    /* Reduce la altura de imagen. */
+    .detail-image {
+        /* Define una altura menor. */
+        min-height: 210px;
+    }
+}

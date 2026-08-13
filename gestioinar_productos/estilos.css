@@ -1,0 +1,41 @@
+/* Importa estilos globales. */
+@import url("../assets/estilos_globales.css");
+
+/* Organiza cada fila de producto del comercio. */
+.product-row {
+    /* Usa una grilla con contenido y acciones. */
+    display: grid;
+    /* Define columnas. */
+    grid-template-columns: 1fr auto;
+    /* Separa elementos. */
+    gap: 12px;
+    /* Agrega padding. */
+    padding: 15px;
+    /* Dibuja borde. */
+    border: 1px solid var(--color-border);
+    /* Redondea. */
+    border-radius: 15px;
+    /* Agrega margen inferior. */
+    margin-bottom: 10px;
+}
+
+/* Organiza los botones de cada producto. */
+.product-row__actions {
+    /* Usa flexbox. */
+    display: flex;
+    /* Permite salto de línea. */
+    flex-wrap: wrap;
+    /* Separa botones. */
+    gap: 7px;
+    /* Alinea al inicio vertical. */
+    align-items: flex-start;
+}
+
+/* Ajusta la fila en celulares. */
+@media (max-width: 650px) {
+    /* Apila contenido y acciones. */
+    .product-row {
+        /* Usa una columna. */
+        grid-template-columns: 1fr;
+    }
+}

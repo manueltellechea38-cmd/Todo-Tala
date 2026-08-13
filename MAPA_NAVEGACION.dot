@@ -1,0 +1,130 @@
+// Este archivo describe gráficamente cómo se conectan las ventanas del MVP.
+digraph TodoTala {
+    // Configura el diagrama de izquierda a derecha para facilitar la lectura.
+    rankdir=LR;
+    // Define un fondo claro.
+    bgcolor="#F4F6F8";
+    // Configura separación entre nodos.
+    nodesep=0.45;
+    // Configura separación entre niveles.
+    ranksep=0.65;
+    // Define el estilo general de los nodos.
+    node [shape=box, style="rounded,filled", fontname="Arial", fontsize=11, color="#CBD5E1", fillcolor="#FFFFFF", fontcolor="#172033", margin="0.12,0.08"];
+    // Define el estilo general de las flechas.
+    edge [fontname="Arial", fontsize=9, color="#64748B", fontcolor="#475569", arrowsize=0.75];
+
+    // Agrupa el punto de entrada y autenticación.
+    subgraph cluster_acceso {
+        // Título del grupo.
+        label="Acceso";
+        // Color del borde del grupo.
+        color="#BFD2EE";
+        // Color del texto del grupo.
+        fontcolor="#1F5FBF";
+        // Fondo suave.
+        bgcolor="#EEF5FF";
+        // Define las ventanas del grupo.
+        inicio [label="Pantalla inicio"];
+        login [label="Iniciar sesión"];
+        registro [label="Registro"];
+    }
+
+    // Agrupa el flujo del cliente.
+    subgraph cluster_cliente {
+        // Título del grupo.
+        label="Flujo cliente";
+        // Color del borde.
+        color="#C8E6D0";
+        // Color del título.
+        fontcolor="#238636";
+        // Fondo suave.
+        bgcolor="#F1FAF3";
+        // Ventanas del cliente.
+        catalogo [label="Catálogo cliente"];
+        busqueda [label="Resultados búsqueda"];
+        detalle [label="Detalle producto"];
+        carrito [label="Carrito / pedido"];
+        mispedidos [label="Mis pedidos\n(código de retiro)"];
+        perfil [label="Perfil cliente"];
+    }
+
+    // Agrupa el flujo del comercio.
+    subgraph cluster_comercio {
+        // Título del grupo.
+        label="Flujo jefe / empleado";
+        // Color del borde.
+        color="#F0D58A";
+        // Color del título.
+        fontcolor="#8A6200";
+        // Fondo suave.
+        bgcolor="#FFFAEA";
+        // Ventanas del comercio.
+        panel [label="Panel comercio"];
+        productos [label="Gestionar productos"];
+        agregar [label="Agregar producto"];
+        editar [label="Editar producto"];
+        promociones [label="Gestionar promociones"];
+        recibidos [label="Pedidos recibidos\n(validar código)"];
+    }
+
+    // Conecta inicio con login mediante el botón correspondiente.
+    inicio -> login [label="Iniciar sesión"];
+    // Conecta inicio con registro.
+    inicio -> registro [label="Crear cuenta"];
+    // Conecta inicio con búsqueda.
+    inicio -> busqueda [label="Buscar"];
+    // Conecta inicio con catálogo.
+    inicio -> catalogo [label="Explorar / Ver catálogo"];
+    // Permite ir del registro al login.
+    registro -> login [label="Ya tengo cuenta"];
+    // El login abre el catálogo cuando se elige Cliente.
+    login -> catalogo [label="Ingresar como Cliente", color="#238636"];
+    // El login abre el panel cuando se elige Jefe o Empleado.
+    login -> panel [label="Ingresar como Jefe / Empleado", color="#A66B00"];
+
+    // El catálogo permite abrir un producto.
+    catalogo -> detalle [label="Tocar producto"];
+    // El catálogo permite ir al carrito.
+    catalogo -> carrito [label="Carrito"];
+    // El catálogo permite ver pedidos.
+    catalogo -> mispedidos [label="Mis pedidos"];
+    // El catálogo permite abrir perfil.
+    catalogo -> perfil [label="Perfil"];
+    // El catálogo permite ir a búsqueda.
+    catalogo -> busqueda [label="Buscar"];
+    // La búsqueda abre el detalle.
+    busqueda -> detalle [label="Ver detalle"];
+    // El detalle agrega al carrito.
+    detalle -> carrito [label="Agregar al carrito"];
+    // El carrito crea un pedido.
+    carrito -> mispedidos [label="Confirmar pedido"];
+    // Mis pedidos permite volver al catálogo.
+    mispedidos -> catalogo [label="Volver"];
+    // Perfil permite volver al catálogo.
+    perfil -> catalogo [label="Volver"];
+    // Perfil permite cerrar sesión.
+    perfil -> inicio [label="Cerrar sesión"];
+
+    // El panel abre el alta de productos.
+    panel -> agregar [label="Agregar producto"];
+    // El panel abre la gestión de productos.
+    panel -> productos [label="Gestionar productos"];
+    // El panel abre promociones.
+    panel -> promociones [label="Promociones"];
+    // El panel abre pedidos recibidos.
+    panel -> recibidos [label="Pedidos recibidos"];
+    // El panel permite cerrar sesión.
+    panel -> inicio [label="Salir"];
+    // La gestión de productos permite agregar.
+    productos -> agregar [label="Agregar producto"];
+    // La gestión de productos permite editar.
+    productos -> editar [label="Editar"];
+    // El alta vuelve a la gestión después de guardar.
+    agregar -> productos [label="Guardar / Volver"];
+    // La edición vuelve a la gestión después de guardar o eliminar.
+    editar -> productos [label="Guardar / Eliminar / Volver"];
+    // Promociones vuelve al panel.
+    promociones -> panel [label="Volver"];
+    // Pedidos recibidos vuelve al panel.
+    recibidos -> panel [label="Volver"];
+}

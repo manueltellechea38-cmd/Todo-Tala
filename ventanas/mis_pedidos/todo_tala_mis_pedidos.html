@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis pedidos</title>
+    <link rel="stylesheet" href="/mis_pedidos/estilos.css">
+</head>
+
+<body>
+
+<main class="page-container">
+
+    <section class="card pedidos-container">
+
+        <header class="card-header">
+
+            <button class="back-button" aria-label="Volver">
+                ←
+            </button>
+
+            <h1>Mis pedidos</h1>
+
+        </header>
+
+
+        <nav class="tabs" aria-label="Filtros de pedidos">
+
+            <button class="tab active" id="tab-todos" onclick="filtrarEstado('')">
+                Todos
+            </button>
+
+            <button class="tab" id="tab-Pendiente" onclick="filtrarEstado('Pendiente')">
+                Pendiente
+            </button>
+
+            <button class="tab" id="tab-Confirmado" onclick="filtrarEstado('Confirmado')">
+                Confirmado
+            </button>
+
+            <button class="tab" id="tab-Finalizado" onclick="filtrarEstado('Finalizado')">
+                Finalizado
+            </button>
+
+        </nav>
+
+
+        <section id="lista-pedidos" class="list-container">
+
+            <!-- Los pedidos se generan con JS -->
+
+        </section>
+
+
+    </section>
+
+</main>
+
+
+<script src="pedidos.js"></script>
+
+</body>
+
+</html>

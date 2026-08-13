@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!-- Declara HTML5. -->
+<html lang="es">
+<!-- Define idioma español. -->
+<head>
+    <!-- Configura caracteres. -->
+    <meta charset="UTF-8">
+    <!-- Activa responsive. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título del navegador. -->
+    <title>Todo Tala | Panel del comercio</title>
+    <!-- Carga estilos. -->
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<!-- Comienza la interfaz. -->
+<body>
+    <!-- Contenedor general. -->
+    <main class="app-page">
+        <!-- Tarjeta principal. -->
+        <section class="app-card">
+            <!-- Encabezado del panel. -->
+            <header class="app-header">
+                <!-- Título y descripción. -->
+                <div>
+                    <!-- Nombre del comercio demo. -->
+                    <h1>Panadería El Sol</h1>
+                    <!-- Rol actual. -->
+                    <p id="rol-actual" class="muted">Panel del comercio</p>
+                </div>
+                <!-- Cierra sesión. -->
+                <button id="btn-salir" class="btn btn--secondary" type="button">Salir</button>
+            </header>
+            <!-- Contenido principal. -->
+            <section class="content">
+                <!-- Título del resumen. -->
+                <h2>Resumen rápido</h2>
+                <!-- Métricas calculadas con JS. -->
+                <section class="summary-grid" style="margin-top:12px;">
+                    <!-- Productos. -->
+                    <article class="metric"><strong id="cantidad-productos">0</strong><span>Productos</span></article>
+                    <!-- Pedidos. -->
+                    <article class="metric"><strong id="cantidad-pedidos">0</strong><span>Pedidos activos</span></article>
+                    <!-- Promociones. -->
+                    <article class="metric"><strong id="cantidad-promos">0</strong><span>Promociones</span></article>
+                </section>
+                <!-- Aviso de stock bajo generado por JS. -->
+                <div id="aviso-stock" style="margin-top:14px;"></div>
+                <!-- Título de accesos. -->
+                <h2 style="margin-top:24px;">Accesos rápidos</h2>
+                <!-- Accesos conectados a las ventanas existentes. -->
+                <section class="quick-grid">
+                    <!-- Agrega producto. -->
+                    <button id="btn-agregar" class="quick-card" type="button"><strong>Agregar producto</strong><p class="muted">Crear una publicación nueva.</p></button>
+                    <!-- Gestiona productos. -->
+                    <button id="btn-productos" class="quick-card" type="button"><strong>Gestionar productos</strong><p class="muted">Editar, ocultar o revisar stock.</p></button>
+                    <!-- Gestiona pedidos. -->
+                    <button id="btn-pedidos" class="quick-card" type="button"><strong>Pedidos recibidos</strong><p class="muted">Aceptar, preparar y entregar pedidos.</p></button>
+                    <!-- Gestiona promociones. -->
+                    <button id="btn-promos" class="quick-card" type="button"><strong>Promociones</strong><p class="muted">Crear y activar promociones.</p></button>
+                </section>
+                <!-- Nota de alcance. -->
+                <p class="helper" style="margin-top:18px;">Este panel usa datos locales de demostración. La base de datos y el backend todavía forman parte de las próximas etapas del proyecto.</p>
+            </section>
+        </section>
+    </main>
+    <!-- Carga utilidades. -->
+    <script src="../assets/app.js"></script>
+    <!-- Carga lógica del panel. -->
+    <script src="panel.js"></script>
+</body>
+<!-- Finaliza el documento. -->
+</html>

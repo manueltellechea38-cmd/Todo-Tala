@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!-- Declara HTML5. -->
+<html lang="es">
+<!-- Define idioma. -->
+<head>
+    <!-- Configura caracteres. -->
+    <meta charset="UTF-8">
+    <!-- Activa responsive. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título. -->
+    <title>Todo Tala | Promociones</title>
+    <!-- Carga estilos. -->
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<!-- Comienza interfaz. -->
+<body>
+    <!-- Contenedor. -->
+    <main class="app-page">
+        <!-- Tarjeta. -->
+        <section class="app-card">
+            <!-- Encabezado. -->
+            <header class="app-header">
+                <!-- Agrupa volver y título. -->
+                <div class="app-header__title"><button id="btn-volver" class="icon-button" type="button" aria-label="Volver">←</button><div><h1>Promociones</h1><p class="muted">Creá y activá promociones simples del comercio.</p></div></div>
+                <!-- Abre el formulario. -->
+                <button id="btn-crear" class="btn btn--primary" type="button">Nueva promoción</button>
+            </header>
+            <!-- Contenido. -->
+            <section class="content">
+                <!-- Panel de alta. -->
+                <section id="panel-nueva" class="new-promo-panel">
+                    <!-- Formulario. -->
+                    <form id="form-promocion" class="form-grid">
+                        <!-- Nombre. -->
+                        <div class="form-group form-grid__full"><label for="nombre-promo">Nombre *</label><input id="nombre-promo" type="text" placeholder="Ej: 20% en repostería"></div>
+                        <!-- Alcance. -->
+                        <div class="form-group"><label for="alcance">Aplica a</label><select id="alcance"><option>Producto</option><option>Categoría</option><option>Todo el comercio</option></select></div>
+                        <!-- Estado inicial. -->
+                        <div class="form-group"><label for="activa">Estado</label><select id="activa"><option value="true">Activa</option><option value="false">Inactiva</option></select></div>
+                        <!-- Fecha inicio. -->
+                        <div class="form-group"><label for="inicio">Inicio *</label><input id="inicio" type="date"></div>
+                        <!-- Fecha fin. -->
+                        <div class="form-group"><label for="fin">Fin *</label><input id="fin" type="date"></div>
+                        <!-- Error. -->
+                        <p id="error-promo" class="error-message form-grid__full">Completá los datos y verificá que la fecha final no sea anterior a la inicial.</p>
+                        <!-- Guarda. -->
+                        <button class="btn btn--primary form-grid__full" type="submit">Guardar promoción</button>
+                    </form>
+                </section>
+                <!-- Lista dinámica. -->
+                <section id="lista-promos"></section>
+            </section>
+        </section>
+    </main>
+    <!-- Carga utilidades. -->
+    <script src="../assets/app.js"></script>
+    <!-- Carga lógica. -->
+    <script src="promociones.js"></script>
+</body>
+<!-- Finaliza documento. -->
+</html>

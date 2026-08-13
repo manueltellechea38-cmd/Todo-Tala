@@ -1,0 +1,61 @@
+/* Importa los estilos generales. */
+@import url("../assets/estilos_globales.css");
+
+/* Define cada promoción. */
+.promo-row {
+    /* Usa una grilla. */
+    display: grid;
+    /* Separa contenido y acciones. */
+    grid-template-columns: 1fr auto;
+    /* Agrega espacio. */
+    gap: 12px;
+    /* Agrega padding. */
+    padding: 15px;
+    /* Dibuja borde. */
+    border: 1px solid var(--color-border);
+    /* Redondea. */
+    border-radius: 15px;
+    /* Agrega margen inferior. */
+    margin-bottom: 10px;
+}
+
+/* Organiza botones de promoción. */
+.promo-actions {
+    /* Usa flexbox. */
+    display: flex;
+    /* Permite wrap. */
+    flex-wrap: wrap;
+    /* Separa botones. */
+    gap: 7px;
+}
+
+/* Panel para crear promociones. */
+.new-promo-panel {
+    /* Oculta inicialmente. */
+    display: none;
+    /* Agrega margen inferior. */
+    margin-bottom: 18px;
+    /* Usa fondo suave. */
+    background: #f8fafc;
+    /* Dibuja borde. */
+    border: 1px solid var(--color-border);
+    /* Redondea. */
+    border-radius: 15px;
+    /* Agrega padding. */
+    padding: 16px;
+}
+
+/* Muestra el panel cuando está activo. */
+.new-promo-panel.is-visible {
+    /* Cambia a bloque. */
+    display: block;
+}
+
+/* Ajusta promociones en celular. */
+@media (max-width: 620px) {
+    /* Apila cada promoción. */
+    .promo-row {
+        /* Usa una columna. */
+        grid-template-columns: 1fr;
+    }
+}

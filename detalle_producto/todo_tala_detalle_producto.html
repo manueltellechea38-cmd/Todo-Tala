@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!-- Declara HTML5. -->
+<html lang="es">
+<!-- Define español como idioma. -->
+<head>
+    <!-- Configura caracteres. -->
+    <meta charset="UTF-8">
+    <!-- Habilita responsive. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título de pestaña. -->
+    <title>Todo Tala | Detalle del producto</title>
+    <!-- Carga estilos específicos. -->
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<!-- Comienza la interfaz. -->
+<body>
+    <!-- Contenedor general. -->
+    <main class="app-page">
+        <!-- Tarjeta principal. -->
+        <article class="app-card">
+            <!-- Encabezado. -->
+            <header class="app-header">
+                <!-- Agrupa volver y título. -->
+                <div class="app-header__title">
+                    <!-- Regresa al catálogo. -->
+                    <button id="btn-volver" class="icon-button" type="button" aria-label="Volver">←</button>
+                    <!-- Título. -->
+                    <h1>Detalle del producto</h1>
+                </div>
+                <!-- Botón de favorito. -->
+                <button id="btn-favorito" class="icon-button" type="button" aria-label="Agregar a favoritos">♡</button>
+            </header>
+            <!-- Contenido del detalle. -->
+            <section class="content detail-layout">
+                <!-- Imagen simulada. -->
+                <figure id="imagen-producto" class="detail-image">--</figure>
+                <!-- Información del producto. -->
+                <section>
+                    <!-- Fila del título. -->
+                    <div class="detail-title-row">
+                        <!-- Nombre del producto. -->
+                        <div>
+                            <!-- Título dinámico. -->
+                            <h1 id="nombre-producto">Producto</h1>
+                            <!-- Comercio dinámico. -->
+                            <p id="comercio-producto" class="muted"></p>
+                        </div>
+                        <!-- Estado de stock. -->
+                        <span id="estado-producto" class="badge"></span>
+                    </div>
+                    <!-- Precio actual y anterior. -->
+                    <p class="detail-price"><span id="precio-producto"></span><span id="precio-anterior" class="old-price"></span></p>
+                    <!-- Marca y categoría. -->
+                    <p id="meta-producto" class="muted"></p>
+                    <!-- Descripción. -->
+                    <p id="descripcion-producto" style="margin-top:18px;"></p>
+                    <!-- Stock. -->
+                    <p id="stock-producto" class="muted" style="margin-top:12px;"></p>
+                    <!-- Selector de cantidad. -->
+                    <section style="margin-top:22px;">
+                        <!-- Etiqueta. -->
+                        <label>Cantidad</label>
+                        <!-- Control. -->
+                        <div class="quantity-control" style="margin-top:8px;">
+                            <!-- Resta. -->
+                            <button id="btn-restar" type="button">−</button>
+                            <!-- Cantidad actual. -->
+                            <span id="cantidad">1</span>
+                            <!-- Suma. -->
+                            <button id="btn-sumar" type="button">+</button>
+                        </div>
+                    </section>
+                    <!-- Acción principal. -->
+                    <button id="btn-agregar" class="btn btn--primary btn--block" type="button" style="margin-top:22px;">Agregar al carrito</button>
+                </section>
+            </section>
+        </article>
+    </main>
+    <!-- Carga funciones comunes. -->
+    <script src="../assets/app.js"></script>
+    <!-- Carga lógica del detalle. -->
+    <script src="detalle-producto.js"></script>
+</body>
+<!-- Finaliza el documento. -->
+</html>

@@ -1,0 +1,255 @@
+/*==========================
+    RESET
+==========================*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f3f4f6;
+    color:#333;
+}
+
+/*==========================
+    CONTENEDOR
+==========================*/
+
+.register-page{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+}
+
+/*==========================
+    TARJETA
+==========================*/
+
+.register-card{
+    width:100%;
+    max-width:450px;
+    background:#fff;
+    border-radius:18px;
+    box-shadow:0 12px 30px rgba(0,0,0,.12);
+    overflow:hidden;
+    padding:25px;
+}
+
+/*==========================
+    CABECERA
+==========================*/
+
+.register-header{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.register-header h1{
+    font-size:1.5rem;
+    color:#222;
+}
+
+.back-button{
+    width:40px;
+    height:40px;
+    border:none;
+    border-radius:50%;
+    background:#f0f0f0;
+    cursor:pointer;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:1.2rem;
+    transition:.2s;
+}
+
+.back-button:hover{
+    background:#ddd;
+}
+
+/*==========================
+    FORMULARIO
+==========================*/
+
+.register-form{
+    display:flex;
+    flex-direction:column;
+}
+
+.register-form label{
+    font-size:.9rem;
+    font-weight:bold;
+    color:#444;
+    margin-bottom:6px;
+}
+
+.register-form input,
+.register-form select{
+    width:100%;
+    padding:12px 14px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    font-size:1rem;
+    margin-bottom:16px;
+    outline:none;
+    transition:.2s;
+    background:white;
+}
+
+.register-form input:focus,
+.register-form select:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.15);
+}
+
+/*==========================
+    SELECTOR DE CUENTA
+==========================*/
+
+.account-selector{
+    display:flex;
+    gap:8px;
+    background:#f3f4f6;
+    border-radius:10px;
+    padding:4px;
+    margin-bottom:20px;
+}
+
+.account-selector button{
+    flex:1;
+    border:none;
+    background:transparent;
+    color:#666;
+    padding:11px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:.95rem;
+    transition:.2s;
+}
+
+.account-selector button:hover{
+    background:#e5e7eb;
+}
+
+.account-selector button.active{
+    background:#2563eb;
+    color:white;
+}
+
+.account-selector i{
+    margin-right:6px;
+}
+
+/*==========================
+    MENSAJE ERROR
+==========================*/
+
+.error-msg{
+    display:none;
+    align-items:center;
+    gap:6px;
+    color:#dc2626;
+    font-size:.8rem;
+    margin-top:-10px;
+    margin-bottom:15px;
+}
+
+/*==========================
+    CAMPOS DEL COMERCIO
+==========================*/
+
+.business-fields{
+    display:none;
+    border-top:1px solid #e5e7eb;
+    padding-top:20px;
+    margin-top:5px;
+    margin-bottom:10px;
+}
+
+.business-fields h2{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:1rem;
+    color:#444;
+    margin-bottom:18px;
+}
+
+.business-fields i{
+    color:#2563eb;
+}
+
+/*==========================
+    BOTONES
+==========================*/
+
+.btn-primary{
+    width:100%;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    padding:13px;
+    font-size:1rem;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:10px;
+    transition:.2s;
+}
+
+.btn-primary:hover{
+    background:#1d4ed8;
+}
+
+.btn-primary:active{
+    transform:scale(.98);
+}
+
+.btn-secondary{
+    width:100%;
+    border:none;
+    border-radius:10px;
+    background:#efefef;
+    color:#333;
+    padding:13px;
+    font-size:.95rem;
+    cursor:pointer;
+    margin-top:10px;
+    transition:.2s;
+}
+
+.btn-secondary:hover{
+    background:#ddd;
+}
+
+/*==========================
+    RESPONSIVE
+==========================*/
+
+@media (max-width:500px){
+
+    .register-page{
+        padding:15px;
+    }
+
+    .register-card{
+        padding:20px;
+        border-radius:14px;
+    }
+
+    .register-header h1{
+        font-size:1.3rem;
+    }
+
+    .account-selector{
+        flex-direction:column;
+    }
+
+}

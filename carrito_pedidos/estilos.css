@@ -1,0 +1,84 @@
+/* Importa los estilos comunes. */
+@import url("../assets/estilos_globales.css");
+
+/* Organiza cada producto del carrito. */
+.cart-item {
+    /* Usa una grilla con contenido y acciones. */
+    display: grid;
+    /* Define columnas flexibles. */
+    grid-template-columns: 1fr auto;
+    /* Separa elementos. */
+    gap: 14px;
+    /* Agrega padding. */
+    padding: 14px;
+    /* Dibuja borde. */
+    border: 1px solid var(--color-border);
+    /* Redondea. */
+    border-radius: 15px;
+    /* Agrega margen inferior. */
+    margin-bottom: 10px;
+}
+
+/* Organiza los controles de cantidad. */
+.cart-actions {
+    /* Usa flexbox. */
+    display: flex;
+    /* Centra verticalmente. */
+    align-items: center;
+    /* Separa botones. */
+    gap: 7px;
+}
+
+/* Botones pequeños del carrito. */
+.cart-actions button {
+    /* Define tamaño mínimo. */
+    min-width: 34px;
+    /* Define alto. */
+    height: 34px;
+    /* Quita borde. */
+    border: 0;
+    /* Redondea. */
+    border-radius: 9px;
+    /* Usa fondo suave. */
+    background: #eef1f5;
+    /* Permite clic. */
+    cursor: pointer;
+}
+
+/* Caja del total. */
+.cart-total {
+    /* Usa fondo suave. */
+    background: #f8fafc;
+    /* Dibuja borde. */
+    border: 1px solid var(--color-border);
+    /* Redondea. */
+    border-radius: 15px;
+    /* Agrega padding. */
+    padding: 16px;
+    /* Agrega margen superior. */
+    margin-top: 18px;
+}
+
+/* Organiza cada fila del total. */
+.total-row {
+    /* Usa flexbox. */
+    display: flex;
+    /* Separa extremos. */
+    justify-content: space-between;
+    /* Agrega espacio vertical. */
+    padding: 5px 0;
+}
+
+/* Destaca el total final. */
+.total-row--strong {
+    /* Aumenta el tamaño. */
+    font-size: 1.08rem;
+    /* Usa negrita. */
+    font-weight: 800;
+    /* Agrega borde superior. */
+    border-top: 1px solid var(--color-border);
+    /* Separa del subtotal. */
+    margin-top: 8px;
+    /* Agrega padding superior. */
+    padding-top: 12px;
+}

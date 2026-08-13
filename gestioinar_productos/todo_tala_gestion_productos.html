@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!-- Declara HTML5. -->
+<html lang="es">
+<!-- Define idioma. -->
+<head>
+    <!-- Configura caracteres. -->
+    <meta charset="UTF-8">
+    <!-- Activa responsive. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título. -->
+    <title>Todo Tala | Gestionar productos</title>
+    <!-- Carga estilos. -->
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<!-- Comienza interfaz. -->
+<body>
+    <!-- Contenedor. -->
+    <main class="app-page">
+        <!-- Tarjeta principal. -->
+        <section class="app-card">
+            <!-- Encabezado. -->
+            <header class="app-header">
+                <!-- Agrupa volver y título. -->
+                <div class="app-header__title">
+                    <!-- Vuelve al panel. -->
+                    <button id="btn-volver" class="icon-button" type="button" aria-label="Volver">←</button>
+                    <!-- Título y explicación. -->
+                    <div><h1>Mis productos</h1><p class="muted">Gestioná publicaciones y stock del comercio.</p></div>
+                </div>
+                <!-- Agrega producto. -->
+                <button id="btn-agregar" class="btn btn--primary" type="button">Agregar producto</button>
+            </header>
+            <!-- Contenido. -->
+            <section class="content">
+                <!-- Filtro simple. -->
+                <div class="toolbar">
+                    <!-- Búsqueda. -->
+                    <input id="buscar-producto" class="toolbar__grow" type="search" placeholder="Buscar producto...">
+                    <!-- Filtro de visibilidad. -->
+                    <select id="filtro-visibilidad"><option value="">Todos</option><option value="visible">Publicados</option><option value="oculto">Ocultos</option></select>
+                </div>
+                <!-- Lista dinámica. -->
+                <section id="lista-productos"></section>
+            </section>
+        </section>
+    </main>
+    <!-- Carga utilidades. -->
+    <script src="../assets/app.js"></script>
+    <!-- Carga lógica. -->
+    <script src="mis-productos.js"></script>
+</body>
+<!-- Finaliza. -->
+</html>

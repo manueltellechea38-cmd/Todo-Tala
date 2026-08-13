@@ -1,0 +1,20 @@
+/* Importa los estilos globales. */
+@import url("../assets/estilos_globales.css");
+
+/* Crea una caja para el estado de publicación. */
+.status-box {
+    /* Usa flexbox. */
+    display: flex;
+    /* Separa extremos. */
+    justify-content: space-between;
+    /* Centra verticalmente. */
+    align-items: center;
+    /* Dibuja borde. */
+    border: 1px solid var(--color-border);
+    /* Redondea. */
+    border-radius: 14px;
+    /* Agrega padding. */
+    padding: 14px;
+    /* Separa contenido. */
+    gap: 12px;
+}

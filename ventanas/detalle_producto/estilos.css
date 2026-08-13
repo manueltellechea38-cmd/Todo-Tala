@@ -1,0 +1,271 @@
+/* ==========================
+   RESET
+========================== */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f4f6;
+    color: #333;
+}
+
+/* ==========================
+   CONTENEDOR
+========================== */
+
+.profile-page{
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+/* ==========================
+   TARJETA
+========================== */
+
+.profile-card{
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0,0,0,.12);
+}
+
+/* ==========================
+   CABECERA
+========================== */
+
+.detail-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+}
+
+.back-button,
+.favorite-button{
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+    background: #f2f2f2;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.back-button:hover,
+.favorite-button:hover{
+    background: #dddddd;
+}
+
+/* ==========================
+   IMAGEN
+========================== */
+
+.product-image{
+    position: relative;
+    height: 280px;
+    background: #ececec;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-placeholder{
+    font-size: 5rem;
+}
+
+.discount-badge{
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #dc2626;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: .85rem;
+    font-weight: bold;
+}
+
+/* ==========================
+   CONTENIDO
+========================== */
+
+.detail-content{
+    padding: 25px;
+}
+
+.product-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.product-title h1{
+    font-size: 1.8rem;
+}
+
+.badge{
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: .8rem;
+    font-weight: bold;
+}
+
+.badge-success{
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.product-store{
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.product-price{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.product-price strong{
+    color: #2563eb;
+    font-size: 2rem;
+}
+
+.old-price{
+    color: #999;
+    text-decoration: line-through;
+}
+
+.stock{
+    color: #15803d;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.product-description{
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+/* ==========================
+   CANTIDAD
+========================== */
+
+.quantity-selector{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.quantity-selector p{
+    font-weight: bold;
+}
+
+.quantity-selector nav{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.quantity-selector button{
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.quantity-selector button:hover{
+    background: #1d4ed8;
+}
+
+#cantidad{
+    min-width: 25px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* ==========================
+   BOTÓN
+========================== */
+
+.profile-actions{
+    padding: 25px;
+    border-top: 1px solid #ececec;
+}
+
+.btn{
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    background: #2563eb;
+    color: white;
+    padding: 16px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn:hover{
+    background: #1d4ed8;
+}
+
+.btn:active{
+    transform: scale(.98);
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media(max-width:600px){
+
+    .profile-page{
+        padding: 10px;
+    }
+
+    .profile-card{
+        border-radius: 12px;
+    }
+
+    .product-image{
+        height: 220px;
+    }
+
+    .image-placeholder{
+        font-size: 4rem;
+    }
+
+    .product-title{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .quantity-selector{
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+}

@@ -1,0 +1,83 @@
+/* Importa estilos globales. */
+@import url("../assets/estilos_globales.css");
+
+/* Organiza filtros de pedido. */
+.tabs {
+    /* Usa flexbox. */
+    display: flex;
+    /* Permite wrap. */
+    flex-wrap: wrap;
+    /* Separa botones. */
+    gap: 8px;
+    /* Agrega margen inferior. */
+    margin-bottom: 16px;
+}
+
+/* Define pestañas. */
+.tab {
+    /* Quita borde. */
+    border: 0;
+    /* Usa fondo suave. */
+    background: #eef1f5;
+    /* Redondea. */
+    border-radius: 999px;
+    /* Agrega padding. */
+    padding: 8px 12px;
+    /* Permite clic. */
+    cursor: pointer;
+    /* Usa peso medio. */
+    font-weight: 700;
+}
+
+/* Marca pestaña activa. */
+.tab.active {
+    /* Usa azul. */
+    background: var(--color-primary);
+    /* Usa blanco. */
+    color: white;
+}
+
+/* Define cada pedido recibido. */
+.received-order {
+    /* Dibuja borde. */
+    border: 1px solid var(--color-border);
+    /* Redondea. */
+    border-radius: 16px;
+    /* Agrega padding. */
+    padding: 16px;
+    /* Agrega margen inferior. */
+    margin-bottom: 12px;
+}
+
+/* Organiza acciones de cada pedido. */
+.order-actions {
+    /* Usa flexbox. */
+    display: flex;
+    /* Permite wrap. */
+    flex-wrap: wrap;
+    /* Separa botones. */
+    gap: 8px;
+    /* Agrega margen superior. */
+    margin-top: 12px;
+}
+
+/* Caja de verificación de código. */
+.code-check {
+    /* Usa grilla. */
+    display: grid;
+    /* Crea campo y botón. */
+    grid-template-columns: 1fr auto;
+    /* Separa elementos. */
+    gap: 8px;
+    /* Agrega margen superior. */
+    margin-top: 12px;
+}
+
+/* Ajusta en celular. */
+@media (max-width: 560px) {
+    /* Apila verificación. */
+    .code-check {
+        /* Usa una columna. */
+        grid-template-columns: 1fr;
+    }
+}

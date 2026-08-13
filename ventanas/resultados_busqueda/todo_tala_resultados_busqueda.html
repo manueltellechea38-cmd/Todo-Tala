@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Buscar productos</title>
+
+    <link rel="stylesheet"
+          href="estilos.css">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+</head>
+
+<body>
+
+<main class="search-page">
+
+    <section class="search-card">
+
+        <header class="search-header">
+
+            <button class="back-button">
+
+                <i class="ti ti-arrow-left"></i>
+
+            </button>
+
+            <h1>
+                Buscar productos
+            </h1>
+
+        </header>
+
+        <section class="search-bar">
+
+            <input
+                id="search-input"
+                type="text"
+                placeholder="Ej: pan, auriculares, martillo...">
+
+            <button id="btn-buscar">
+
+                <i class="ti ti-search"></i>
+
+                Buscar
+
+            </button>
+
+        </section>
+
+        <p
+            id="resumen"
+            class="search-summary">
+
+        </p>
+
+        <section
+            id="lista-resultados"
+            class="results-list">
+
+            <article class="empty-results">
+
+                <i class="ti ti-search"></i>
+
+                <p>
+                    Escribí un producto o comercio y tocá "Buscar".
+                </p>
+
+            </article>
+
+        </section>
+
+    </section>
+
+</main>
+
+<script src="buscar-productos.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+/* Importa los estilos globales. */
+@import url("../assets/estilos_globales.css");
+
+/* Organiza el encabezado específico del catálogo. */
+.catalog-top {
+    /* Usa una fila flexible. */
+    display: flex;
+    /* Separa título y acciones. */
+    justify-content: space-between;
+    /* Centra verticalmente. */
+    align-items: center;
+    /* Permite salto en móvil. */
+    flex-wrap: wrap;
+    /* Separa elementos. */
+    gap: 12px;
+}
+
+/* Crea la grilla de productos. */
+.product-grid {
+    /* Usa CSS Grid. */
+    display: grid;
+    /* Crea columnas responsivas. */
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    /* Separa tarjetas. */
+    gap: 14px;
+}
+
+/* Define la tarjeta de producto. */
+.product-card {
+    /* Usa borde. */
+    border: 1px solid var(--color-border);
+    /* Redondea. */
+    border-radius: 16px;
+    /* Agrega espacio. */
+    padding: 14px;
+    /* Permite clic. */
+    cursor: pointer;
+    /* Agrega transición. */
+    transition: 160ms ease;
+}
+
+/* Mejora visual al pasar el mouse. */
+.product-card:hover {
+    /* Cambia borde. */
+    border-color: #b9cceb;
+    /* Eleva levemente. */
+    transform: translateY(-2px);
+}
+
+/* Simula la imagen del producto con siglas. */
+.product-image {
+    /* Define altura. */
+    height: 120px;
+    /* Redondea. */
+    border-radius: 13px;
+    /* Usa fondo suave. */
+    background: #eef2f7;
+    /* Centra contenido. */
+    display: grid;
+    /* Centra totalmente. */
+    place-items: center;
+    /* Usa color azul. */
+    color: var(--color-primary);
+    /* Aumenta peso. */
+    font-weight: 850;
+    /* Aumenta tamaño. */
+    font-size: 1.4rem;
+    /* Separa del texto. */
+    margin-bottom: 12px;
+}
+
+/* Organiza precio y estado. */
+.product-meta {
+    /* Usa flexbox. */
+    display: flex;
+    /* Separa extremos. */
+    justify-content: space-between;
+    /* Centra verticalmente. */
+    align-items: center;
+    /* Agrega margen superior. */
+    margin-top: 10px;
+    /* Separa elementos. */
+    gap: 8px;
+}
+
+/* Muestra un contador simple del carrito. */
+.cart-count {
+    /* Mantiene tamaño pequeño. */
+    min-width: 24px;
+    /* Centra texto. */
+    text-align: center;
+}

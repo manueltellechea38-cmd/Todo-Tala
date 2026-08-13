@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu pedido</title>
+
+    <link rel="stylesheet" href="/carrito_pedidos/estilos.css">
+</head>
+
+<body>
+
+<main class="profile-page">
+
+    <section class="profile-card">
+
+        <header class="profile-header">
+
+            <button class="back-button" aria-label="Volver">
+                ←
+            </button>
+
+            <h1>Tu pedido</h1>
+
+        </header>
+
+        <section class="cart-list" id="lista-carrito">
+        </section>
+
+        <section class="cart-observation">
+
+            <label for="observacion">
+                Observación (opcional)
+            </label>
+
+            <select id="observacion">
+
+                <option value="">Sin observación</option>
+                <option>Lo paso a buscar</option>
+                <option>Reservar para más tarde</option>
+
+            </select>
+
+        </section>
+
+        <section class="cart-total">
+
+            <article>
+
+                <span>Subtotal</span>
+
+                <span id="subtotal-total">$0</span>
+
+            </article>
+
+            <article class="total">
+
+                <span>Total</span>
+
+                <span id="total-total">$0</span>
+
+            </article>
+
+        </section>
+
+        <section class="profile-actions">
+
+            <button class="btn" id="btn-confirmar" onclick="confirmarPedido()">
+
+                <span id="btn-confirmar-texto">
+                    Confirmar pedido
+                </span>
+
+            </button>
+
+        </section>
+
+    </section>
+
+</main>
+
+<script src="carrito.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+/* Importa el sistema visual común. */
+@import url("../assets/estilos_globales.css");
+
+/* Organiza el formulario de búsqueda avanzada. */
+.search-controls {
+    /* Usa una grilla responsiva. */
+    display: grid;
+    /* Define columnas adaptables. */
+    grid-template-columns: 2fr 1fr 1fr auto;
+    /* Separa controles. */
+    gap: 10px;
+    /* Alinea los controles al final. */
+    align-items: end;
+    /* Agrega margen inferior. */
+    margin-bottom: 18px;
+}
+
+/* Define cada resultado. */
+.result-item {
+    /* Usa una grilla con imagen y contenido. */
+    display: grid;
+    /* Define una columna angosta y otra flexible. */
+    grid-template-columns: 84px 1fr auto;
+    /* Separa elementos. */
+    gap: 14px;
+    /* Centra verticalmente. */
+    align-items: center;
+    /* Agrega padding. */
+    padding: 14px;
+    /* Dibuja borde. */
+    border: 1px solid var(--color-border);
+    /* Redondea. */
+    border-radius: 15px;
+    /* Agrega margen inferior. */
+    margin-bottom: 10px;
+}
+
+/* Simula imagen del producto. */
+.result-image {
+    /* Define ancho y alto. */
+    width: 84px;
+    /* Define altura. */
+    height: 74px;
+    /* Redondea. */
+    border-radius: 12px;
+    /* Usa fondo suave. */
+    background: #eef2f7;
+    /* Centra siglas. */
+    display: grid;
+    /* Centra completamente. */
+    place-items: center;
+    /* Usa azul. */
+    color: var(--color-primary);
+    /* Usa negrita. */
+    font-weight: 850;
+}
+
+/* Ajusta búsqueda en móvil. */
+@media (max-width: 720px) {
+    /* Apila controles. */
+    .search-controls {
+        /* Usa una sola columna. */
+        grid-template-columns: 1fr;
+    }
+
+    /* Simplifica cada resultado. */
+    .result-item {
+        /* Usa dos columnas. */
+        grid-template-columns: 70px 1fr;
+    }
+
+    /* Mueve la acción debajo del contenido. */
+    .result-item > .btn {
+        /* Ocupa las dos columnas. */
+        grid-column: 1 / -1;
+    }
+}
