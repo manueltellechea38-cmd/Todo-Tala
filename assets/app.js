@@ -1,9 +1,10 @@
 window.TodoTala = window.TodoTala || {};
 
-TodoTala.STORAGE_KEY = "todoTalaDataV11";
+TodoTala.STORAGE_KEY = "todoTalaDataV12";
 
 TodoTala.crearDatosIniciales = function () {
     return {
+        version: "1.2",
         sesion: {
             usuarioId: null,
             rol: null,
@@ -50,10 +51,37 @@ TodoTala.crearDatosIniciales = function () {
                 ruc: "217654320019",
                 telefono: "099 123 456",
                 direccion: "Av. Artigas 123, Tala",
+                localidad: "Tala",
                 horario: "08:00 a 18:00",
                 descripcion: "Almacén local con productos de consumo diario.",
                 whatsapp: "099123456",
                 correo: "contacto@laplaza.uy"
+            },
+            {
+                id: 2,
+                jefeId: null,
+                nombre: "Ferretería Central",
+                ruc: "219876540011",
+                telefono: "098 555 221",
+                direccion: "José Alonso y Trelles 245, Tala",
+                localidad: "Tala",
+                horario: "08:30 a 19:00",
+                descripcion: "Herramientas y artículos para el hogar.",
+                whatsapp: "098555221",
+                correo: "ventas@ferreteriacentral.uy"
+            },
+            {
+                id: 3,
+                jefeId: null,
+                nombre: "Tienda Horizonte",
+                ruc: "216667770014",
+                telefono: "092 310 440",
+                direccion: "18 de Julio 410, Tala",
+                localidad: "Tala",
+                horario: "09:00 a 20:00",
+                descripcion: "Indumentaria y accesorios de uso diario.",
+                whatsapp: "092310440",
+                correo: "hola@tiendahorizonte.uy"
             }
         ],
 
@@ -77,7 +105,8 @@ TodoTala.crearDatosIniciales = function () {
                 descripcion: "Paquete de arroz de 1 kilogramo.",
                 stock: 30,
                 visible: true,
-                imagenTexto: "AR"
+                imagenTexto: "AR",
+                localidad: "Tala"
             },
             {
                 id: 2,
@@ -91,7 +120,8 @@ TodoTala.crearDatosIniciales = function () {
                 descripcion: "Paquete de fideos de 500 gramos.",
                 stock: 25,
                 visible: true,
-                imagenTexto: "FI"
+                imagenTexto: "FI",
+                localidad: "Tala"
             },
             {
                 id: 3,
@@ -105,7 +135,8 @@ TodoTala.crearDatosIniciales = function () {
                 descripcion: "Detergente concentrado para vajilla.",
                 stock: 5,
                 visible: true,
-                imagenTexto: "DE"
+                imagenTexto: "DE",
+                localidad: "Tala"
             },
             {
                 id: 4,
@@ -119,7 +150,68 @@ TodoTala.crearDatosIniciales = function () {
                 descripcion: "Yerba mate tradicional de 1 kilogramo.",
                 stock: 0,
                 visible: true,
-                imagenTexto: "YE"
+                imagenTexto: "YE",
+                localidad: "Tala"
+            },
+            {
+                id: 5,
+                comercioId: 2,
+                comercio: "Ferretería Central",
+                categoria: "Ferretería",
+                nombre: "Martillo carpintero",
+                marca: "Forte",
+                precio: 490,
+                precioAnterior: 560,
+                descripcion: "Martillo de uso general con mango antideslizante.",
+                stock: 11,
+                visible: true,
+                imagenTexto: "MC",
+                localidad: "Tala"
+            },
+            {
+                id: 6,
+                comercioId: 2,
+                comercio: "Ferretería Central",
+                categoria: "Ferretería",
+                nombre: "Cinta métrica 5 m",
+                marca: "ProMed",
+                precio: 275,
+                precioAnterior: null,
+                descripcion: "Cinta métrica retráctil de cinco metros.",
+                stock: 4,
+                visible: true,
+                imagenTexto: "CM",
+                localidad: "Tala"
+            },
+            {
+                id: 7,
+                comercioId: 3,
+                comercio: "Tienda Horizonte",
+                categoria: "Ropa",
+                nombre: "Remera básica",
+                marca: "Horizonte",
+                precio: 690,
+                precioAnterior: 790,
+                descripcion: "Remera unisex de algodón, disponible en varios talles.",
+                stock: 14,
+                visible: true,
+                imagenTexto: "RB",
+                localidad: "Tala"
+            },
+            {
+                id: 8,
+                comercioId: 3,
+                comercio: "Tienda Horizonte",
+                categoria: "Ropa",
+                nombre: "Gorra clásica",
+                marca: "Horizonte",
+                precio: 520,
+                precioAnterior: null,
+                descripcion: "Gorra regulable de uso diario.",
+                stock: 7,
+                visible: true,
+                imagenTexto: "GC",
+                localidad: "Tala"
             }
         ],
 
@@ -154,6 +246,28 @@ TodoTala.crearDatosIniciales = function () {
                 productoId: 3,
                 inicio: "2026-09-10",
                 fin: "2026-09-30",
+                activa: true
+            },
+            {
+                id: 2,
+                comercioId: 2,
+                nombre: "Martillo destacado",
+                tipo: "precio",
+                valor: 490,
+                productoId: 5,
+                inicio: "2026-09-12",
+                fin: "2026-09-25",
+                activa: true
+            },
+            {
+                id: 3,
+                comercioId: 3,
+                nombre: "Semana de indumentaria",
+                tipo: "precio",
+                valor: 690,
+                productoId: 7,
+                inicio: "2026-09-14",
+                fin: "2026-09-28",
                 activa: true
             }
         ],
@@ -337,6 +451,57 @@ TodoTala.claseEstado = function (estado) {
     }
 
     return "badge";
+};
+
+TodoTala.estadoStock = function (producto) {
+    if (producto.stock <= 0) {
+        return { texto: "Sin stock", clase: "badge badge--danger" };
+    }
+
+    if (producto.stock <= 5) {
+        return { texto: "Últimas " + producto.stock, clase: "badge badge--warning" };
+    }
+
+    return { texto: "Disponible", clase: "badge badge--success" };
+};
+
+TodoTala.cantidadCarrito = function () {
+    const datos = TodoTala.obtenerDatos();
+    return datos.carrito.reduce(function (total, item) {
+        return total + item.cantidad;
+    }, 0);
+};
+
+TodoTala.agregarAlCarrito = function (productoId, cantidad) {
+    const datos = TodoTala.obtenerDatos();
+    const producto = datos.productos.find(function (item) {
+        return item.id === productoId;
+    });
+
+    if (!producto || producto.stock <= 0) {
+        return false;
+    }
+
+    const cantidadSolicitada = Number(cantidad || 1);
+    const existente = datos.carrito.find(function (item) {
+        return item.id === productoId;
+    });
+
+    const cantidadActual = existente ? existente.cantidad : 0;
+    const nuevaCantidad = cantidadActual + cantidadSolicitada;
+
+    if (nuevaCantidad > producto.stock) {
+        return false;
+    }
+
+    if (existente) {
+        existente.cantidad = nuevaCantidad;
+    } else {
+        datos.carrito.push({ id: productoId, cantidad: cantidadSolicitada });
+    }
+
+    TodoTala.guardarDatos(datos);
+    return true;
 };
 
 TodoTala.reiniciarDemo = function () {
