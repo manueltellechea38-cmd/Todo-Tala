@@ -1,83 +1,70 @@
-/* Importa estilos globales. */
 @import url("../assets/estilos_globales.css");
 
-/* Organiza filtros de pedido. */
-.tabs {
-    /* Usa flexbox. */
-    display: flex;
-    /* Permite wrap. */
-    flex-wrap: wrap;
-    /* Separa botones. */
-    gap: 8px;
-    /* Agrega margen inferior. */
-    margin-bottom: 16px;
+.received-card {
+    max-width: 1050px;
 }
 
-/* Define pestañas. */
-.tab {
-    /* Quita borde. */
-    border: 0;
-    /* Usa fondo suave. */
-    background: #eef1f5;
-    /* Redondea. */
-    border-radius: 999px;
-    /* Agrega padding. */
-    padding: 8px 12px;
-    /* Permite clic. */
-    cursor: pointer;
-    /* Usa peso medio. */
-    font-weight: 700;
-}
-
-/* Marca pestaña activa. */
-.tab.active {
-    /* Usa azul. */
-    background: var(--color-primary);
-    /* Usa blanco. */
-    color: white;
-}
-
-/* Define cada pedido recibido. */
-.received-order {
-    /* Dibuja borde. */
-    border: 1px solid var(--color-border);
-    /* Redondea. */
-    border-radius: 16px;
-    /* Agrega padding. */
-    padding: 16px;
-    /* Agrega margen inferior. */
-    margin-bottom: 12px;
-}
-
-/* Organiza acciones de cada pedido. */
-.order-actions {
-    /* Usa flexbox. */
-    display: flex;
-    /* Permite wrap. */
-    flex-wrap: wrap;
-    /* Separa botones. */
-    gap: 8px;
-    /* Agrega margen superior. */
-    margin-top: 12px;
-}
-
-/* Caja de verificación de código. */
-.code-check {
-    /* Usa grilla. */
+.back-link {
     display: grid;
-    /* Crea campo y botón. */
-    grid-template-columns: 1fr auto;
-    /* Separa elementos. */
-    gap: 8px;
-    /* Agrega margen superior. */
-    margin-top: 12px;
+    place-items: center;
 }
 
-/* Ajusta en celular. */
-@media (max-width: 560px) {
-    /* Apila verificación. */
+.received-content,
+.received-list {
+    display: grid;
+    gap: 12px;
+}
+
+/* Filtros superiores. */
+.order-filters {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 10px;
+}
+
+/* Tarjeta de pedido recibido. */
+.received-order {
+    display: grid;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+}
+
+.received-order > header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.order-items {
+    color: var(--color-muted);
+}
+
+.order-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.code-check {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+}
+
+.cancel-order-form {
+    display: grid;
+    gap: 8px;
+    padding: 11px;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+@media (max-width: 620px) {
+    .order-filters,
     .code-check {
-        /* Usa una columna. */
         grid-template-columns: 1fr;
     }
 }

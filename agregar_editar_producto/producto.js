@@ -3,6 +3,7 @@ const inputImagen = document.getElementById("imagen");
 const vistaPrevia = document.getElementById("vista-previa");
 const usuarioProducto = TodoTala.usuarioActual();
 
+/* Muestra la imagen elegida antes de guardar. */
 inputImagen.addEventListener("change", function () {
     const archivo = inputImagen.files[0];
     if (!archivo) return;
@@ -15,6 +16,7 @@ inputImagen.addEventListener("change", function () {
     lector.readAsDataURL(archivo);
 });
 
+/* Valida y agrega un producto al comercio actual. */
 formularioProducto.addEventListener("submit", function (evento) {
     evento.preventDefault();
 
@@ -30,12 +32,10 @@ formularioProducto.addEventListener("submit", function (evento) {
     if (!valido) return;
 
     const datos = TodoTala.obtenerDatos();
-    const comercio = datos.comercios.find(function (item) {
-        return item.id === usuarioProducto.comercioId;
-    });
-    const nuevoId = Math.max.apply(null, datos.productos.map(function (producto) {
-        return producto.id;
-    })) + 1;
+    const comercio = TodoTala.comercioActual();
+    const nuevoId = datos.productos.reduce(function (mayor, producto) {
+        return Math.max(mayor, producto.id);
+    }, 0) + 1;
 
     datos.productos.push({
         id: nuevoId,
@@ -54,12 +54,8 @@ formularioProducto.addEventListener("submit", function (evento) {
     });
 
     TodoTala.guardarDatos(datos);
-    TodoTala.toast("Producto guardado");
-    setTimeout(function () {
-        TodoTala.irA("../gestioinar_productos/todo_tala_gestion_productos.html");
+    TodoTala.toast("Producto guardado.");
+    window.setTimeout(function () {
+        TodoTala.irA("../gestionar_productos/todo_tala_gestion_productos.html");
     }, 400);
-});
-
-document.getElementById("btn-volver").addEventListener("click", function () {
-    TodoTala.irA("../gestioinar_productos/todo_tala_gestion_productos.html");
 });

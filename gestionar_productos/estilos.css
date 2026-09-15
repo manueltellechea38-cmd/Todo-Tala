@@ -1,6 +1,6 @@
 @import url("../assets/estilos_globales.css");
 
-.promotions-card {
+.products-card {
     max-width: 1000px;
 }
 
@@ -9,21 +9,17 @@
     place-items: center;
 }
 
-.promotions-content,
-.promo-list {
+#filtros-productos select {
+    width: auto;
+}
+
+.product-list {
     display: grid;
-    gap: 12px;
+    gap: 10px;
 }
 
-/* Formulario que se abre para crear una promoción. */
-.new-promo-panel {
-    padding: 14px;
-    border: 1px solid var(--color-border);
-    border-radius: 12px;
-    background: #f8fafc;
-}
-
-.promo-row {
+/* Fila de un producto administrado por el comercio. */
+.product-row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 12px;
@@ -33,19 +29,26 @@
     border-radius: 10px;
 }
 
-.promo-info {
+.product-info {
     display: grid;
     gap: 4px;
 }
 
-.promo-actions {
+.product-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.product-row__actions {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
 }
 
 @media (max-width: 620px) {
-    .promo-row {
+    .product-row {
         grid-template-columns: 1fr;
     }
 }

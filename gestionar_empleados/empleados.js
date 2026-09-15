@@ -2,18 +2,15 @@ const usuarioJefe = TodoTala.usuarioActual();
 const listaEmpleados = document.getElementById("lista-empleados");
 const errorEmpleado = document.getElementById("error-empleado");
 
-/* Muestra solamente los empleados que pertenecen al comercio del jefe. */
+/* Muestra solamente empleados del comercio del jefe actual. */
 function renderizarEmpleados() {
     const datos = TodoTala.obtenerDatos();
-    const comercio = datos.comercios.find(function (item) {
-        return item.id === usuarioJefe.comercioId;
-    });
-
-    document.getElementById("nombre-comercio").textContent = comercio ? comercio.nombre : "Mi comercio";
-
+    const comercio = TodoTala.comercioActual();
     const empleados = datos.usuarios.filter(function (usuario) {
         return usuario.rol === "empleado" && usuario.comercioId === usuarioJefe.comercioId;
     });
+
+    document.getElementById("nombre-comercio").textContent = comercio ? comercio.nombre : "Mi comercio";
 
     if (empleados.length === 0) {
         listaEmpleados.innerHTML = '<p class="empty-state">No hay empleados registrados.</p>';
@@ -21,63 +18,54 @@ function renderizarEmpleados() {
     }
 
     listaEmpleados.innerHTML = empleados.map(function (empleado) {
-        return '<article class="employee-item">' +
-            '<strong>' + empleado.nombre + '</strong>' +
-            '<span>' + empleado.correo + '</span>' +
-            '<span>Cédula: ' + empleado.cedula + '</span>' +
-            '<button class="btn btn--danger" data-eliminar="' + empleado.id + '" type="button">Eliminar</button>' +
-        '</article>';
+        return '<article class="employee-item" data-empleado="' + empleado.id + '"><strong>' + empleado.nombre + '</strong><span>' + empleado.correo + '</span><span>Cédula: ' + empleado.cedula + '</span><button class="btn btn--danger" type="button">Eliminar</button></article>';
     }).join("");
 
-    /* Conecta el botón eliminar de cada empleado. */
-    document.querySelectorAll("[data-eliminar]").forEach(function (boton) {
-        boton.addEventListener("click", function () {
-            const id = Number(boton.dataset.eliminar);
-            const datosActuales = TodoTala.obtenerDatos();
-
-            datosActuales.usuarios = datosActuales.usuarios.filter(function (usuario) {
-                return usuario.id !== id;
-            });
-
-            TodoTala.guardarDatos(datosActuales);
-            renderizarEmpleados();
-            TodoTala.toast("Empleado eliminado");
+    document.querySelectorAll("[data-empleado]").forEach(function (tarjeta) {
+        tarjeta.querySelector("button").addEventListener("click", function () {
+            eliminarEmpleado(Number(tarjeta.dataset.empleado));
         });
     });
 }
 
-/* Crea una nueva cuenta de empleado para el comercio actual. */
+/* Elimina una cuenta de empleado del comercio. */
+function eliminarEmpleado(id) {
+    const datos = TodoTala.obtenerDatos();
+    const empleado = datos.usuarios.find(function (usuario) { return usuario.id === id; });
+
+    if (!empleado || empleado.rol !== "empleado" || empleado.comercioId !== usuarioJefe.comercioId) return;
+
+    datos.usuarios = datos.usuarios.filter(function (usuario) { return usuario.id !== id; });
+    TodoTala.guardarDatos(datos);
+    renderizarEmpleados();
+}
+
+/* Valida y crea la cuenta de un nuevo empleado. */
 document.getElementById("form-empleado").addEventListener("submit", function (evento) {
     evento.preventDefault();
 
     const datos = TodoTala.obtenerDatos();
     const nombre = document.getElementById("nombre").value.trim();
-    const cedula = document.getElementById("cedula").value.trim();
+    const cedula = document.getElementById("cedula").value.replace(/\D/g, "");
     const correo = document.getElementById("correo").value.trim().toLowerCase();
     const password = document.getElementById("password").value;
     const fechaNacimiento = document.getElementById("fecha-nacimiento").value;
 
     const repetido = datos.usuarios.some(function (usuario) {
-        return usuario.correo.toLowerCase() === correo || usuario.cedula === cedula;
+        return usuario.correo.toLowerCase() === correo || String(usuario.cedula) === cedula;
     });
 
-    /* Valida los campos obligatorios. */
-    if (!nombre || !cedula || !correo || password.length < 8) {
-        errorEmpleado.textContent = "Completá los datos obligatorios. La contraseña debe tener al menos 8 caracteres.";
+    const valido = nombre !== "" && cedula.length >= 7 && correo.includes("@") && correo.includes(".") && password.length >= 8 && !repetido;
+
+    if (!valido) {
+        errorEmpleado.textContent = repetido ? "Ese correo o cédula ya está registrado." : "Completá los datos obligatorios. La contraseña debe tener al menos 8 caracteres.";
         errorEmpleado.classList.add("is-visible");
         return;
     }
 
-    /* Evita repetir correo o cédula. */
-    if (repetido) {
-        errorEmpleado.textContent = "Ese correo o cédula ya está registrado.";
-        errorEmpleado.classList.add("is-visible");
-        return;
-    }
-
-    const nuevoId = Math.max.apply(null, datos.usuarios.map(function (usuario) {
-        return usuario.id;
-    })) + 1;
+    const nuevoId = datos.usuarios.reduce(function (mayor, usuario) {
+        return Math.max(mayor, usuario.id);
+    }, 0) + 1;
 
     datos.usuarios.push({
         id: nuevoId,
@@ -94,7 +82,7 @@ document.getElementById("form-empleado").addEventListener("submit", function (ev
     evento.target.reset();
     errorEmpleado.classList.remove("is-visible");
     renderizarEmpleados();
-    TodoTala.toast("Empleado creado correctamente");
+    TodoTala.toast("Empleado creado correctamente.");
 });
 
 renderizarEmpleados();

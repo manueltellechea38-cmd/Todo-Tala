@@ -1,27 +1,18 @@
-const idEditarProducto = Number(TodoTala.parametro("id"));
 const usuarioEditar = TodoTala.usuarioActual();
-let datosEditar = TodoTala.obtenerDatos();
-let productoEditar = datosEditar.productos.find(function (producto) {
-    return producto.id === idEditarProducto && producto.comercioId === usuarioEditar.comercioId;
+const idEditar = Number(TodoTala.parametro("id"));
+const datosEditar = TodoTala.obtenerDatos();
+const productoEditar = datosEditar.productos.find(function (producto) {
+    return producto.id === idEditar && producto.comercioId === usuarioEditar.comercioId;
 });
+const botonEliminar = document.getElementById("btn-eliminar");
+let confirmarEliminacion = false;
 
+/* Si el producto no pertenece al comercio, vuelve al listado. */
 if (!productoEditar) {
-    TodoTala.irA("../gestioinar_productos/todo_tala_gestion_productos.html");
+    TodoTala.irA("../gestionar_productos/todo_tala_gestion_productos.html");
 }
 
-function actualizarAvisoStock() {
-    const stock = Number(document.getElementById("stock").value);
-    const aviso = document.getElementById("stock-aviso");
-
-    if (stock === 0) {
-        aviso.textContent = "Sin stock";
-    } else if (stock <= 5) {
-        aviso.textContent = "Stock bajo";
-    } else {
-        aviso.textContent = "Stock disponible";
-    }
-}
-
+/* Carga los datos actuales del producto en el formulario. */
 function cargarProducto() {
     document.getElementById("nombre").value = productoEditar.nombre;
     document.getElementById("marca").value = productoEditar.marca;
@@ -33,8 +24,19 @@ function cargarProducto() {
     actualizarAvisoStock();
 }
 
+/* Informa cuando quedan cinco unidades o menos. */
+function actualizarAvisoStock() {
+    const stock = Number(document.getElementById("stock").value);
+    const aviso = document.getElementById("stock-aviso");
+
+    if (stock === 0) aviso.textContent = "Sin stock.";
+    else if (stock <= 5) aviso.textContent = "Stock bajo.";
+    else aviso.textContent = "Stock disponible.";
+}
+
 document.getElementById("stock").addEventListener("input", actualizarAvisoStock);
 
+/* Guarda los cambios realizados. */
 document.getElementById("form-editar").addEventListener("submit", function (evento) {
     evento.preventDefault();
 
@@ -42,7 +44,7 @@ document.getElementById("form-editar").addEventListener("submit", function (even
     const marca = document.getElementById("marca").value.trim();
     const precio = Number(document.getElementById("precio").value);
     const stock = Number(document.getElementById("stock").value);
-    const valido = nombre && marca && precio > 0 && stock >= 0;
+    const valido = nombre !== "" && marca !== "" && precio > 0 && stock >= 0;
 
     document.getElementById("error-form").classList.toggle("is-visible", !valido);
     if (!valido) return;
@@ -56,27 +58,25 @@ document.getElementById("form-editar").addEventListener("submit", function (even
     productoEditar.visible = document.getElementById("visible").checked;
 
     TodoTala.guardarDatos(datosEditar);
-    TodoTala.toast("Cambios guardados");
-    setTimeout(function () {
-        TodoTala.irA("../gestioinar_productos/todo_tala_gestion_productos.html");
+    TodoTala.toast("Cambios guardados.");
+    window.setTimeout(function () {
+        TodoTala.irA("../gestionar_productos/todo_tala_gestion_productos.html");
     }, 350);
 });
 
-document.getElementById("btn-eliminar").addEventListener("click", function () {
-    if (!window.confirm("¿Querés eliminar este producto?")) return;
+/* La eliminación necesita dos clics para evitar borrados accidentales. */
+botonEliminar.addEventListener("click", function () {
+    if (!confirmarEliminacion) {
+        confirmarEliminacion = true;
+        botonEliminar.textContent = "Confirmar eliminación";
+        return;
+    }
 
-    datosEditar.productos = datosEditar.productos.filter(function (producto) {
-        return producto.id !== productoEditar.id;
-    });
-    datosEditar.carrito = datosEditar.carrito.filter(function (item) {
-        return item.id !== productoEditar.id;
-    });
+    datosEditar.productos = datosEditar.productos.filter(function (producto) { return producto.id !== productoEditar.id; });
+    datosEditar.carrito = datosEditar.carrito.filter(function (item) { return item.id !== productoEditar.id; });
+    datosEditar.promociones = datosEditar.promociones.filter(function (promo) { return promo.productoId !== productoEditar.id; });
     TodoTala.guardarDatos(datosEditar);
-    TodoTala.irA("../gestioinar_productos/todo_tala_gestion_productos.html");
+    TodoTala.irA("../gestionar_productos/todo_tala_gestion_productos.html");
 });
 
-document.getElementById("btn-volver").addEventListener("click", function () {
-    TodoTala.irA("../gestioinar_productos/todo_tala_gestion_productos.html");
-});
-
-if (productoEditar) cargarProducto();
+cargarProducto();

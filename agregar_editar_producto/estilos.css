@@ -1,36 +1,31 @@
-/* Importa los estilos generales. */
 @import url("../assets/estilos_globales.css");
 
-/* Crea un área simple para seleccionar una imagen local del MVP. */
+.product-form-card {
+    max-width: 760px;
+}
+
+.back-link {
+    display: grid;
+    place-items: center;
+}
+
+/* Selector y vista previa de la imagen. */
 .image-upload {
-    /* Dibuja borde punteado. */
-    border: 2px dashed #b9c4d2;
-    /* Redondea. */
-    border-radius: 16px;
-    /* Agrega padding. */
-    padding: 22px;
-    /* Centra texto. */
-    text-align: center;
-    /* Usa fondo suave. */
-    background: #f8fafc;
+    display: grid;
+    gap: 8px;
+    padding: 13px;
+    border: 1px dashed var(--color-border);
+    border-radius: 10px;
 }
 
-/* Define la vista previa de imagen. */
 .image-preview {
-    /* Oculta inicialmente. */
     display: none;
-    /* Limita ancho. */
-    max-width: 100%;
-    /* Limita altura. */
-    max-height: 180px;
-    /* Centra la imagen. */
-    margin: 12px auto 0;
-    /* Redondea. */
-    border-radius: 12px;
+    width: 150px;
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
 }
 
-/* Muestra la imagen cuando existe. */
 .image-preview.is-visible {
-    /* Cambia a bloque. */
     display: block;
 }

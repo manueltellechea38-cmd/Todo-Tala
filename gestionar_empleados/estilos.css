@@ -1,34 +1,26 @@
 @import url("../assets/estilos_globales.css");
 
-/* Ancho máximo de la pantalla. */
 .employee-card {
     max-width: 1000px;
 }
 
-/* Separa el formulario de la lista de empleados. */
+/* Divide el alta y la lista de empleados. */
 .employee-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
 }
 
-/* Formulario de alta. */
-.employee-form {
+.employee-form,
+.employee-list {
     display: grid;
-    gap: 12px;
+    gap: 11px;
     margin-top: 12px;
 }
 
 .employee-form label {
     display: grid;
     gap: 6px;
-}
-
-/* Listado de cuentas creadas. */
-.employee-list {
-    display: grid;
-    gap: 10px;
-    margin-top: 12px;
 }
 
 .employee-item {
@@ -45,37 +37,12 @@
 }
 
 .employee-item .btn {
-    margin-top: 6px;
     justify-self: start;
+    margin-top: 5px;
 }
 
-/* Navegación inferior del jefe. */
-.commerce-nav {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    border-top: 1px solid var(--color-border);
-}
-
-.commerce-nav a {
-    padding: 13px 6px;
-    text-align: center;
-    color: var(--color-muted);
-    font-size: 0.82rem;
-}
-
-.commerce-nav .active {
-    color: var(--color-primary);
-    font-weight: 700;
-}
-
-/* En celular se muestra una sola columna. */
 @media (max-width: 700px) {
     .employee-layout {
         grid-template-columns: 1fr;
-    }
-
-    .commerce-nav a {
-        font-size: 0.72rem;
-        padding: 11px 3px;
     }
 }

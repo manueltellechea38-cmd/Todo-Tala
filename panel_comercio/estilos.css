@@ -1,16 +1,20 @@
 @import url("../assets/estilos_globales.css");
 
-/* Ancho principal del panel. */
 .panel-card {
     max-width: 1050px;
 }
 
-/* Tarjetas con los datos rápidos del comercio. */
+.panel-content {
+    display: grid;
+    gap: 24px;
+}
+
+/* Tarjetas con cantidades del comercio. */
 .summary-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
-    margin: 12px 0 22px;
+    margin-top: 12px;
 }
 
 .metric {
@@ -26,19 +30,14 @@
     font-size: 1.6rem;
 }
 
-/* Zona reservada para avisos de stock. */
-.stock-area {
-    margin-bottom: 22px;
-}
-
 .stock-warning {
     padding: 14px;
-    border: 1px solid #f0d994;
+    border: 1px solid #ecd78e;
     border-radius: 12px;
     background: var(--color-warning-soft);
 }
 
-/* Accesos a las funciones administrativas. */
+/* Accesos rápidos. */
 .quick-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -52,7 +51,6 @@
     padding: 16px;
     border: 1px solid var(--color-border);
     border-radius: 12px;
-    background: white;
 }
 
 .quick-card:hover {
@@ -64,33 +62,6 @@
     font-size: 0.9rem;
 }
 
-/* Navegación inferior del jefe y del empleado. */
-.commerce-nav {
-    display: grid;
-    border-top: 1px solid var(--color-border);
-}
-
-.commerce-nav--5 {
-    grid-template-columns: repeat(5, 1fr);
-}
-
-.commerce-nav--4 {
-    grid-template-columns: repeat(4, 1fr);
-}
-
-.commerce-nav a {
-    padding: 13px 6px;
-    text-align: center;
-    color: var(--color-muted);
-    font-size: 0.82rem;
-}
-
-.commerce-nav .active {
-    color: var(--color-primary);
-    font-weight: 700;
-}
-
-/* Ajustes para pantallas medianas. */
 @media (max-width: 720px) {
     .summary-grid,
     .quick-grid {
@@ -98,15 +69,9 @@
     }
 }
 
-/* Ajustes para celular. */
 @media (max-width: 520px) {
     .summary-grid,
     .quick-grid {
         grid-template-columns: 1fr;
-    }
-
-    .commerce-nav a {
-        font-size: 0.72rem;
-        padding: 11px 3px;
     }
 }
