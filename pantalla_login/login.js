@@ -10,7 +10,6 @@ const botonIngresar = document.getElementById("btn-ingresar");
 /* Permite mostrar u ocultar la contraseña. */
 botonVerPassword.addEventListener("click", function () {
     const estaOculta = campoPassword.type === "password";
-
     campoPassword.type = estaOculta ? "text" : "password";
     botonVerPassword.textContent = estaOculta ? "Ocultar" : "Mostrar";
 });
@@ -39,7 +38,7 @@ formularioLogin.addEventListener("submit", function (evento) {
 
     const usuario = TodoTala.iniciarSesion(correo, password);
 
-    /* Si los datos no coinciden con ninguna cuenta, muestra el error. */
+    /* Si no existe una cuenta con esos datos, vuelve a habilitar el formulario. */
     if (!usuario) {
         botonIngresar.disabled = false;
         botonIngresar.textContent = "Ingresar";
@@ -48,6 +47,6 @@ formularioLogin.addEventListener("submit", function (evento) {
         return;
     }
 
-    /* Cada usuario entra a la parte de la aplicación que corresponde a su rol. */
+    /* Cada rol entra a la parte de la aplicación que le corresponde. */
     TodoTala.irSegunRol(usuario);
 });

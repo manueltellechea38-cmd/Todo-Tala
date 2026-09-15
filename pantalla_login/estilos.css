@@ -1,16 +1,15 @@
 @import url("../assets/estilos_globales.css");
 
-/* Centra la tarjeta de ingreso en la pantalla. */
+/* Centra la tarjeta de acceso en la pantalla. */
 .login-page {
     align-items: center;
 }
 
-/* Limita el ancho del formulario. */
 .login-card {
-    max-width: 480px;
+    max-width: 500px;
 }
 
-/* Encabezado azul con la marca de Todo Tala. */
+/* Encabezado azul con el nombre de la aplicación. */
 .login-header {
     display: flex;
     align-items: center;
@@ -22,14 +21,13 @@
 
 .login-header p {
     margin-top: 2px;
-    font-size: 0.88rem;
-    opacity: 0.9;
+    font-size: 0.85rem;
+    opacity: 0.85;
 }
 
-/* Identificador visual de la aplicación. */
 .login-logo {
-    width: 50px;
-    height: 50px;
+    width: 52px;
+    height: 52px;
     display: grid;
     place-items: center;
     border-radius: 12px;
@@ -38,11 +36,7 @@
     font-weight: 800;
 }
 
-/* Espaciado del contenido principal. */
-.login-content {
-    padding: 24px;
-}
-
+/* Formulario de ingreso. */
 .login-title {
     margin-bottom: 18px;
 }
@@ -51,7 +45,6 @@
     margin-top: 5px;
 }
 
-/* Ordena los campos uno debajo del otro. */
 .login-form {
     display: grid;
     gap: 12px;
@@ -62,46 +55,30 @@
     gap: 6px;
 }
 
-/* Deja espacio para el botón Mostrar dentro del campo contraseña. */
 .password-label {
     position: relative;
 }
 
 .password-label input {
-    padding-right: 80px;
+    padding-right: 78px;
 }
 
 .password-toggle {
     position: absolute;
-    right: 10px;
-    bottom: 9px;
+    right: 8px;
+    bottom: 8px;
     border: 0;
     background: transparent;
     color: var(--color-primary);
     font-weight: 700;
-    cursor: pointer;
 }
 
-/* Separa el acceso del enlace para crear una cuenta. */
+/* Enlace al registro. */
 .register-area {
+    display: grid;
+    gap: 8px;
     margin-top: 20px;
     padding-top: 18px;
     border-top: 1px solid var(--color-border);
     text-align: center;
-}
-
-.register-area p {
-    margin-bottom: 10px;
-    color: var(--color-muted);
-}
-
-/* Ajuste para celulares. */
-@media (max-width: 520px) {
-    .login-content {
-        padding: 20px 16px;
-    }
-
-    .login-header {
-        padding: 18px 16px;
-    }
 }

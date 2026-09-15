@@ -1,121 +1,93 @@
-/* Importa los estilos comunes del MVP. */
 @import url("../assets/estilos_globales.css");
 
-/* Organiza el detalle en dos columnas en pantallas amplias. */
-.detail-layout {
-    /* Usa CSS Grid. */
+.detail-card {
+    max-width: 980px;
+}
+
+.back-link {
     display: grid;
-    /* Crea una columna visual y otra de contenido. */
-    grid-template-columns: minmax(240px, 0.8fr) 1.2fr;
-    /* Separa ambas columnas. */
+    place-items: center;
+}
+
+/* Divide la imagen y la información en dos columnas. */
+.detail-layout {
+    display: grid;
+    grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
     gap: 24px;
 }
 
-/* Simula la imagen del producto mientras no existe carga real de archivos. */
 .detail-image {
-    /* Define una altura mínima. */
-    min-height: 310px;
-    /* Redondea. */
-    border-radius: 18px;
-    /* Usa fondo suave. */
-    background: linear-gradient(145deg, #eef2f7, #e6effd);
-    /* Centra el contenido. */
+    min-height: 320px;
     display: grid;
-    /* Centra totalmente. */
     place-items: center;
-    /* Usa azul principal. */
+    border-radius: 14px;
+    background: #eef2f7;
     color: var(--color-primary);
-    /* Aumenta tamaño. */
     font-size: 3rem;
-    /* Usa negrita. */
-    font-weight: 900;
+    font-weight: 800;
 }
 
-/* Organiza el título con el estado. */
+.detail-info {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+}
+
 .detail-title-row {
-    /* Usa flexbox. */
     display: flex;
-    /* Separa los extremos. */
     justify-content: space-between;
-    /* Centra verticalmente. */
     align-items: flex-start;
-    /* Separa elementos. */
     gap: 12px;
 }
 
-/* Destaca el precio actual. */
 .detail-price {
-    /* Aumenta tamaño. */
-    font-size: 1.8rem;
-    /* Usa peso fuerte. */
-    font-weight: 850;
-    /* Agrega margen vertical. */
-    margin: 12px 0 4px;
-}
-
-/* Estilo del precio anterior. */
-.old-price {
-    /* Tacha el texto. */
-    text-decoration: line-through;
-    /* Usa color secundario. */
-    color: var(--color-muted);
-    /* Reduce tamaño. */
-    font-size: 0.95rem;
-    /* Agrega margen izquierdo. */
-    margin-left: 8px;
-}
-
-/* Organiza el selector de cantidad. */
-.quantity-control {
-    /* Usa flexbox. */
-    display: inline-flex;
-    /* Centra verticalmente. */
+    display: flex;
     align-items: center;
-    /* Agrega borde. */
+    gap: 10px;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.old-price {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    font-weight: 400;
+    text-decoration: line-through;
+}
+
+/* Control de cantidad. */
+.quantity-area {
+    display: grid;
+    gap: 7px;
+}
+
+.quantity-control {
+    width: fit-content;
+    display: grid;
+    grid-template-columns: 40px 48px 40px;
+    align-items: center;
     border: 1px solid var(--color-border);
-    /* Redondea. */
-    border-radius: 12px;
-    /* Oculta bordes internos fuera del radio. */
+    border-radius: 10px;
     overflow: hidden;
 }
 
-/* Estilo de botones de cantidad. */
 .quantity-control button {
-    /* Define tamaño. */
-    width: 42px;
-    /* Define altura. */
-    height: 42px;
-    /* Quita borde. */
+    height: 40px;
     border: 0;
-    /* Usa fondo suave. */
-    background: #f3f5f7;
-    /* Permite clic. */
-    cursor: pointer;
-    /* Aumenta tamaño del signo. */
-    font-size: 1.1rem;
+    background: #eef1f5;
 }
 
-/* Estilo del número de cantidad. */
 .quantity-control span {
-    /* Define ancho mínimo. */
-    min-width: 48px;
-    /* Centra texto. */
     text-align: center;
-    /* Usa negrita. */
-    font-weight: 750;
+    font-weight: 700;
 }
 
-/* Apila el detalle en celular. */
-@media (max-width: 700px) {
-    /* Cambia a una columna. */
+@media (max-width: 720px) {
     .detail-layout {
-        /* Usa una sola columna. */
         grid-template-columns: 1fr;
     }
 
-    /* Reduce la altura de imagen. */
     .detail-image {
-        /* Define una altura menor. */
-        min-height: 210px;
+        min-height: 220px;
     }
 }

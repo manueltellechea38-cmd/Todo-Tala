@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Tala | Crear cuenta</title>
+    <link rel="stylesheet" href="estilos.css?v=1.3.3">
+</head>
+<body>
+    <main class="app-page registration-page">
+        <section class="app-card registration-card">
+            <!-- Encabezado del registro. -->
+            <header class="registration-header">
+                <a class="icon-button" href="../pantalla_login/todo_tala_pantalla_login.html" aria-label="Volver">←</a>
+                <section>
+                    <p class="registration-eyebrow">Todo Tala</p>
+                    <h1>Crear una cuenta</h1>
+                    <p>Elegí el tipo de cuenta y completá tus datos.</p>
+                </section>
+            </header>
+
+            <section class="content">
+                <form id="registro-form" class="form-grid" novalidate>
+                    <!-- Selección del tipo de cuenta. -->
+                    <fieldset class="account-fieldset form-grid__full">
+                        <legend>Tipo de cuenta</legend>
+                        <section class="account-selector" aria-label="Tipo de cuenta">
+                            <button id="btn-cliente" class="active" type="button">
+                                <strong>Cliente</strong>
+                                <span>Buscar productos y realizar pedidos</span>
+                            </button>
+                            <button id="btn-jefe" type="button">
+                                <strong>Jefe / Comercio</strong>
+                                <span>Administrar un comercio</span>
+                            </button>
+                        </section>
+                        <p class="helper">Las cuentas de empleado son creadas por el jefe del comercio.</p>
+                    </fieldset>
+
+                    <!-- Datos personales. -->
+                    <header class="section-title form-grid__full">
+                        <h2>Datos personales</h2>
+                    </header>
+
+                    <label class="form-group form-grid__full" for="nombre">
+                        Nombre y apellido *
+                        <input id="nombre" type="text" autocomplete="name">
+                    </label>
+
+                    <label class="form-group" for="cedula">
+                        Cédula *
+                        <input id="cedula" type="text" inputmode="numeric" placeholder="Sin puntos ni guiones">
+                    </label>
+
+                    <label class="form-group" for="fecha-nacimiento">
+                        Fecha de nacimiento
+                        <input id="fecha-nacimiento" type="date">
+                    </label>
+
+                    <label class="form-group form-grid__full" for="email">
+                        Correo electrónico *
+                        <input id="email" type="email" autocomplete="email">
+                    </label>
+                    <p id="error-email" class="error-message form-grid__full">Ese correo no es válido o ya está registrado.</p>
+
+                    <label class="form-group" for="password">
+                        Contraseña *
+                        <input id="password" type="password" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+                    </label>
+
+                    <label class="form-group" for="confirm-password">
+                        Confirmar contraseña *
+                        <input id="confirm-password" type="password" autocomplete="new-password">
+                    </label>
+                    <p id="error-password" class="error-message form-grid__full">Las contraseñas deben coincidir y tener al menos 8 caracteres.</p>
+
+                    <!-- Estos campos aparecen solamente al registrar un Jefe. -->
+                    <fieldset id="campos-comercio" class="business-fields form-grid__full">
+                        <legend>Datos del comercio</legend>
+
+                        <label class="form-group" for="nombre-comercio">
+                            Nombre del comercio *
+                            <input id="nombre-comercio" type="text">
+                        </label>
+
+                        <label class="form-group" for="ruc">
+                            RUC del comercio *
+                            <input id="ruc" type="text" inputmode="numeric">
+                        </label>
+                        <p id="error-ruc" class="error-message business-error">Ese RUC no es válido o ya está registrado.</p>
+
+                        <label class="form-group" for="telefono-comercio">
+                            Teléfono *
+                            <input id="telefono-comercio" type="tel">
+                        </label>
+
+                        <label class="form-group" for="direccion">
+                            Dirección *
+                            <input id="direccion" type="text">
+                        </label>
+
+                        <label class="form-group business-full" for="horario">
+                            Horario *
+                            <input id="horario" type="text" placeholder="Ej: 08:00 a 18:00">
+                        </label>
+                    </fieldset>
+
+                    <p id="error-general" class="error-message form-grid__full">Revisá los campos obligatorios antes de continuar.</p>
+
+                    <section class="registration-actions form-grid__full">
+                        <button class="btn btn--primary" type="submit">Crear cuenta</button>
+                        <a class="btn btn--secondary" href="../pantalla_login/todo_tala_pantalla_login.html">Ya tengo cuenta</a>
+                    </section>
+                </form>
+            </section>
+        </section>
+    </main>
+
+    <script src="../assets/app.js?v=1.3.3"></script>
+    <script src="../assets/acceso.js?v=1.3.3"></script>
+    <script src="registro.js?v=1.3.3"></script>
+</body>
+</html>

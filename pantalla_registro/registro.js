@@ -1,12 +1,12 @@
+/* El registro comienza como cuenta de Cliente. */
 let tipoCuenta = "cliente";
 
 const formularioRegistro = document.getElementById("registro-form");
 const botonCliente = document.getElementById("btn-cliente");
 const botonJefe = document.getElementById("btn-jefe");
 const camposComercio = document.getElementById("campos-comercio");
-const botonVolverRegistro = document.getElementById("btn-volver");
-const botonIrLogin = document.getElementById("btn-login");
 
+/* Cambia los campos visibles según el tipo de cuenta elegido. */
 function seleccionarTipo(tipo) {
     tipoCuenta = tipo;
     botonCliente.classList.toggle("active", tipo === "cliente");
@@ -22,14 +22,7 @@ botonJefe.addEventListener("click", function () {
     seleccionarTipo("jefe");
 });
 
-botonVolverRegistro.addEventListener("click", function () {
-    TodoTala.irA("../pantalla_login/todo_tala_pantalla_login.html");
-});
-
-botonIrLogin.addEventListener("click", function () {
-    TodoTala.irA("../pantalla_login/todo_tala_pantalla_login.html");
-});
-
+/* Valida y guarda una nueva cuenta. */
 formularioRegistro.addEventListener("submit", function (evento) {
     evento.preventDefault();
 
@@ -41,13 +34,15 @@ formularioRegistro.addEventListener("submit", function (evento) {
     const confirmacion = document.getElementById("confirm-password").value;
 
     const correoValido = correo.includes("@") && correo.includes(".") && !TodoTala.correoRegistrado(correo);
+    const cedulaValida = cedula.length >= 7 && !TodoTala.cedulaRegistrada(cedula);
     const passwordValida = password.length >= 8 && password === confirmacion;
-    const datosPersonalesValidos = nombre !== "" && cedula.length >= 7;
+    const datosPersonalesValidos = nombre !== "" && cedulaValida;
 
     let comercioValido = true;
     let rucValido = true;
     let comercio = null;
 
+    /* Un Jefe también debe registrar los datos principales de su comercio. */
     if (tipoCuenta === "jefe") {
         const nombreComercio = document.getElementById("nombre-comercio").value.trim();
         const ruc = document.getElementById("ruc").value.replace(/\D/g, "");
@@ -63,9 +58,10 @@ formularioRegistro.addEventListener("submit", function (evento) {
             ruc: ruc,
             telefono: telefono,
             direccion: direccion,
+            localidad: "",
             horario: horario,
             descripcion: "",
-            whatsapp: "",
+            whatsapp: telefono,
             correo: correo
         };
     }
@@ -90,9 +86,9 @@ formularioRegistro.addEventListener("submit", function (evento) {
         rol: tipoCuenta
     }, comercio);
 
-    TodoTala.toast("Cuenta creada correctamente", "success");
+    TodoTala.toast("Cuenta creada correctamente");
 
     window.setTimeout(function () {
         TodoTala.irA("../pantalla_login/todo_tala_pantalla_login.html");
-    }, 600);
+    }, 500);
 });

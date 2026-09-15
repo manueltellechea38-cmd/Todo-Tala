@@ -1,18 +1,16 @@
-const datos = TodoTala.obtenerDatos();
-const usuario = TodoTala.usuarioActual();
+const datosInicio = TodoTala.obtenerDatos();
+const usuarioInicio = TodoTala.usuarioActual();
 const promoGrid = document.getElementById("promo-grid");
 const previewGrid = document.getElementById("preview-grid");
 const buscador = document.getElementById("busqueda-inicio");
 
 /* Muestra un saludo con el nombre del cliente que inició sesión. */
-if (usuario) {
-    document.getElementById("saludo").textContent = "Hola, " + usuario.nombre.split(" ")[0];
-}
+document.getElementById("saludo").textContent = "Hola, " + usuarioInicio.nombre.split(" ")[0];
 
-/* Carga solamente las promociones activas en la fecha actual. */
+/* Muestra solamente promociones activas en la fecha actual. */
 function renderizarPromociones() {
     const hoy = new Date().toISOString().slice(0, 10);
-    const promociones = datos.promociones.filter(function (promo) {
+    const promociones = datosInicio.promociones.filter(function (promo) {
         return promo.activa && promo.inicio <= hoy && promo.fin >= hoy;
     });
 
@@ -21,11 +19,11 @@ function renderizarPromociones() {
         return;
     }
 
-    promoGrid.innerHTML = promociones.map(function (promo) {
-        const producto = datos.productos.find(function (item) {
+    promoGrid.innerHTML = promociones.slice(0, 3).map(function (promo) {
+        const producto = datosInicio.productos.find(function (item) {
             return item.id === promo.productoId;
         });
-        const comercio = datos.comercios.find(function (item) {
+        const comercio = datosInicio.comercios.find(function (item) {
             return item.id === promo.comercioId;
         });
         const detalle = promo.tipo === "porcentaje"
@@ -40,7 +38,7 @@ function renderizarPromociones() {
     }).join("");
 }
 
-/* Devuelve el HTML de una tarjeta simple de producto. */
+/* Crea una tarjeta de producto para la portada. */
 function tarjetaProducto(producto) {
     const estado = TodoTala.estadoStock(producto);
 
@@ -53,8 +51,10 @@ function tarjetaProducto(producto) {
     '</article>';
 }
 
-/* Hace que cada tarjeta abra el detalle del producto. */
-function activarTarjetas() {
+/* Muestra hasta cuatro productos en la portada. */
+function renderizarProductos(lista) {
+    previewGrid.innerHTML = lista.slice(0, 4).map(tarjetaProducto).join("");
+
     document.querySelectorAll("[data-producto-id]").forEach(function (tarjeta) {
         tarjeta.addEventListener("click", function () {
             TodoTala.irA("../detalle_producto/todo_tala_detalle_producto.html?id=" + tarjeta.dataset.productoId);
@@ -62,14 +62,8 @@ function activarTarjetas() {
     });
 }
 
-/* Muestra hasta cuatro productos en la portada. */
-function renderizarProductos(lista) {
-    previewGrid.innerHTML = lista.slice(0, 4).map(tarjetaProducto).join("");
-    activarTarjetas();
-}
-
 renderizarPromociones();
-renderizarProductos(datos.productos.filter(function (producto) {
+renderizarProductos(datosInicio.productos.filter(function (producto) {
     return producto.visible;
 }));
 
@@ -79,23 +73,15 @@ document.getElementById("form-busqueda").addEventListener("submit", function (ev
     TodoTala.irA("../resultados_busqueda/todo_tala_resultados_busqueda.html?q=" + encodeURIComponent(buscador.value.trim()));
 });
 
-/* Mientras el usuario escribe, actualiza los destacados que coinciden. */
+/* Mientras se escribe, actualiza los productos destacados que coinciden. */
 buscador.addEventListener("input", function () {
     const texto = buscador.value.trim().toLowerCase();
-
-    if (texto.length < 2) {
-        renderizarProductos(datos.productos.filter(function (producto) {
-            return producto.visible;
-        }));
-        return;
-    }
-
-    const resultados = datos.productos.filter(function (producto) {
+    const productos = datosInicio.productos.filter(function (producto) {
         const contenido = producto.nombre + " " + producto.comercio + " " + producto.categoria;
-        return producto.visible && contenido.toLowerCase().includes(texto);
+        return producto.visible && (texto.length < 2 || contenido.toLowerCase().includes(texto));
     });
 
-    renderizarProductos(resultados);
+    renderizarProductos(productos);
 });
 
 /* Cierra la sesión y vuelve al login. */

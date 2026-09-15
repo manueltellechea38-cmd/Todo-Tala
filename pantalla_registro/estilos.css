@@ -1,11 +1,6 @@
 @import url("../assets/estilos_globales.css");
 
-.registration-page {
-    background:
-        radial-gradient(circle at top right, rgba(31, 95, 191, 0.12), transparent 32%),
-        var(--color-background);
-}
-
+/* Tarjeta principal del registro. */
 .registration-card {
     max-width: 880px;
 }
@@ -13,47 +8,51 @@
 .registration-header {
     display: flex;
     align-items: flex-start;
-    gap: 16px;
-    padding: 24px;
+    gap: 14px;
+    padding: 22px;
+    background: var(--color-primary);
     color: white;
-    background: linear-gradient(135deg, #0d2f59 0%, #1f5fbf 100%);
 }
 
 .registration-header .icon-button {
+    display: grid;
+    place-items: center;
     flex: 0 0 auto;
     background: rgba(255, 255, 255, 0.15);
     color: white;
 }
 
 .registration-header p {
-    margin-top: 5px;
-    color: rgba(255, 255, 255, 0.8);
+    margin-top: 4px;
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .registration-eyebrow {
     margin: 0 !important;
     font-size: 0.8rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    font-weight: 700;
+}
+
+/* Selector Cliente / Jefe. */
+.account-fieldset {
+    display: grid;
+    gap: 9px;
 }
 
 .account-selector {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
 }
 
 .account-selector button {
     display: grid;
     gap: 4px;
-    text-align: left;
+    padding: 14px;
     border: 1px solid var(--color-border);
+    border-radius: 12px;
     background: white;
-    border-radius: 14px;
-    padding: 15px;
-    cursor: pointer;
-    color: var(--color-text);
+    text-align: left;
 }
 
 .account-selector button span {
@@ -65,27 +64,21 @@
     border-color: var(--color-primary);
     background: var(--color-primary-soft);
     color: var(--color-primary);
-    box-shadow: 0 0 0 2px rgba(31, 95, 191, 0.08);
 }
 
 .section-title {
-    padding-bottom: 8px;
+    padding-bottom: 7px;
     border-bottom: 1px solid var(--color-border);
 }
 
-.section-title p {
-    margin-top: 3px;
-    color: var(--color-muted);
-    font-size: 0.84rem;
-}
-
+/* Datos extra que se muestran para el Jefe. */
 .business-fields {
     display: none;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-    padding: 18px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    padding: 16px;
     border: 1px solid var(--color-border);
-    border-radius: 16px;
+    border-radius: 12px;
     background: #f8fafc;
 }
 
@@ -93,8 +86,9 @@
     display: grid;
 }
 
-.business-fields .section-title,
-.business-fields .form-grid__full {
+.business-fields legend,
+.business-full,
+.business-error {
     grid-column: 1 / -1;
 }
 
@@ -104,24 +98,20 @@
     gap: 10px;
 }
 
+/* Ajustes para celular. */
 @media (max-width: 680px) {
     .account-selector,
-    .business-fields,
-    .form-grid {
+    .business-fields {
         grid-template-columns: 1fr;
     }
 
-    .form-grid__full,
-    .business-fields .section-title,
-    .business-fields .form-grid__full {
+    .business-fields legend,
+    .business-full,
+    .business-error {
         grid-column: auto;
     }
 
     .registration-actions {
         flex-direction: column;
-    }
-
-    .registration-actions .btn {
-        width: 100%;
     }
 }

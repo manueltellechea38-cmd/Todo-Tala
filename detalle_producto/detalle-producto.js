@@ -1,102 +1,83 @@
-/* Obtiene el identificador recibido por URL o usa el primer producto como respaldo. */
-const idProductoDetalle = Number(TodoTala.parametro("id") || 1);
-/* Obtiene los datos actuales del MVP. */
+const idProducto = Number(TodoTala.parametro("id") || 1);
 const datosDetalle = TodoTala.obtenerDatos();
-/* Busca el producto correspondiente. */
-const productoDetalle = datosDetalle.productos.find(function (producto) { return producto.id === idProductoDetalle; }) || datosDetalle.productos[0];
-/* Guarda la cantidad seleccionada. */
-let cantidadDetalle = 1;
+const producto = datosDetalle.productos.find(function (item) {
+    return item.id === idProducto;
+});
+let cantidad = 1;
 
-/* Renderiza toda la información del producto. */
+/* Si el producto no existe, vuelve al catálogo. */
+if (!producto) {
+    TodoTala.irA("../catalogo_cliente/todo_tala_catalogo_cliente.html");
+}
+
+/* Muestra todos los datos del producto seleccionado. */
 function renderizarDetalle() {
-    /* Muestra las siglas de imagen. */
-    document.getElementById("imagen-producto").textContent = productoDetalle.imagenTexto;
-    /* Muestra el nombre. */
-    document.getElementById("nombre-producto").textContent = productoDetalle.nombre;
-    /* Muestra el comercio. */
-    document.getElementById("comercio-producto").textContent = productoDetalle.comercio;
-    /* Muestra el precio. */
-    document.getElementById("precio-producto").textContent = TodoTala.formatearPrecio(productoDetalle.precio);
-    /* Muestra precio anterior solo si existe. */
-    document.getElementById("precio-anterior").textContent = productoDetalle.precioAnterior ? TodoTala.formatearPrecio(productoDetalle.precioAnterior) : "";
-    /* Muestra marca y categoría. */
-    document.getElementById("meta-producto").textContent = productoDetalle.marca + " · " + productoDetalle.categoria;
-    /* Muestra descripción. */
-    document.getElementById("descripcion-producto").textContent = productoDetalle.descripcion;
-    /* Muestra stock. */
-    document.getElementById("stock-producto").textContent = "Stock actual: " + productoDetalle.stock + " unidad(es)";
-    /* Obtiene el badge. */
-    const badge = document.getElementById("estado-producto");
-    /* Define el texto del estado. */
-    badge.textContent = productoDetalle.stock > 0 ? "Disponible" : "Sin stock";
-    /* Define la clase del estado. */
-    badge.className = productoDetalle.stock > 0 ? "badge badge--success" : "badge badge--danger";
-    /* Deshabilita agregar si no hay stock. */
-    document.getElementById("btn-agregar").disabled = productoDetalle.stock <= 0;
-    /* Cambia el texto si no hay stock. */
-    if (productoDetalle.stock <= 0) document.getElementById("btn-agregar").textContent = "Producto sin stock";
-    /* Actualiza el corazón según favoritos. */
-    document.getElementById("btn-favorito").textContent = datosDetalle.favoritos.includes(productoDetalle.id) ? "♥" : "♡";
+    const estado = TodoTala.estadoStock(producto);
+    const tienePromocion = Number(producto.precioAnterior || 0) > Number(producto.precio || 0);
+
+    document.getElementById("imagen-producto").textContent = producto.imagenTexto;
+    document.getElementById("nombre-producto").textContent = producto.nombre;
+    document.getElementById("comercio-producto").textContent = producto.comercio + " · " + producto.localidad;
+    document.getElementById("precio-producto").textContent = TodoTala.formatearPrecio(producto.precio);
+    document.getElementById("precio-anterior").textContent = tienePromocion ? TodoTala.formatearPrecio(producto.precioAnterior) : "";
+    document.getElementById("meta-producto").textContent = producto.marca + " · " + producto.categoria;
+    document.getElementById("descripcion-producto").textContent = producto.descripcion;
+    document.getElementById("stock-producto").textContent = "Stock actual: " + producto.stock + " unidad(es)";
+    document.getElementById("estado-producto").textContent = estado.texto;
+    document.getElementById("estado-producto").className = estado.clase;
+    document.getElementById("cantidad").textContent = cantidad;
+    document.getElementById("btn-agregar").disabled = producto.stock <= 0;
+    document.getElementById("btn-agregar").textContent = producto.stock > 0 ? "Agregar al carrito" : "Producto sin stock";
+    document.getElementById("btn-favorito").textContent = datosDetalle.favoritos.includes(producto.id) ? "♥" : "♡";
 }
 
-/* Cambia la cantidad respetando los límites del stock. */
-function cambiarCantidadDetalle(cambio) {
-    /* Calcula la nueva cantidad. */
-    const nueva = cantidadDetalle + cambio;
-    /* Impide cantidades menores a uno. */
-    if (nueva < 1) return;
-    /* Impide superar el stock. */
-    if (nueva > productoDetalle.stock) return;
-    /* Guarda la nueva cantidad. */
-    cantidadDetalle = nueva;
-    /* Actualiza el texto. */
-    document.getElementById("cantidad").textContent = cantidadDetalle;
+/* Cambia la cantidad sin superar el stock. */
+function cambiarCantidad(cambio) {
+    const nuevaCantidad = cantidad + cambio;
+
+    if (nuevaCantidad < 1 || nuevaCantidad > producto.stock) {
+        return;
+    }
+
+    cantidad = nuevaCantidad;
+    document.getElementById("cantidad").textContent = cantidad;
 }
 
-/* Resta una unidad. */
-document.getElementById("btn-restar").addEventListener("click", function () { cambiarCantidadDetalle(-1); });
-/* Suma una unidad. */
-document.getElementById("btn-sumar").addEventListener("click", function () { cambiarCantidadDetalle(1); });
-/* Regresa al catálogo. */
-document.getElementById("btn-volver").addEventListener("click", function () { TodoTala.irA("../catalogo_cliente/todo_tala_catalogo_cliente.html"); });
+document.getElementById("btn-restar").addEventListener("click", function () {
+    cambiarCantidad(-1);
+});
 
-/* Alterna el producto como favorito. */
+document.getElementById("btn-sumar").addEventListener("click", function () {
+    cambiarCantidad(1);
+});
+
+/* Agrega o quita el producto de favoritos. */
 document.getElementById("btn-favorito").addEventListener("click", function () {
-    /* Obtiene datos actualizados. */
     const datos = TodoTala.obtenerDatos();
-    /* Busca la posición del producto en favoritos. */
-    const indice = datos.favoritos.indexOf(productoDetalle.id);
-    /* Si ya era favorito lo quita. */
-    if (indice >= 0) datos.favoritos.splice(indice, 1);
-    /* Si no era favorito lo agrega. */
-    else datos.favoritos.push(productoDetalle.id);
-    /* Guarda los datos. */
+    const posicion = datos.favoritos.indexOf(producto.id);
+
+    if (posicion >= 0) {
+        datos.favoritos.splice(posicion, 1);
+    } else {
+        datos.favoritos.push(producto.id);
+    }
+
     TodoTala.guardarDatos(datos);
-    /* Actualiza el estado local. */
     datosDetalle.favoritos = datos.favoritos;
-    /* Vuelve a renderizar. */
     renderizarDetalle();
-    /* Informa la acción. */
-    TodoTala.toast(indice >= 0 ? "Producto quitado de favoritos" : "Producto agregado a favoritos");
 });
 
-/* Agrega el producto al carrito. */
+/* Agrega la cantidad elegida al carrito y abre el carrito. */
 document.getElementById("btn-agregar").addEventListener("click", function () {
-    /* Obtiene datos actualizados. */
-    const datos = TodoTala.obtenerDatos();
-    /* Busca si el producto ya existe en carrito. */
-    const existente = datos.carrito.find(function (item) { return item.id === productoDetalle.id; });
-    /* Si existe aumenta su cantidad. */
-    if (existente) existente.cantidad = Math.min(existente.cantidad + cantidadDetalle, productoDetalle.stock);
-    /* Si no existe crea un nuevo item. */
-    else datos.carrito.push({ id: productoDetalle.id, cantidad: cantidadDetalle });
-    /* Guarda el carrito. */
-    TodoTala.guardarDatos(datos);
-    /* Informa la acción. */
+    if (!TodoTala.agregarAlCarrito(producto.id, cantidad)) {
+        TodoTala.toast("No se pudo agregar esa cantidad.");
+        return;
+    }
+
     TodoTala.toast("Producto agregado al carrito");
-    /* Navega al carrito luego de un momento corto. */
-    window.setTimeout(function () { TodoTala.irA("../carrito_pedidos/todo_tala_carrito_pedido.html"); }, 550);
+    window.setTimeout(function () {
+        TodoTala.irA("../carrito_pedidos/todo_tala_carrito_pedido.html");
+    }, 400);
 });
 
-/* Renderiza al cargar. */
 renderizarDetalle();
