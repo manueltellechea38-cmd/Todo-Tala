@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo Tala | Iniciar sesión</title>
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="estilos.css?v=1.2.1">
 </head>
 <body>
     <main class="app-page login-page">
         <section class="app-card app-card--narrow login-card">
             <header class="login-brand">
-                <div class="login-logo" aria-hidden="true">TT</div>
+                <a class="login-logo" href="../pantalla_inicio/todo_tala_pantalla_inicio.html" aria-label="Volver al inicio">TT</a>
                 <div>
                     <p class="login-eyebrow">Comercio digital local</p>
                     <h1>Todo Tala</h1>
@@ -39,9 +39,9 @@
                         <p id="error-login" class="error-message">Correo o contraseña incorrectos.</p>
                     </div>
 
-                    <button class="btn btn--primary btn--block" type="submit">Ingresar</button>
-                    <button id="btn-registro" class="btn btn--secondary btn--block" type="button">Crear una cuenta</button>
-                    <button id="btn-volver" class="link-button" type="button">Volver al inicio</button>
+                    <button id="btn-ingresar" class="btn btn--primary btn--block" type="submit">Ingresar</button>
+                    <a class="btn btn--secondary btn--block" href="../pantalla_reguistro/todo_tala_pantalla_registro.html">Crear una cuenta</a>
+                    <a class="link-button" href="../pantalla_inicio/todo_tala_pantalla_inicio.html">Volver al inicio</a>
                 </form>
 
                 <aside class="demo-access" aria-label="Cuentas de prueba">
@@ -54,7 +54,7 @@
         </section>
     </main>
 
-    <script src="../assets/app.js"></script>
-    <script src="login.js"></script>
+    <script src="../assets/app.js?v=1.2.1"></script>
+    <script src="login.js?v=1.2.1"></script>
 </body>
 </html>
