@@ -4,10 +4,12 @@ const promoGrid = document.getElementById("promo-grid");
 const previewGrid = document.getElementById("preview-grid");
 const buscador = document.getElementById("busqueda-inicio");
 
+/* Muestra un saludo con el nombre del cliente que inició sesión. */
 if (usuario) {
     document.getElementById("saludo").textContent = "Hola, " + usuario.nombre.split(" ")[0];
 }
 
+/* Carga solamente las promociones activas en la fecha actual. */
 function renderizarPromociones() {
     const hoy = new Date().toISOString().slice(0, 10);
     const promociones = datos.promociones.filter(function (promo) {
@@ -38,6 +40,7 @@ function renderizarPromociones() {
     }).join("");
 }
 
+/* Devuelve el HTML de una tarjeta simple de producto. */
 function tarjetaProducto(producto) {
     const estado = TodoTala.estadoStock(producto);
 
@@ -50,6 +53,7 @@ function tarjetaProducto(producto) {
     '</article>';
 }
 
+/* Hace que cada tarjeta abra el detalle del producto. */
 function activarTarjetas() {
     document.querySelectorAll("[data-producto-id]").forEach(function (tarjeta) {
         tarjeta.addEventListener("click", function () {
@@ -58,6 +62,7 @@ function activarTarjetas() {
     });
 }
 
+/* Muestra hasta cuatro productos en la portada. */
 function renderizarProductos(lista) {
     previewGrid.innerHTML = lista.slice(0, 4).map(tarjetaProducto).join("");
     activarTarjetas();
@@ -68,11 +73,13 @@ renderizarProductos(datos.productos.filter(function (producto) {
     return producto.visible;
 }));
 
+/* Envía la búsqueda completa a la pantalla de resultados. */
 document.getElementById("form-busqueda").addEventListener("submit", function (evento) {
     evento.preventDefault();
     TodoTala.irA("../resultados_busqueda/todo_tala_resultados_busqueda.html?q=" + encodeURIComponent(buscador.value.trim()));
 });
 
+/* Mientras el usuario escribe, actualiza los destacados que coinciden. */
 buscador.addEventListener("input", function () {
     const texto = buscador.value.trim().toLowerCase();
 
@@ -91,6 +98,7 @@ buscador.addEventListener("input", function () {
     renderizarProductos(resultados);
 });
 
+/* Cierra la sesión y vuelve al login. */
 document.getElementById("btn-salir").addEventListener("click", function () {
     TodoTala.cerrarSesion();
     TodoTala.abrir("pantalla_login/todo_tala_pantalla_login.html");
