@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Tala</title>
+</head>
+<body>
+    <script src="assets/app.js"></script>
+    <script>
+        const usuario = TodoTala.usuarioActual();
+
+        if (!usuario) {
+            window.location.replace("pantalla_login/todo_tala_pantalla_login.html");
+        } else if (usuario.rol === "cliente") {
+            window.location.replace("pantalla_inicio/todo_tala_pantalla_inicio.html");
+        } else {
+            window.location.replace("panel_comercio/todo_tala_panel_comercio.html");
+        }
+    </script>
+</body>
+</html>
