@@ -1,92 +1,117 @@
-/* Importa el diseño compartido por todo el MVP. */
 @import url("../assets/estilos_globales.css");
 
-/* Centra el encabezado del login. */
-.login-intro {
-    /* Centra el texto. */
-    text-align: center;
-    /* Agrega espacio inferior. */
+.login-page {
+    align-items: center;
+    background:
+        radial-gradient(circle at top left, rgba(31, 95, 191, 0.16), transparent 32%),
+        linear-gradient(180deg, #f7f9fc 0%, #edf2f8 100%);
+}
+
+.login-card {
+    max-width: 520px;
+}
+
+.login-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 24px;
+    color: white;
+    background: linear-gradient(135deg, #0d2f59 0%, #1f5fbf 100%);
+}
+
+.login-logo {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: white;
+    color: var(--color-primary);
+    font-weight: 900;
+    font-size: 1.2rem;
+}
+
+.login-eyebrow {
+    margin-bottom: 2px;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.82rem;
+}
+
+.login-content {
+    padding: 28px;
+}
+
+.login-heading {
     margin-bottom: 22px;
 }
 
-/* Crea una marca simple para el proyecto. */
-.login-mark {
-    /* Define ancho. */
-    width: 58px;
-    /* Define altura. */
-    height: 58px;
-    /* Centra las letras. */
-    display: grid;
-    /* Centra totalmente. */
-    place-items: center;
-    /* Usa azul principal. */
-    background: var(--color-primary);
-    /* Usa texto blanco. */
-    color: white;
-    /* Redondea el bloque. */
-    border-radius: 18px;
-    /* Centra el bloque horizontalmente. */
-    margin: 0 auto 14px;
-    /* Refuerza las letras. */
-    font-weight: 850;
+.login-heading h2 {
+    margin-bottom: 5px;
+    font-size: 1.35rem;
 }
 
-/* Agrega separación entre controles del formulario. */
 .login-form {
-    /* Usa grilla vertical. */
     display: grid;
-    /* Separa los grupos. */
-    gap: 15px;
+    gap: 16px;
 }
 
-/* Permite ubicar el botón de mostrar contraseña dentro del campo. */
 .password-wrap {
-    /* Define un contexto de posicionamiento. */
     position: relative;
 }
 
-/* Reserva espacio a la derecha del input para el botón. */
 .password-wrap input {
-    /* Aumenta padding derecho. */
-    padding-right: 82px;
+    padding-right: 86px;
 }
 
-/* Botón interno de contraseña. */
 .password-toggle {
-    /* Lo posiciona sobre el input. */
     position: absolute;
-    /* Lo ubica a la derecha. */
-    right: 8px;
-    /* Lo centra verticalmente. */
+    right: 9px;
     top: 50%;
-    /* Corrige el centrado. */
     transform: translateY(-50%);
-    /* Quita borde. */
     border: 0;
-    /* Usa fondo transparente. */
     background: transparent;
-    /* Usa color azul. */
     color: var(--color-primary);
-    /* Permite clic. */
     cursor: pointer;
-    /* Reduce tamaño. */
     font-size: 0.82rem;
-    /* Usa peso medio. */
     font-weight: 700;
 }
 
-/* Caja que aclara que el login funciona como simulación de MVP. */
-.demo-note {
-    /* Usa fondo azul suave. */
-    background: var(--color-primary-soft);
-    /* Agrega borde. */
-    border: 1px solid #d4e3fa;
-    /* Redondea. */
-    border-radius: 12px;
-    /* Agrega padding. */
-    padding: 12px;
-    /* Reduce texto. */
-    font-size: 0.84rem;
-    /* Usa color secundario. */
+.link-button {
+    border: 0;
+    background: transparent;
+    color: var(--color-primary);
+    cursor: pointer;
+    font-weight: 700;
+    padding: 6px;
+}
+
+.demo-access {
+    margin-top: 22px;
+    padding: 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    background: #f8fafc;
     color: var(--color-muted);
+    font-size: 0.82rem;
+}
+
+.demo-access strong {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--color-text);
+}
+
+.demo-access p + p {
+    margin-top: 3px;
+}
+
+@media (max-width: 560px) {
+    .login-content {
+        padding: 22px 18px;
+    }
+
+    .login-brand {
+        padding: 20px 18px;
+    }
 }
