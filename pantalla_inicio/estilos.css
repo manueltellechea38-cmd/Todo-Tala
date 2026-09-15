@@ -1,231 +1,221 @@
-/* Importa los estilos compartidos por todo el MVP. */
 @import url("../assets/estilos_globales.css");
 
-/* Define el encabezado visual de la pantalla inicial. */
+.home-page {
+    background:
+        radial-gradient(circle at top left, rgba(31, 95, 191, 0.12), transparent 34%),
+        linear-gradient(180deg, #f7f9fc 0%, #edf2f8 100%);
+}
+
+.home-card {
+    max-width: 1120px;
+}
+
 .home-hero {
-    /* Agrega espacio interior amplio. */
-    padding: 28px 24px 20px;
-    /* Crea un degradado muy suave con los colores del proyecto. */
+    padding: 24px;
     background: linear-gradient(135deg, #ffffff 0%, #eef5ff 72%, #fff8df 100%);
 }
 
-/* Organiza logo y acciones superiores. */
 .home-topbar {
-    /* Usa flexbox. */
     display: flex;
-    /* Separa ambos extremos. */
     justify-content: space-between;
-    /* Centra verticalmente. */
     align-items: center;
-    /* Separa elementos. */
-    gap: 12px;
+    gap: 14px;
 }
 
-/* Estilo del nombre del proyecto. */
 .brand {
-    /* Usa una fila. */
     display: flex;
-    /* Centra verticalmente. */
     align-items: center;
-    /* Separa el símbolo del texto. */
     gap: 10px;
-    /* Refuerza el peso visual. */
-    font-weight: 800;
+    font-weight: 850;
+    font-size: 1.05rem;
 }
 
-/* Crea un símbolo simple sin depender de imágenes externas. */
 .brand-mark {
-    /* Define el tamaño. */
-    width: 38px;
-    /* Define la altura. */
-    height: 38px;
-    /* Redondea el símbolo. */
-    border-radius: 12px;
-    /* Usa azul principal. */
-    background: var(--color-primary);
-    /* Usa texto blanco. */
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #0d2f59, #1f5fbf);
     color: white;
-    /* Centra las letras. */
     display: grid;
-    /* Centra completamente. */
     place-items: center;
-    /* Reduce el tamaño del texto. */
-    font-size: 0.78rem;
+    font-size: 0.82rem;
+    font-weight: 900;
 }
 
-/* Separa la introducción del encabezado. */
+.topbar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
 .hero-copy {
-    /* Limita el ancho para legibilidad. */
-    max-width: 680px;
-    /* Agrega margen superior. */
-    margin-top: 34px;
+    max-width: 720px;
+    margin-top: 42px;
 }
 
-/* Destaca el mensaje principal. */
+.hero-kicker,
+.section-kicker {
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
 .hero-copy h1 {
-    /* Usa un tamaño grande pero razonable para un MVP. */
-    font-size: clamp(2rem, 6vw, 3.4rem);
-    /* Ajusta altura de línea. */
-    line-height: 1.05;
-    /* Agrega margen inferior. */
+    margin: 8px 0 14px;
+    font-size: clamp(2rem, 6vw, 3.7rem);
+    line-height: 1.03;
+}
+
+.hero-copy > p:last-child {
+    max-width: 620px;
+    color: var(--color-muted);
+    font-size: 1.03rem;
+}
+
+.home-actions {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    margin-top: 24px;
+    max-width: 760px;
+}
+
+.home-sections {
+    padding: 24px;
+    display: grid;
+    gap: 28px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
     margin-bottom: 14px;
 }
 
-/* Estilo del texto de apoyo. */
-.hero-copy p {
-    /* Usa texto secundario. */
-    color: var(--color-muted);
-    /* Limita el ancho. */
-    max-width: 580px;
-}
-
-/* Organiza búsqueda y botones principales. */
-.home-actions {
-    /* Usa una grilla. */
-    display: grid;
-    /* Crea dos columnas. */
-    grid-template-columns: 1fr auto;
-    /* Separa elementos. */
-    gap: 10px;
-    /* Agrega margen superior. */
-    margin-top: 22px;
-}
-
-/* Área que contiene promociones y productos. */
-.home-sections {
-    /* Agrega espacio interior. */
-    padding: 22px 24px;
-    /* Usa una grilla. */
-    display: grid;
-    /* Separa secciones. */
-    gap: 24px;
-}
-
-/* Encabezado pequeño de cada bloque. */
-.section-heading {
-    /* Usa flexbox. */
-    display: flex;
-    /* Separa título y enlace. */
-    justify-content: space-between;
-    /* Centra verticalmente. */
-    align-items: center;
-    /* Agrega margen inferior. */
-    margin-bottom: 12px;
-}
-
-/* Grilla de promociones. */
 .promo-grid {
-    /* Usa CSS Grid. */
     display: grid;
-    /* Crea tres columnas flexibles. */
-    grid-template-columns: repeat(3, 1fr);
-    /* Separa tarjetas. */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
 }
 
-/* Tarjeta de promoción. */
 .promo-card {
-    /* Agrega espacio interior. */
-    padding: 16px;
-    /* Redondea las esquinas. */
-    border-radius: 16px;
-    /* Usa un fondo azul suave. */
-    background: var(--color-primary-soft);
-    /* Dibuja borde. */
+    min-height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 5px;
+    padding: 18px;
+    border-radius: 18px;
     border: 1px solid #dbe8fb;
+    background: linear-gradient(145deg, #eef5ff, #ffffff);
 }
 
-/* Variante amarilla de promoción. */
-.promo-card:nth-child(2) {
-    /* Usa fondo amarillo suave. */
-    background: #fff8df;
-    /* Ajusta el borde. */
-    border-color: #f4e4a5;
+.promo-card:nth-child(2n) {
+    border-color: #f2df9c;
+    background: linear-gradient(145deg, #fff8df, #ffffff);
 }
 
-/* Variante neutra de promoción. */
-.promo-card:nth-child(3) {
-    /* Usa fondo gris claro. */
-    background: #f1f3f6;
-    /* Ajusta el borde. */
-    border-color: #e0e4e9;
+.promo-label {
+    width: fit-content;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 800;
 }
 
-/* Texto secundario dentro de promoción. */
-.promo-card p {
-    /* Usa color secundario. */
+.promo-card p,
+.promo-card small {
     color: var(--color-muted);
-    /* Reduce tamaño. */
-    font-size: 0.86rem;
-    /* Agrega margen superior. */
-    margin-top: 4px;
 }
 
-/* Grilla de productos destacados. */
 .preview-grid {
-    /* Usa dos columnas. */
     display: grid;
-    /* Reparte el espacio. */
-    grid-template-columns: repeat(2, 1fr);
-    /* Separa tarjetas. */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
 }
 
-/* Tarjeta de producto en inicio. */
 .preview-card {
-    /* Dibuja borde. */
+    overflow: hidden;
     border: 1px solid var(--color-border);
-    /* Redondea. */
-    border-radius: 16px;
-    /* Agrega espacio interior. */
-    padding: 15px;
-    /* Muestra cursor de enlace. */
+    border-radius: 18px;
+    background: white;
     cursor: pointer;
-    /* Agrega transición. */
     transition: 160ms ease;
 }
 
-/* Hover de producto. */
-.preview-card:hover {
-    /* Cambia color del borde. */
+.preview-card:hover,
+.preview-card:focus {
     border-color: #b9cceb;
-    /* Eleva la tarjeta. */
     transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(23, 32, 51, 0.08);
+    outline: none;
 }
 
-/* Simulación visual de imagen de producto. */
 .product-placeholder {
-    /* Define altura. */
-    height: 110px;
-    /* Redondea. */
-    border-radius: 13px;
-    /* Usa fondo suave. */
-    background: #eef2f7;
-    /* Centra siglas. */
+    height: 128px;
     display: grid;
-    /* Centra en ambos ejes. */
     place-items: center;
-    /* Usa texto azul. */
+    background: linear-gradient(145deg, #eef2f7, #f8fafc);
     color: var(--color-primary);
-    /* Usa peso fuerte. */
-    font-weight: 850;
-    /* Aumenta el tamaño. */
-    font-size: 1.35rem;
-    /* Separa del texto inferior. */
-    margin-bottom: 11px;
+    font-size: 1.4rem;
+    font-weight: 900;
 }
 
-/* Ajustes para celulares. */
-@media (max-width: 650px) {
-    /* Apila búsqueda y botón. */
-    .home-actions {
-        /* Usa una sola columna. */
+.preview-card__body {
+    display: grid;
+    gap: 6px;
+    padding: 14px;
+}
+
+.preview-price {
+    color: var(--color-text);
+    font-size: 1.05rem;
+    font-weight: 850;
+}
+
+@media (max-width: 900px) {
+    .preview-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .promo-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 680px) {
+    .home-hero,
+    .home-sections {
+        padding: 18px;
+    }
+
+    .home-topbar {
+        align-items: flex-start;
+    }
+
+    .topbar-actions {
+        gap: 6px;
+    }
+
+    .topbar-actions .btn {
+        padding: 9px 11px;
+        font-size: 0.82rem;
+    }
+
+    .home-actions,
+    .preview-grid,
+    .promo-grid {
         grid-template-columns: 1fr;
     }
 
-    /* Reduce a una columna las promociones. */
-    .promo-grid {
-        /* Usa una columna. */
-        grid-template-columns: 1fr;
+    .section-heading {
+        align-items: flex-start;
     }
 }
