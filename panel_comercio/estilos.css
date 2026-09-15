@@ -1,9 +1,11 @@
 @import url("../assets/estilos_globales.css");
 
+/* Ancho principal del panel. */
 .panel-card {
     max-width: 1050px;
 }
 
+/* Tarjetas con los datos rápidos del comercio. */
 .summary-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -24,6 +26,7 @@
     font-size: 1.6rem;
 }
 
+/* Zona reservada para avisos de stock. */
 .stock-area {
     margin-bottom: 22px;
 }
@@ -35,6 +38,7 @@
     background: var(--color-warning-soft);
 }
 
+/* Accesos a las funciones administrativas. */
 .quick-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -60,6 +64,7 @@
     font-size: 0.9rem;
 }
 
+/* Navegación inferior del jefe y del empleado. */
 .commerce-nav {
     display: grid;
     border-top: 1px solid var(--color-border);
@@ -85,6 +90,7 @@
     font-weight: 700;
 }
 
+/* Ajustes para pantallas medianas. */
 @media (max-width: 720px) {
     .summary-grid,
     .quick-grid {
@@ -92,6 +98,7 @@
     }
 }
 
+/* Ajustes para celular. */
 @media (max-width: 520px) {
     .summary-grid,
     .quick-grid {
