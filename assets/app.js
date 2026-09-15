@@ -1,16 +1,17 @@
 window.TodoTala = window.TodoTala || {};
 
+TodoTala.VERSION = "1.3.3";
 TodoTala.STORAGE_KEY = "todoTalaDataV12";
 
+/* Datos iniciales usados mientras la aplicación trabaja en el navegador. */
 TodoTala.crearDatosIniciales = function () {
     return {
-        version: "1.2",
+        version: TodoTala.VERSION,
         sesion: {
             usuarioId: null,
             rol: null,
             iniciada: false
         },
-
         usuarios: [
             {
                 id: 1,
@@ -42,7 +43,6 @@ TodoTala.crearDatosIniciales = function () {
                 comercioId: 1
             }
         ],
-
         comercios: [
             {
                 id: 1,
@@ -84,142 +84,20 @@ TodoTala.crearDatosIniciales = function () {
                 correo: "hola@tiendahorizonte.uy"
             }
         ],
-
-        cliente: {
-            id: 1,
-            nombre: "Juan Perez",
-            email: "juan@gmail.com",
-            telefono: ""
-        },
-
         productos: [
-            {
-                id: 1,
-                comercioId: 1,
-                comercio: "Almacén La Plaza",
-                categoria: "Alimentos",
-                nombre: "Arroz 1 kg",
-                marca: "La Abundancia",
-                precio: 65,
-                precioAnterior: null,
-                descripcion: "Paquete de arroz de 1 kilogramo.",
-                stock: 30,
-                visible: true,
-                imagenTexto: "AR",
-                localidad: "Tala"
-            },
-            {
-                id: 2,
-                comercioId: 1,
-                comercio: "Almacén La Plaza",
-                categoria: "Alimentos",
-                nombre: "Fideos 500 g",
-                marca: "Las Acacias",
-                precio: 45,
-                precioAnterior: null,
-                descripcion: "Paquete de fideos de 500 gramos.",
-                stock: 25,
-                visible: true,
-                imagenTexto: "FI",
-                localidad: "Tala"
-            },
-            {
-                id: 3,
-                comercioId: 1,
-                comercio: "Almacén La Plaza",
-                categoria: "Limpieza",
-                nombre: "Detergente 750 ml",
-                marca: "Brillo",
-                precio: 119,
-                precioAnterior: 139,
-                descripcion: "Detergente concentrado para vajilla.",
-                stock: 5,
-                visible: true,
-                imagenTexto: "DE",
-                localidad: "Tala"
-            },
-            {
-                id: 4,
-                comercioId: 1,
-                comercio: "Almacén La Plaza",
-                categoria: "Alimentos",
-                nombre: "Yerba 1 kg",
-                marca: "Campo Sur",
-                precio: 198,
-                precioAnterior: null,
-                descripcion: "Yerba mate tradicional de 1 kilogramo.",
-                stock: 0,
-                visible: true,
-                imagenTexto: "YE",
-                localidad: "Tala"
-            },
-            {
-                id: 5,
-                comercioId: 2,
-                comercio: "Ferretería Central",
-                categoria: "Ferretería",
-                nombre: "Martillo carpintero",
-                marca: "Forte",
-                precio: 490,
-                precioAnterior: 560,
-                descripcion: "Martillo de uso general con mango antideslizante.",
-                stock: 11,
-                visible: true,
-                imagenTexto: "MC",
-                localidad: "Tala"
-            },
-            {
-                id: 6,
-                comercioId: 2,
-                comercio: "Ferretería Central",
-                categoria: "Ferretería",
-                nombre: "Cinta métrica 5 m",
-                marca: "ProMed",
-                precio: 275,
-                precioAnterior: null,
-                descripcion: "Cinta métrica retráctil de cinco metros.",
-                stock: 4,
-                visible: true,
-                imagenTexto: "CM",
-                localidad: "Tala"
-            },
-            {
-                id: 7,
-                comercioId: 3,
-                comercio: "Tienda Horizonte",
-                categoria: "Ropa",
-                nombre: "Remera básica",
-                marca: "Horizonte",
-                precio: 690,
-                precioAnterior: 790,
-                descripcion: "Remera unisex de algodón, disponible en varios talles.",
-                stock: 14,
-                visible: true,
-                imagenTexto: "RB",
-                localidad: "Tala"
-            },
-            {
-                id: 8,
-                comercioId: 3,
-                comercio: "Tienda Horizonte",
-                categoria: "Ropa",
-                nombre: "Gorra clásica",
-                marca: "Horizonte",
-                precio: 520,
-                precioAnterior: null,
-                descripcion: "Gorra regulable de uso diario.",
-                stock: 7,
-                visible: true,
-                imagenTexto: "GC",
-                localidad: "Tala"
-            }
+            { id: 1, comercioId: 1, comercio: "Almacén La Plaza", categoria: "Alimentos", nombre: "Arroz 1 kg", marca: "La Abundancia", precio: 65, precioAnterior: null, descripcion: "Paquete de arroz de 1 kilogramo.", stock: 30, visible: true, imagenTexto: "AR", localidad: "Tala" },
+            { id: 2, comercioId: 1, comercio: "Almacén La Plaza", categoria: "Alimentos", nombre: "Fideos 500 g", marca: "Las Acacias", precio: 45, precioAnterior: null, descripcion: "Paquete de fideos de 500 gramos.", stock: 25, visible: true, imagenTexto: "FI", localidad: "Tala" },
+            { id: 3, comercioId: 1, comercio: "Almacén La Plaza", categoria: "Limpieza", nombre: "Detergente 750 ml", marca: "Brillo", precio: 119, precioAnterior: 139, descripcion: "Detergente concentrado para vajilla.", stock: 5, visible: true, imagenTexto: "DE", localidad: "Tala" },
+            { id: 4, comercioId: 1, comercio: "Almacén La Plaza", categoria: "Alimentos", nombre: "Yerba 1 kg", marca: "Campo Sur", precio: 198, precioAnterior: null, descripcion: "Yerba mate tradicional de 1 kilogramo.", stock: 0, visible: true, imagenTexto: "YE", localidad: "Tala" },
+            { id: 5, comercioId: 2, comercio: "Ferretería Central", categoria: "Ferretería", nombre: "Martillo carpintero", marca: "Forte", precio: 490, precioAnterior: 560, descripcion: "Martillo de uso general con mango antideslizante.", stock: 11, visible: true, imagenTexto: "MC", localidad: "Tala" },
+            { id: 6, comercioId: 2, comercio: "Ferretería Central", categoria: "Ferretería", nombre: "Cinta métrica 5 m", marca: "ProMed", precio: 275, precioAnterior: null, descripcion: "Cinta métrica retráctil de cinco metros.", stock: 4, visible: true, imagenTexto: "CM", localidad: "Tala" },
+            { id: 7, comercioId: 3, comercio: "Tienda Horizonte", categoria: "Ropa", nombre: "Remera básica", marca: "Horizonte", precio: 690, precioAnterior: 790, descripcion: "Remera unisex de algodón, disponible en varios talles.", stock: 14, visible: true, imagenTexto: "RB", localidad: "Tala" },
+            { id: 8, comercioId: 3, comercio: "Tienda Horizonte", categoria: "Ropa", nombre: "Gorra clásica", marca: "Horizonte", precio: 520, precioAnterior: null, descripcion: "Gorra regulable de uso diario.", stock: 7, visible: true, imagenTexto: "GC", localidad: "Tala" }
         ],
-
         carrito: [],
-        reservas: [],
+        reservaCarrito: null,
         favoritos: [],
         comerciosFavoritos: [],
-
         pedidos: [
             {
                 id: 1001,
@@ -232,80 +110,68 @@ TodoTala.crearDatosIniciales = function () {
                 listoDesde: "2026-09-14T12:00:00",
                 venceRetiro: "2026-09-16T12:00:00",
                 total: 110,
-                items: ["Arroz 1 kg x1", "Fideos 500 g x1"]
+                items: ["Arroz 1 kg x1", "Fideos 500 g x1"],
+                detalle: [
+                    { productoId: 1, cantidad: 1, precio: 65 },
+                    { productoId: 2, cantidad: 1, precio: 45 }
+                ],
+                observacion: "",
+                motivoCancelacion: null,
+                stockRestaurado: false
             }
         ],
-
         promociones: [
-            {
-                id: 1,
-                comercioId: 1,
-                nombre: "Oferta en limpieza",
-                tipo: "porcentaje",
-                valor: 15,
-                productoId: 3,
-                inicio: "2026-09-10",
-                fin: "2026-09-30",
-                activa: true
-            },
-            {
-                id: 2,
-                comercioId: 2,
-                nombre: "Martillo destacado",
-                tipo: "precio",
-                valor: 490,
-                productoId: 5,
-                inicio: "2026-09-12",
-                fin: "2026-09-25",
-                activa: true
-            },
-            {
-                id: 3,
-                comercioId: 3,
-                nombre: "Semana de indumentaria",
-                tipo: "precio",
-                valor: 690,
-                productoId: 7,
-                inicio: "2026-09-14",
-                fin: "2026-09-28",
-                activa: true
-            }
+            { id: 1, comercioId: 1, nombre: "Oferta en limpieza", tipo: "porcentaje", valor: 15, productoId: 3, inicio: "2026-09-10", fin: "2026-09-30", activa: true },
+            { id: 2, comercioId: 2, nombre: "Martillo destacado", tipo: "precio", valor: 490, productoId: 5, inicio: "2026-09-12", fin: "2026-09-25", activa: true },
+            { id: 3, comercioId: 3, nombre: "Semana de indumentaria", tipo: "precio", valor: 690, productoId: 7, inicio: "2026-09-14", fin: "2026-09-28", activa: true }
         ],
-
         notificaciones: [
-            {
-                id: 1,
-                usuarioId: 1,
-                mensaje: "Tu pedido #1001 está listo para retirar.",
-                fecha: "14/09/2026",
-                leida: false
-            }
+            { id: 1, usuarioId: 1, mensaje: "Tu pedido #1001 está listo para retirar.", fecha: "14/09/2026", leida: false }
         ]
     };
 };
 
+/* Completa propiedades nuevas cuando existen datos guardados de una versión anterior. */
+TodoTala.normalizarDatos = function (datos) {
+    datos.version = TodoTala.VERSION;
+    datos.carrito = Array.isArray(datos.carrito) ? datos.carrito : [];
+    datos.favoritos = Array.isArray(datos.favoritos) ? datos.favoritos : [];
+    datos.comerciosFavoritos = Array.isArray(datos.comerciosFavoritos) ? datos.comerciosFavoritos : [];
+    datos.pedidos = Array.isArray(datos.pedidos) ? datos.pedidos : [];
+    datos.promociones = Array.isArray(datos.promociones) ? datos.promociones : [];
+    datos.notificaciones = Array.isArray(datos.notificaciones) ? datos.notificaciones : [];
+
+    if (typeof datos.reservaCarrito === "undefined") {
+        datos.reservaCarrito = null;
+    }
+
+    return datos;
+};
+
+/* Lee y guarda los datos generales de Todo Tala. */
 TodoTala.obtenerDatos = function () {
     const guardado = localStorage.getItem(TodoTala.STORAGE_KEY);
 
     if (!guardado) {
-        const datosIniciales = TodoTala.crearDatosIniciales();
-        TodoTala.guardarDatos(datosIniciales);
-        return datosIniciales;
+        const iniciales = TodoTala.crearDatosIniciales();
+        TodoTala.guardarDatos(iniciales);
+        return iniciales;
     }
 
     try {
-        return JSON.parse(guardado);
+        return TodoTala.normalizarDatos(JSON.parse(guardado));
     } catch (error) {
-        const datosIniciales = TodoTala.crearDatosIniciales();
-        TodoTala.guardarDatos(datosIniciales);
-        return datosIniciales;
+        const iniciales = TodoTala.crearDatosIniciales();
+        TodoTala.guardarDatos(iniciales);
+        return iniciales;
     }
 };
 
 TodoTala.guardarDatos = function (datos) {
-    localStorage.setItem(TodoTala.STORAGE_KEY, JSON.stringify(datos));
+    localStorage.setItem(TodoTala.STORAGE_KEY, JSON.stringify(TodoTala.normalizarDatos(datos)));
 };
 
+/* Funciones pequeñas que se reutilizan en varias pantallas. */
 TodoTala.formatearPrecio = function (valor) {
     return "$" + Number(valor || 0).toLocaleString("es-UY");
 };
@@ -318,28 +184,25 @@ TodoTala.irA = function (ruta) {
     window.location.href = ruta;
 };
 
-TodoTala.toast = function (mensaje, tipo) {
-    let elemento = document.getElementById("toast-global");
+TodoTala.toast = function (mensaje) {
+    let aviso = document.getElementById("toast-global");
 
-    if (!elemento) {
-        elemento = document.createElement("div");
-        elemento.id = "toast-global";
-        elemento.className = "toast";
-        document.body.appendChild(elemento);
+    if (!aviso) {
+        aviso = document.createElement("aside");
+        aviso.id = "toast-global";
+        aviso.className = "toast";
+        document.body.appendChild(aviso);
     }
 
-    elemento.textContent = mensaje;
-    elemento.className = "toast is-visible";
-
-    if (tipo) {
-        elemento.classList.add("toast--" + tipo);
-    }
+    aviso.textContent = mensaje;
+    aviso.classList.add("is-visible");
 
     window.setTimeout(function () {
-        elemento.classList.remove("is-visible");
-    }, 2600);
+        aviso.classList.remove("is-visible");
+    }, 2400);
 };
 
+/* Sesión y datos del usuario actual. */
 TodoTala.usuarioActual = function () {
     const datos = TodoTala.obtenerDatos();
 
@@ -352,10 +215,22 @@ TodoTala.usuarioActual = function () {
     }) || null;
 };
 
+TodoTala.comercioActual = function () {
+    const datos = TodoTala.obtenerDatos();
+    const usuario = TodoTala.usuarioActual();
+
+    if (!usuario || !usuario.comercioId) {
+        return null;
+    }
+
+    return datos.comercios.find(function (comercio) {
+        return comercio.id === usuario.comercioId;
+    }) || null;
+};
+
 TodoTala.iniciarSesion = function (correo, password) {
     const datos = TodoTala.obtenerDatos();
     const correoNormalizado = correo.trim().toLowerCase();
-
     const usuario = datos.usuarios.find(function (item) {
         return item.correo.toLowerCase() === correoNormalizado && item.password === password;
     });
@@ -376,28 +251,28 @@ TodoTala.iniciarSesion = function (correo, password) {
 
 TodoTala.cerrarSesion = function () {
     const datos = TodoTala.obtenerDatos();
-    datos.sesion = {
-        usuarioId: null,
-        rol: null,
-        iniciada: false
-    };
+    datos.sesion = { usuarioId: null, rol: null, iniciada: false };
     TodoTala.guardarDatos(datos);
 };
 
+/* Validaciones usadas al crear cuentas. */
 TodoTala.correoRegistrado = function (correo) {
-    const datos = TodoTala.obtenerDatos();
     const correoNormalizado = correo.trim().toLowerCase();
-
-    return datos.usuarios.some(function (usuario) {
+    return TodoTala.obtenerDatos().usuarios.some(function (usuario) {
         return usuario.correo.toLowerCase() === correoNormalizado;
     });
 };
 
-TodoTala.rucRegistrado = function (ruc) {
-    const datos = TodoTala.obtenerDatos();
-    const limpio = ruc.replace(/\D/g, "");
+TodoTala.cedulaRegistrada = function (cedula) {
+    const limpia = String(cedula).replace(/\D/g, "");
+    return TodoTala.obtenerDatos().usuarios.some(function (usuario) {
+        return String(usuario.cedula).replace(/\D/g, "") === limpia;
+    });
+};
 
-    return datos.comercios.some(function (comercio) {
+TodoTala.rucRegistrado = function (ruc) {
+    const limpio = String(ruc).replace(/\D/g, "");
+    return TodoTala.obtenerDatos().comercios.some(function (comercio) {
         return String(comercio.ruc || "").replace(/\D/g, "") === limpio;
     });
 };
@@ -426,33 +301,7 @@ TodoTala.registrarUsuario = function (nuevoUsuario, nuevoComercio) {
     return nuevoUsuario;
 };
 
-TodoTala.generarCodigo = function () {
-    const caracteres = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-    let codigo = "TT-";
-
-    for (let i = 0; i < 6; i += 1) {
-        codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
-    }
-
-    return codigo;
-};
-
-TodoTala.claseEstado = function (estado) {
-    if (estado === "Listo para retirar" || estado === "Entregado") {
-        return "badge badge--success";
-    }
-
-    if (estado === "Rechazado" || estado === "Cancelado") {
-        return "badge badge--danger";
-    }
-
-    if (estado === "Pendiente" || estado === "Aceptado" || estado === "En preparación") {
-        return "badge badge--warning";
-    }
-
-    return "badge";
-};
-
+/* Estados de productos y pedidos. */
 TodoTala.estadoStock = function (producto) {
     if (producto.stock <= 0) {
         return { texto: "Sin stock", clase: "badge badge--danger" };
@@ -465,9 +314,25 @@ TodoTala.estadoStock = function (producto) {
     return { texto: "Disponible", clase: "badge badge--success" };
 };
 
+TodoTala.claseEstado = function (estado) {
+    if (estado === "Listo para retirar" || estado === "Entregado") {
+        return "badge badge--success";
+    }
+
+    if (estado === "Rechazado" || estado === "Cancelado") {
+        return "badge badge--danger";
+    }
+
+    if (["Pendiente", "Aceptado", "En preparación"].includes(estado)) {
+        return "badge badge--warning";
+    }
+
+    return "badge";
+};
+
+/* Carrito del cliente. */
 TodoTala.cantidadCarrito = function () {
-    const datos = TodoTala.obtenerDatos();
-    return datos.carrito.reduce(function (total, item) {
+    return TodoTala.obtenerDatos().carrito.reduce(function (total, item) {
         return total + item.cantidad;
     }, 0);
 };
@@ -486,11 +351,10 @@ TodoTala.agregarAlCarrito = function (productoId, cantidad) {
     const existente = datos.carrito.find(function (item) {
         return item.id === productoId;
     });
-
     const cantidadActual = existente ? existente.cantidad : 0;
     const nuevaCantidad = cantidadActual + cantidadSolicitada;
 
-    if (nuevaCantidad > producto.stock) {
+    if (cantidadSolicitada < 1 || nuevaCantidad > producto.stock) {
         return false;
     }
 
@@ -500,11 +364,72 @@ TodoTala.agregarAlCarrito = function (productoId, cantidad) {
         datos.carrito.push({ id: productoId, cantidad: cantidadSolicitada });
     }
 
+    /* Si cambia el carrito, una reserva anterior deja de ser válida. */
+    datos.reservaCarrito = null;
     TodoTala.guardarDatos(datos);
     return true;
 };
 
-TodoTala.reiniciarDemo = function () {
-    TodoTala.guardarDatos(TodoTala.crearDatosIniciales());
-    TodoTala.toast("Datos de demostración reiniciados", "success");
+/* Genera el código que el cliente presenta al retirar el pedido. */
+TodoTala.generarCodigo = function () {
+    const caracteres = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let codigo = "TT-";
+
+    for (let i = 0; i < 6; i += 1) {
+        codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+    }
+
+    return codigo;
+};
+
+/* Devuelve al stock los productos de un pedido cancelado una sola vez. */
+TodoTala.restaurarStockPedido = function (pedido, datos) {
+    if (!pedido || pedido.stockRestaurado || !Array.isArray(pedido.detalle)) {
+        return;
+    }
+
+    pedido.detalle.forEach(function (detalle) {
+        const producto = datos.productos.find(function (item) {
+            return item.id === detalle.productoId;
+        });
+
+        if (producto) {
+            producto.stock += detalle.cantidad;
+        }
+    });
+
+    pedido.stockRestaurado = true;
+};
+
+/* Crea una notificación sencilla para un usuario. */
+TodoTala.crearNotificacion = function (usuarioId, mensaje, datos) {
+    const datosSistema = datos || TodoTala.obtenerDatos();
+    const siguienteId = datosSistema.notificaciones.reduce(function (mayor, item) {
+        return Math.max(mayor, item.id || 0);
+    }, 0) + 1;
+
+    datosSistema.notificaciones.unshift({
+        id: siguienteId,
+        usuarioId: usuarioId,
+        mensaje: mensaje,
+        fecha: new Date().toLocaleDateString("es-UY"),
+        leida: false
+    });
+
+    if (!datos) {
+        TodoTala.guardarDatos(datosSistema);
+    }
+};
+
+/* Oculta opciones exclusivas del jefe cuando entra un empleado. */
+TodoTala.ajustarNavegacionComercio = function () {
+    const usuario = TodoTala.usuarioActual();
+
+    if (!usuario || usuario.rol === "jefe") {
+        return;
+    }
+
+    document.querySelectorAll("[data-solo-jefe]").forEach(function (elemento) {
+        elemento.hidden = true;
+    });
 };

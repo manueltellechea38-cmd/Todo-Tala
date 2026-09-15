@@ -1,3 +1,4 @@
+/* Colores principales usados en todas las pantallas. */
 :root {
     --color-primary: #1f5fbf;
     --color-primary-dark: #174a96;
@@ -16,6 +17,7 @@
     --color-warning-soft: #fff6df;
 }
 
+/* Ajustes generales del navegador. */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -45,10 +47,16 @@ button {
     cursor: pointer;
 }
 
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
 [hidden] {
     display: none !important;
 }
 
+/* Contenedores principales de las pantallas. */
 .app-page {
     min-height: 100vh;
     display: flex;
@@ -59,10 +67,10 @@ button {
 
 .app-card {
     width: min(100%, 1000px);
-    background: var(--color-surface);
+    overflow: hidden;
     border: 1px solid var(--color-border);
     border-radius: 16px;
-    overflow: hidden;
+    background: var(--color-surface);
 }
 
 .app-card--narrow {
@@ -105,6 +113,7 @@ h2 {
     font-size: 0.85rem;
 }
 
+/* Formularios y controles. */
 .toolbar {
     display: flex;
     flex-wrap: wrap;
@@ -132,9 +141,14 @@ h2 {
     grid-column: 1 / -1;
 }
 
-label {
+label,
+legend {
     font-weight: 700;
     font-size: 0.92rem;
+}
+
+fieldset {
+    border: 0;
 }
 
 input,
@@ -170,6 +184,7 @@ textarea {
     display: block;
 }
 
+/* Botones reutilizables. */
 .btn {
     display: inline-flex;
     justify-content: center;
@@ -212,6 +227,7 @@ textarea {
     background: #eef1f5;
 }
 
+/* Estados y tarjetas pequeñas. */
 .badge {
     display: inline-block;
     padding: 4px 8px;
@@ -250,6 +266,13 @@ textarea {
     background: white;
 }
 
+.empty-state {
+    padding: 30px 16px;
+    text-align: center;
+    color: var(--color-muted);
+}
+
+/* Navegación inferior del cliente. */
 .bottom-nav {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -259,9 +282,9 @@ textarea {
 
 .bottom-nav a,
 .bottom-nav button {
+    padding: 13px 6px;
     border: 0;
     background: transparent;
-    padding: 13px 6px;
     text-align: center;
     color: var(--color-muted);
     font-size: 0.82rem;
@@ -272,17 +295,33 @@ textarea {
     font-weight: 700;
 }
 
-.empty-state {
-    padding: 30px 16px;
-    text-align: center;
-    color: var(--color-muted);
+/* Navegación de jefe y empleado. */
+.commerce-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    border-top: 1px solid var(--color-border);
+    background: white;
 }
 
+.commerce-nav a {
+    padding: 13px 6px;
+    text-align: center;
+    color: var(--color-muted);
+    font-size: 0.82rem;
+}
+
+.commerce-nav .active {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+/* Mensaje corto usado después de algunas acciones. */
 .toast {
     position: fixed;
     left: 50%;
     bottom: 20px;
     transform: translateX(-50%);
+    max-width: calc(100vw - 30px);
     padding: 10px 14px;
     border-radius: 10px;
     background: #172033;
@@ -297,6 +336,7 @@ textarea {
     opacity: 1;
 }
 
+/* Ajustes para celular. */
 @media (max-width: 640px) {
     .app-page {
         padding: 8px;
@@ -320,7 +360,8 @@ textarea {
     }
 
     .bottom-nav a,
-    .bottom-nav button {
+    .bottom-nav button,
+    .commerce-nav a {
         padding: 11px 3px;
         font-size: 0.74rem;
     }

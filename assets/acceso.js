@@ -1,41 +1,44 @@
+/* Calcula la carpeta principal del proyecto para poder navegar desde cualquier pantalla. */
 TodoTala.RAIZ = new URL("../", document.currentScript.src).href;
 
-/* Abre una ruta tomando como base la carpeta principal del proyecto. */
+/* Abre una ruta tomando como base la carpeta principal de Todo Tala. */
 TodoTala.abrir = function (ruta) {
     window.location.href = new URL(ruta, TodoTala.RAIZ).href;
 };
 
-/* Envía al usuario a la pantalla principal que corresponde según su rol. */
+/* Envía a cada usuario a la pantalla principal de su rol. */
 TodoTala.irSegunRol = function (usuario) {
     if (usuario.rol === "cliente") {
         TodoTala.abrir("pantalla_inicio/todo_tala_pantalla_inicio.html");
-    } else {
-        TodoTala.abrir("panel_comercio/todo_tala_panel_comercio.html");
+        return;
     }
+
+    TodoTala.abrir("panel_comercio/todo_tala_panel_comercio.html");
 };
 
-/* Protege las pantallas para que solo entren usuarios con sesión iniciada. */
+/* Protege las pantallas para que nadie use la aplicación sin iniciar sesión. */
 TodoTala.controlarAcceso = function () {
     const ruta = window.location.pathname.toLowerCase();
     const usuario = TodoTala.usuarioActual();
-    const login = ruta.includes("/pantalla_login/");
-    const registro = ruta.includes("/pantalla_reguistro/") || ruta.includes("/pantalla_registro/");
-    const inicioRaiz = ruta.endsWith("/index.html") || ruta.endsWith("/");
+    const esLogin = ruta.includes("/pantalla_login/");
+    const esRegistro = ruta.includes("/pantalla_registro/");
+    const esRaiz = ruta.endsWith("/index.html") || ruta.endsWith("/");
 
-    /* Login y registro son las únicas pantallas disponibles sin sesión. */
-    if (login || registro) {
+    /* Login y registro son las únicas pantallas públicas. */
+    if (esLogin || esRegistro) {
         if (usuario) {
             TodoTala.irSegunRol(usuario);
         }
         return;
     }
 
+    /* Si no hay sesión, cualquier otra pantalla vuelve al login. */
     if (!usuario) {
         TodoTala.abrir("pantalla_login/todo_tala_pantalla_login.html");
         return;
     }
 
-    if (inicioRaiz) {
+    if (esRaiz) {
         TodoTala.irSegunRol(usuario);
         return;
     }
@@ -54,36 +57,37 @@ TodoTala.controlarAcceso = function () {
         "panel_comercio",
         "agregar_editar_producto",
         "editar_producto",
-        "gestioinar_productos",
+        "gestionar_productos",
         "gestionar_promociones",
         "pedidos_recibidos",
         "gestionar_empleados"
     ];
 
-    const esCliente = paginasCliente.some(function (carpeta) {
+    const estaEnCliente = paginasCliente.some(function (carpeta) {
         return ruta.includes("/" + carpeta + "/");
     });
 
-    const esComercio = paginasComercio.some(function (carpeta) {
+    const estaEnComercio = paginasComercio.some(function (carpeta) {
         return ruta.includes("/" + carpeta + "/");
     });
 
-    /* Un cliente no puede entrar a las herramientas internas del comercio. */
-    if (usuario.rol === "cliente" && esComercio) {
+    /* Un cliente no puede abrir herramientas internas del comercio. */
+    if (usuario.rol === "cliente" && estaEnComercio) {
         TodoTala.abrir("pantalla_inicio/todo_tala_pantalla_inicio.html");
         return;
     }
 
     /* Jefe y empleado no usan las pantallas exclusivas del cliente. */
-    if (usuario.rol !== "cliente" && esCliente) {
+    if (usuario.rol !== "cliente" && estaEnCliente) {
         TodoTala.abrir("panel_comercio/todo_tala_panel_comercio.html");
         return;
     }
 
-    /* Solo el jefe puede administrar empleados. */
+    /* La administración de empleados pertenece solamente al jefe. */
     if (usuario.rol === "empleado" && ruta.includes("/gestionar_empleados/")) {
         TodoTala.abrir("panel_comercio/todo_tala_panel_comercio.html");
     }
 };
 
 TodoTala.controlarAcceso();
+TodoTala.ajustarNavegacionComercio();
