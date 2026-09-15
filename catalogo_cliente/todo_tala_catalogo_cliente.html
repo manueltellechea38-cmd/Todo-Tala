@@ -1,79 +1,119 @@
 <!DOCTYPE html>
-<!-- Declara HTML5. -->
 <html lang="es">
-<!-- Define idioma español. -->
 <head>
-    <!-- Configura caracteres. -->
     <meta charset="UTF-8">
-    <!-- Activa diseño adaptable. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Título del navegador. -->
     <title>Todo Tala | Catálogo</title>
-    <!-- Carga estilos de esta pantalla. -->
     <link rel="stylesheet" href="estilos.css">
 </head>
-<!-- Comienza la interfaz. -->
-<body>
-    <!-- Contenedor general. -->
+<body class="catalog-page">
     <main class="app-page">
-        <!-- Tarjeta principal. -->
-        <section class="app-card">
-            <!-- Encabezado. -->
-            <header class="app-header catalog-top">
-                <!-- Título y subtítulo. -->
-                <div>
-                    <!-- Título principal. -->
-                    <h1>Catálogo</h1>
-                    <!-- Texto explicativo. -->
-                    <p class="muted">Productos publicados por comercios locales.</p>
-                </div>
-                <!-- Acciones rápidas. -->
-                <div class="toolbar" style="margin:0;">
-                    <!-- Abre mis pedidos. -->
+        <section class="app-card catalog-shell">
+            <header class="catalog-header">
+                <a class="brand" href="../pantalla_inicio/todo_tala_pantalla_inicio.html" aria-label="Ir al inicio">
+                    <span class="brand-mark">TT</span>
+                    <span>Todo Tala</span>
+                </a>
+
+                <nav class="catalog-actions" aria-label="Acciones del cliente">
                     <button id="btn-pedidos" class="btn btn--secondary" type="button">Mis pedidos</button>
-                    <!-- Abre el carrito. -->
-                    <button id="btn-carrito" class="btn btn--primary" type="button">Carrito <span id="contador-carrito" class="badge cart-count">0</span></button>
-                </div>
+                    <button id="btn-carrito" class="btn btn--primary" type="button">
+                        Carrito
+                        <span id="contador-carrito" class="cart-count">0</span>
+                    </button>
+                </nav>
             </header>
-            <!-- Contenido del catálogo. -->
-            <section class="content">
-                <!-- Barra de búsqueda y filtros. -->
-                <div class="toolbar">
-                    <!-- Campo de búsqueda. -->
-                    <input id="search-input" class="toolbar__grow" type="search" placeholder="Buscar por producto, marca o comercio...">
-                    <!-- Filtro de comercio. -->
-                    <select id="filtro-comercio">
-                        <!-- Opción general. -->
-                        <option value="">Todos los comercios</option>
-                    </select>
-                    <!-- Filtro de categoría. -->
-                    <select id="filtro-categoria">
-                        <!-- Opción general. -->
-                        <option value="">Todas las categorías</option>
-                    </select>
-                </div>
-                <!-- Resumen del filtro actual. -->
-                <p id="resumen-catalogo" class="muted" style="margin-bottom:12px;"></p>
-                <!-- Lista renderizada con JavaScript. -->
-                <section id="lista-productos" class="product-grid"></section>
+
+            <section class="catalog-hero">
+                <p class="section-kicker">Comercios locales</p>
+                <h1>Encontrá productos sin recorrer comercio por comercio.</h1>
+                <p>Buscá, compará disponibilidad y armá tu pedido para retirar directamente en el local.</p>
             </section>
-            <!-- Navegación del cliente. -->
+
+            <section class="catalog-content">
+                <aside class="filters" aria-label="Filtros del catálogo">
+                    <div class="filters-heading">
+                        <div>
+                            <p class="section-kicker">Filtrar</p>
+                            <h2>Refiná tu búsqueda</h2>
+                        </div>
+                        <button id="btn-limpiar" class="text-button" type="button">Limpiar</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="search-input">Buscar</label>
+                        <input id="search-input" type="search" placeholder="Producto, marca o comercio">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="filtro-comercio">Comercio</label>
+                        <select id="filtro-comercio">
+                            <option value="">Todos los comercios</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="filtro-categoria">Categoría</label>
+                        <select id="filtro-categoria">
+                            <option value="">Todas las categorías</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="filtro-disponibilidad">Disponibilidad</label>
+                        <select id="filtro-disponibilidad">
+                            <option value="">Todos</option>
+                            <option value="disponible">Con stock</option>
+                            <option value="bajo">Stock bajo</option>
+                            <option value="sin-stock">Sin stock</option>
+                        </select>
+                    </div>
+
+                    <label class="check-row" for="filtro-promocion">
+                        <input id="filtro-promocion" type="checkbox">
+                        <span>Solo productos en promoción</span>
+                    </label>
+
+                    <div class="price-grid">
+                        <div class="form-group">
+                            <label for="precio-min">Precio mín.</label>
+                            <input id="precio-min" type="number" min="0" placeholder="$0">
+                        </div>
+                        <div class="form-group">
+                            <label for="precio-max">Precio máx.</label>
+                            <input id="precio-max" type="number" min="0" placeholder="Sin límite">
+                        </div>
+                    </div>
+                </aside>
+
+                <section class="results-area">
+                    <header class="results-heading">
+                        <div>
+                            <p id="resumen-catalogo" class="muted"></p>
+                            <h2>Productos disponibles en Todo Tala</h2>
+                        </div>
+                        <select id="orden-productos" aria-label="Ordenar productos">
+                            <option value="relevancia">Orden recomendado</option>
+                            <option value="precio-asc">Menor precio</option>
+                            <option value="precio-desc">Mayor precio</option>
+                            <option value="nombre">Nombre A-Z</option>
+                        </select>
+                    </header>
+
+                    <section id="lista-productos" class="product-grid" aria-live="polite"></section>
+                </section>
+            </section>
+
             <nav class="bottom-nav" aria-label="Navegación del cliente">
-                <!-- Inicio. -->
                 <a href="../pantalla_inicio/todo_tala_pantalla_inicio.html">Inicio</a>
-                <!-- Buscar. -->
                 <a href="../resultados_busqueda/todo_tala_resultados_busqueda.html">Buscar</a>
-                <!-- Catálogo activo. -->
                 <a class="active" href="todo_tala_catalogo_cliente.html">Catálogo</a>
-                <!-- Perfil. -->
                 <a href="../perfil_cliente/tala_perfil_cliente.html">Perfil</a>
             </nav>
         </section>
     </main>
-    <!-- Carga utilidades comunes. -->
+
     <script src="../assets/app.js"></script>
-    <!-- Carga lógica del catálogo. -->
     <script src="catalogo.js"></script>
 </body>
-<!-- Finaliza el documento. -->
 </html>
