@@ -1,147 +1,76 @@
 <!DOCTYPE html>
-<!-- Indica que el documento utiliza HTML5. -->
 <html lang="es">
-<!-- Define que el contenido de la página está en español. -->
 <head>
-    <!-- Permite utilizar correctamente caracteres como tildes y ñ. -->
     <meta charset="UTF-8">
-    <!-- Hace que la interfaz se adapte al ancho del dispositivo. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Define el título mostrado en la pestaña del navegador. -->
     <title>Todo Tala | Inicio</title>
-    <!-- Carga los estilos específicos de esta pantalla. -->
     <link rel="stylesheet" href="estilos.css">
 </head>
-<!-- Comienza el contenido visible. -->
 <body>
-    <!-- Contenedor general que centra la ventana del MVP. -->
-    <main class="app-page">
-        <!-- Tarjeta principal del inicio. -->
-        <section class="app-card">
-            <!-- Bloque superior con identidad y explicación breve. -->
+    <main class="app-page home-page">
+        <section class="app-card home-card">
             <header class="home-hero">
-                <!-- Barra superior de la pantalla. -->
-                <div class="home-topbar">
-                    <!-- Identidad visual simple del proyecto. -->
-                    <a class="brand" href="todo_tala_pantalla_inicio.html" aria-label="Ir al inicio">
-                        <!-- Marca textual provisoria para no depender del logo definitivo. -->
+                <nav class="home-topbar" aria-label="Navegación principal">
+                    <a class="brand" href="todo_tala_pantalla_inicio.html" aria-label="Todo Tala - Inicio">
                         <span class="brand-mark">TT</span>
-                        <!-- Nombre del proyecto. -->
                         <span>Todo Tala</span>
                     </a>
-                    <!-- Botón que permite ingresar directamente al catálogo público del MVP. -->
-                    <button id="btn-explorar" class="btn btn--secondary" type="button">Explorar</button>
-                </div>
-                <!-- Mensaje principal de la plataforma. -->
+
+                    <div class="topbar-actions">
+                        <button id="btn-notificaciones" class="icon-button" type="button" aria-label="Notificaciones">🔔</button>
+                        <button id="btn-perfil" class="btn btn--secondary" type="button">Mi perfil</button>
+                        <button id="btn-login" class="btn btn--primary" type="button">Iniciar sesión</button>
+                        <button id="btn-registro" class="btn btn--secondary" type="button">Crear cuenta</button>
+                        <button id="btn-salir" class="btn btn--secondary" type="button">Salir</button>
+                    </div>
+                </nav>
+
                 <section class="hero-copy">
-                    <!-- Título principal orientado al problema que resuelve el proyecto. -->
+                    <p id="saludo" class="hero-kicker">Comercio local, más simple</p>
                     <h1>Encontrá lo que necesitás cerca de vos.</h1>
-                    <!-- Explicación breve del objetivo del MVP. -->
-                    <p>Buscá productos, consultá disponibilidad y prepará tu pedido para retirarlo en el comercio.</p>
+                    <p>Buscá productos, compará opciones, consultá stock y prepará tu pedido para retirarlo en el comercio.</p>
                 </section>
-                <!-- Controles principales del inicio. -->
-                <section class="home-actions">
-                    <!-- Campo para comenzar una búsqueda. -->
-                    <input id="busqueda-inicio" type="search" placeholder="Buscar productos o comercios..." aria-label="Buscar productos o comercios">
-                    <!-- Botón que envía el texto a la pantalla de resultados. -->
-                    <button id="btn-buscar" class="btn btn--primary" type="button">Buscar</button>
-                </section>
-                <!-- Acciones de autenticación. -->
-                <section class="toolbar" style="margin-top:12px; margin-bottom:0;">
-                    <!-- Botón para abrir la ventana de inicio de sesión. -->
-                    <button id="btn-login" class="btn btn--primary" type="button">Iniciar sesión</button>
-                    <!-- Botón para abrir la ventana de registro. -->
-                    <button id="btn-registro" class="btn btn--secondary" type="button">Crear cuenta</button>
-                </section>
+
+                <form id="form-busqueda" class="home-actions" role="search">
+                    <input id="busqueda-inicio" type="search" placeholder="Buscar productos o comercios..." autocomplete="off" aria-label="Buscar productos o comercios">
+                    <button class="btn btn--primary" type="submit">Buscar</button>
+                </form>
             </header>
 
-            <!-- Contiene promociones y productos de ejemplo. -->
             <section class="home-sections">
-                <!-- Sección de promociones destacadas. -->
                 <section>
-                    <!-- Encabezado de la sección. -->
                     <div class="section-heading">
-                        <!-- Título de promociones. -->
-                        <h2>Promociones destacadas</h2>
-                        <!-- Etiqueta que aclara que son datos del MVP. -->
-                        <span class="badge">Demo</span>
+                        <div>
+                            <p class="section-kicker">Oportunidades</p>
+                            <h2>Promociones destacadas</h2>
+                        </div>
                     </div>
-                    <!-- Grilla de promociones. -->
-                    <div class="promo-grid">
-                        <!-- Primera promoción. -->
-                        <article class="promo-card">
-                            <!-- Nombre de la promoción. -->
-                            <strong>2x1 en bizcochos</strong>
-                            <!-- Comercio asociado. -->
-                            <p>Panadería El Sol</p>
-                        </article>
-                        <!-- Segunda promoción. -->
-                        <article class="promo-card">
-                            <!-- Nombre de la promoción. -->
-                            <strong>15% en repostería</strong>
-                            <!-- Comercio asociado. -->
-                            <p>Panadería El Sol</p>
-                        </article>
-                        <!-- Tercera promoción. -->
-                        <article class="promo-card">
-                            <!-- Nombre de la promoción. -->
-                            <strong>Productos destacados</strong>
-                            <!-- Comercio asociado. -->
-                            <p>TecnoTala</p>
-                        </article>
-                    </div>
+                    <div id="promo-grid" class="promo-grid"></div>
                 </section>
 
-                <!-- Sección de productos recientes. -->
                 <section>
-                    <!-- Encabezado de productos. -->
                     <div class="section-heading">
-                        <!-- Título de la sección. -->
-                        <h2>Productos recientes</h2>
-                        <!-- Enlace hacia el catálogo completo. -->
+                        <div>
+                            <p class="section-kicker">Cerca tuyo</p>
+                            <h2>Productos destacados</h2>
+                        </div>
                         <button id="btn-catalogo" class="btn btn--secondary" type="button">Ver catálogo</button>
                     </div>
-                    <!-- Grilla de productos. -->
-                    <div class="preview-grid">
-                        <!-- Tarjeta del primer producto. -->
-                        <article class="preview-card" data-producto-id="1" tabindex="0">
-                            <!-- Reemplazo simple de imagen mientras el MVP no gestiona archivos reales. -->
-                            <div class="product-placeholder">BT</div>
-                            <!-- Nombre del producto. -->
-                            <strong>Auriculares BT</strong>
-                            <!-- Comercio y precio. -->
-                            <p class="muted">TecnoTala · $722</p>
-                        </article>
-                        <!-- Tarjeta del segundo producto. -->
-                        <article class="preview-card" data-producto-id="2" tabindex="0">
-                            <!-- Reemplazo simple de imagen. -->
-                            <div class="product-placeholder">TC</div>
-                            <!-- Nombre del producto. -->
-                            <strong>Torta de chocolate</strong>
-                            <!-- Comercio y precio. -->
-                            <p class="muted">Panadería El Sol · $950</p>
-                        </article>
-                    </div>
+                    <div id="preview-grid" class="preview-grid"></div>
                 </section>
             </section>
 
-            <!-- Navegación inferior coherente con las pantallas del cliente. -->
-            <nav class="bottom-nav" aria-label="Navegación principal">
-                <!-- Inicio permanece activo en esta pantalla. -->
+            <nav class="bottom-nav" aria-label="Accesos del cliente">
                 <a class="active" href="todo_tala_pantalla_inicio.html">Inicio</a>
-                <!-- Lleva a la búsqueda. -->
                 <a href="../resultados_busqueda/todo_tala_resultados_busqueda.html">Buscar</a>
-                <!-- Lleva al catálogo. -->
                 <a href="../catalogo_cliente/todo_tala_catalogo_cliente.html">Catálogo</a>
-                <!-- Lleva al perfil del cliente. -->
-                <a href="../perfil_cliente/tala_perfil_cliente.html">Perfil</a>
+                <a href="../mis_pedidos/todo_tala_mis_pedidos.html">Mis pedidos</a>
+                <a href="../carrito_pedidos/todo_tala_carrito_pedido.html">Carrito</a>
             </nav>
         </section>
     </main>
-    <!-- Carga las funciones compartidas del MVP. -->
+
     <script src="../assets/app.js"></script>
-    <!-- Carga la interactividad específica de la pantalla de inicio. -->
     <script src="inicio.js"></script>
 </body>
-<!-- Finaliza el documento HTML. -->
 </html>
