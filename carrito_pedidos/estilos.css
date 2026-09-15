@@ -1,84 +1,231 @@
-/* Importa los estilos comunes. */
 @import url("../assets/estilos_globales.css");
 
-/* Organiza cada producto del carrito. */
-.cart-item {
-    /* Usa una grilla con contenido y acciones. */
-    display: grid;
-    /* Define columnas flexibles. */
-    grid-template-columns: 1fr auto;
-    /* Separa elementos. */
-    gap: 14px;
-    /* Agrega padding. */
-    padding: 14px;
-    /* Dibuja borde. */
-    border: 1px solid var(--color-border);
-    /* Redondea. */
-    border-radius: 15px;
-    /* Agrega margen inferior. */
-    margin-bottom: 10px;
+.cart-page {
+    background:
+        radial-gradient(circle at top right, rgba(31, 95, 191, 0.10), transparent 30%),
+        linear-gradient(180deg, #f7f9fc 0%, #eef2f7 100%);
 }
 
-/* Organiza los controles de cantidad. */
-.cart-actions {
-    /* Usa flexbox. */
+.cart-shell {
+    max-width: 1100px;
+}
+
+.cart-header {
+    flex-wrap: wrap;
+}
+
+.section-kicker {
+    color: var(--color-primary);
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.cart-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 22px;
+}
+
+.cart-main {
+    min-width: 0;
+}
+
+.important-note {
+    margin-bottom: 18px;
+    padding: 15px 16px;
+    border: 1px solid #f0dd99;
+    border-radius: 15px;
+    background: #fff8df;
+}
+
+.important-note strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.important-note p {
+    color: #6c5a16;
+    font-size: 0.9rem;
+}
+
+.commerce-groups {
+    display: grid;
+    gap: 16px;
+}
+
+.commerce-group {
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    background: white;
+}
+
+.commerce-group__header {
     display: flex;
-    /* Centra verticalmente. */
     align-items: center;
-    /* Separa botones. */
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--color-border);
+    background: #f8fafc;
+}
+
+.commerce-group__header p {
+    color: var(--color-muted);
+    font-size: 0.82rem;
+}
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    padding: 15px 16px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.cart-item:last-child {
+    border-bottom: 0;
+}
+
+.cart-item__meta {
+    display: grid;
+    gap: 4px;
+}
+
+.cart-actions {
+    display: flex;
+    align-items: center;
     gap: 7px;
 }
 
-/* Botones pequeños del carrito. */
 .cart-actions button {
-    /* Define tamaño mínimo. */
     min-width: 34px;
-    /* Define alto. */
     height: 34px;
-    /* Quita borde. */
     border: 0;
-    /* Redondea. */
-    border-radius: 9px;
-    /* Usa fondo suave. */
+    border-radius: 10px;
     background: #eef1f5;
-    /* Permite clic. */
     cursor: pointer;
+    font-weight: 800;
 }
 
-/* Caja del total. */
-.cart-total {
-    /* Usa fondo suave. */
-    background: #f8fafc;
-    /* Dibuja borde. */
-    border: 1px solid var(--color-border);
-    /* Redondea. */
-    border-radius: 15px;
-    /* Agrega padding. */
-    padding: 16px;
-    /* Agrega margen superior. */
+.cart-actions button:hover {
+    background: #e1e7ee;
+}
+
+.cart-actions button[data-action="eliminar"] {
+    color: var(--color-danger);
+    background: var(--color-danger-soft);
+}
+
+.commerce-subtotal {
+    padding: 11px 16px;
+    border-top: 1px solid var(--color-border);
+    text-align: right;
+    font-size: 0.9rem;
+    background: #fbfcfe;
+}
+
+.observation-box {
     margin-top: 18px;
 }
 
-/* Organiza cada fila del total. */
-.total-row {
-    /* Usa flexbox. */
-    display: flex;
-    /* Separa extremos. */
-    justify-content: space-between;
-    /* Agrega espacio vertical. */
-    padding: 5px 0;
+.cart-summary {
+    align-self: start;
+    display: grid;
+    gap: 13px;
+    padding: 19px;
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    background: #fbfcfe;
+    position: sticky;
+    top: 14px;
 }
 
-/* Destaca el total final. */
-.total-row--strong {
-    /* Aumenta el tamaño. */
-    font-size: 1.08rem;
-    /* Usa negrita. */
-    font-weight: 800;
-    /* Agrega borde superior. */
+.summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 4px 0;
+}
+
+.summary-total {
+    margin-top: 4px;
+    padding-top: 13px;
     border-top: 1px solid var(--color-border);
-    /* Separa del subtotal. */
-    margin-top: 8px;
-    /* Agrega padding superior. */
-    padding-top: 12px;
+    font-size: 1.08rem;
+}
+
+.reservation-panel {
+    display: grid;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid #cfe0fa;
+    border-radius: 14px;
+    background: var(--color-primary-soft);
+    text-align: center;
+}
+
+.reservation-panel[hidden] {
+    display: none;
+}
+
+.reservation-label {
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+#tiempo-reserva {
+    color: var(--color-primary);
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.reservation-panel p:not(.reservation-label) {
+    color: var(--color-muted);
+    font-size: 0.82rem;
+}
+
+.summary-help {
+    padding-top: 4px;
+    text-align: center;
+}
+
+.empty-state {
+    padding: 36px 20px;
+    border: 1px dashed var(--color-border);
+    border-radius: 16px;
+    background: #fbfcfe;
+    text-align: center;
+    color: var(--color-muted);
+}
+
+@media (max-width: 850px) {
+    .cart-content {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-summary {
+        position: static;
+    }
+}
+
+@media (max-width: 620px) {
+    .cart-item {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-actions {
+        justify-content: flex-start;
+    }
+
+    .commerce-group__header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
 }
