@@ -1,121 +1,215 @@
-/* Obtiene el campo de búsqueda. */
 const buscadorCatalogo = document.getElementById("search-input");
-/* Obtiene el filtro de comercio. */
 const filtroComercio = document.getElementById("filtro-comercio");
-/* Obtiene el filtro de categoría. */
 const filtroCategoria = document.getElementById("filtro-categoria");
-/* Obtiene el contenedor de productos. */
+const filtroDisponibilidad = document.getElementById("filtro-disponibilidad");
+const filtroPromocion = document.getElementById("filtro-promocion");
+const precioMinimo = document.getElementById("precio-min");
+const precioMaximo = document.getElementById("precio-max");
+const ordenProductos = document.getElementById("orden-productos");
 const listaCatalogo = document.getElementById("lista-productos");
-/* Obtiene el texto resumen. */
 const resumenCatalogo = document.getElementById("resumen-catalogo");
-/* Obtiene el contador del carrito. */
 const contadorCarrito = document.getElementById("contador-carrito");
 
-/* Carga opciones únicas de comercio y categoría. */
 function cargarFiltros() {
-    /* Obtiene datos actuales. */
     const datos = TodoTala.obtenerDatos();
-    /* Crea una lista única de comercios. */
-    const comercios = [...new Set(datos.productos.map(function (producto) { return producto.comercio; }))];
-    /* Crea una lista única de categorías. */
-    const categorias = [...new Set(datos.productos.map(function (producto) { return producto.categoria; }))];
-    /* Agrega cada comercio al selector. */
+    const comercios = [...new Set(datos.productos.map(function (producto) {
+        return producto.comercio;
+    }))].sort();
+    const categorias = [...new Set(datos.productos.map(function (producto) {
+        return producto.categoria;
+    }))].sort();
+
     comercios.forEach(function (comercio) {
-        /* Crea una opción. */
         const opcion = document.createElement("option");
-        /* Define su valor. */
         opcion.value = comercio;
-        /* Define su texto. */
         opcion.textContent = comercio;
-        /* Agrega la opción. */
         filtroComercio.appendChild(opcion);
     });
-    /* Agrega cada categoría al selector. */
+
     categorias.forEach(function (categoria) {
-        /* Crea una opción. */
         const opcion = document.createElement("option");
-        /* Define su valor. */
         opcion.value = categoria;
-        /* Define su texto. */
         opcion.textContent = categoria;
-        /* Agrega la opción. */
         filtroCategoria.appendChild(opcion);
     });
 }
 
-/* Renderiza los productos que cumplen con los filtros. */
-function renderizarCatalogo() {
-    /* Obtiene los datos. */
-    const datos = TodoTala.obtenerDatos();
-    /* Normaliza el texto buscado. */
-    const texto = buscadorCatalogo.value.trim().toLowerCase();
-    /* Filtra productos visibles según los controles. */
-    const productos = datos.productos.filter(function (producto) {
-        /* Comprueba coincidencia de texto. */
-        const coincideTexto = (producto.nombre + " " + producto.marca + " " + producto.comercio).toLowerCase().includes(texto);
-        /* Comprueba comercio. */
-        const coincideComercio = !filtroComercio.value || producto.comercio === filtroComercio.value;
-        /* Comprueba categoría. */
-        const coincideCategoria = !filtroCategoria.value || producto.categoria === filtroCategoria.value;
-        /* Solo devuelve productos publicados. */
-        return producto.visible && coincideTexto && coincideComercio && coincideCategoria;
-    });
-    /* Vacía resultados anteriores. */
-    listaCatalogo.innerHTML = "";
-    /* Actualiza el resumen. */
-    resumenCatalogo.textContent = productos.length + " producto(s) encontrado(s)";
-    /* Muestra estado vacío si no hay coincidencias. */
-    if (productos.length === 0) {
-        /* Agrega un mensaje simple. */
-        listaCatalogo.innerHTML = '<div class="empty-state">No encontramos productos con esos filtros.</div>';
-        /* Finaliza. */
+function productoTienePromocion(producto) {
+    return Number(producto.precioAnterior || 0) > Number(producto.precio || 0);
+}
+
+function coincideDisponibilidad(producto) {
+    if (!filtroDisponibilidad.value) return true;
+    if (filtroDisponibilidad.value === "disponible") return producto.stock > 0;
+    if (filtroDisponibilidad.value === "bajo") return producto.stock > 0 && producto.stock <= 5;
+    if (filtroDisponibilidad.value === "sin-stock") return producto.stock <= 0;
+    return true;
+}
+
+function ordenarLista(productos) {
+    const copia = productos.slice();
+
+    if (ordenProductos.value === "precio-asc") {
+        copia.sort(function (a, b) { return a.precio - b.precio; });
+    } else if (ordenProductos.value === "precio-desc") {
+        copia.sort(function (a, b) { return b.precio - a.precio; });
+    } else if (ordenProductos.value === "nombre") {
+        copia.sort(function (a, b) { return a.nombre.localeCompare(b.nombre, "es"); });
+    } else {
+        copia.sort(function (a, b) {
+            if (productoTienePromocion(a) !== productoTienePromocion(b)) {
+                return productoTienePromocion(a) ? -1 : 1;
+            }
+            if ((a.stock > 0) !== (b.stock > 0)) {
+                return a.stock > 0 ? -1 : 1;
+            }
+            return a.id - b.id;
+        });
+    }
+
+    return copia;
+}
+
+function abrirDetalle(id) {
+    TodoTala.irA("../detalle_producto/todo_tala_detalle_producto.html?id=" + id);
+}
+
+function agregarRapido(id) {
+    const agregado = TodoTala.agregarAlCarrito(id, 1);
+
+    if (!agregado) {
+        TodoTala.toast("No se pudo agregar: revisá el stock disponible", "danger");
         return;
     }
-    /* Crea una tarjeta por producto. */
+
+    actualizarContador();
+    TodoTala.toast("Producto agregado al carrito", "success");
+}
+
+function renderizarCatalogo() {
+    const datos = TodoTala.obtenerDatos();
+    const texto = buscadorCatalogo.value.trim().toLowerCase();
+    const minimo = precioMinimo.value === "" ? null : Number(precioMinimo.value);
+    const maximo = precioMaximo.value === "" ? null : Number(precioMaximo.value);
+
+    let productos = datos.productos.filter(function (producto) {
+        const textoProducto = [
+            producto.nombre,
+            producto.marca,
+            producto.comercio,
+            producto.categoria,
+            producto.localidad
+        ].join(" ").toLowerCase();
+
+        const coincideTexto = textoProducto.includes(texto);
+        const coincideComercio = !filtroComercio.value || producto.comercio === filtroComercio.value;
+        const coincideCategoria = !filtroCategoria.value || producto.categoria === filtroCategoria.value;
+        const coincideMinimo = minimo === null || producto.precio >= minimo;
+        const coincideMaximo = maximo === null || producto.precio <= maximo;
+        const coincidePromo = !filtroPromocion.checked || productoTienePromocion(producto);
+
+        return producto.visible &&
+            coincideTexto &&
+            coincideComercio &&
+            coincideCategoria &&
+            coincideDisponibilidad(producto) &&
+            coincideMinimo &&
+            coincideMaximo &&
+            coincidePromo;
+    });
+
+    productos = ordenarLista(productos);
+    listaCatalogo.innerHTML = "";
+    resumenCatalogo.textContent = productos.length + (productos.length === 1 ? " producto encontrado" : " productos encontrados");
+
+    if (productos.length === 0) {
+        listaCatalogo.innerHTML = '<div class="empty-state"><strong>No encontramos coincidencias.</strong><br>Probá quitando algún filtro o usando otra búsqueda.</div>';
+        return;
+    }
+
     productos.forEach(function (producto) {
-        /* Crea el artículo. */
         const tarjeta = document.createElement("article");
-        /* Asigna clase visual. */
+        const stock = TodoTala.estadoStock(producto);
+        const tienePromo = productoTienePromocion(producto);
+
         tarjeta.className = "product-card";
-        /* Define el contenido de la tarjeta. */
-        tarjeta.innerHTML = '<div class="product-image">' + producto.imagenTexto + '</div>' +
-            '<strong>' + producto.nombre + '</strong>' +
-            '<p class="muted">' + producto.comercio + ' · ' + producto.categoria + '</p>' +
-            '<div class="product-meta"><strong>' + TodoTala.formatearPrecio(producto.precio) + '</strong>' +
-            '<span class="' + (producto.stock > 0 ? 'badge badge--success' : 'badge badge--danger') + '">' + (producto.stock > 0 ? 'En stock' : 'Sin stock') + '</span></div>';
-        /* Abre el detalle al hacer clic. */
-        tarjeta.addEventListener("click", function () {
-            /* Navega con el id del producto. */
-            TodoTala.irA("../detalle_producto/todo_tala_detalle_producto.html?id=" + producto.id);
+        tarjeta.innerHTML =
+            '<div class="product-image" data-detalle>' + producto.imagenTexto + '</div>' +
+            '<div class="product-card__body">' +
+                '<div class="product-stock-row">' +
+                    '<span class="' + stock.clase + '">' + stock.texto + '</span>' +
+                    (tienePromo ? '<span class="badge">Promoción</span>' : '') +
+                '</div>' +
+                '<strong class="product-card__title" data-detalle>' + producto.nombre + '</strong>' +
+                '<p class="product-store">' + producto.comercio + ' · ' + producto.localidad + '</p>' +
+                '<p class="muted">' + producto.marca + ' · ' + producto.categoria + '</p>' +
+                '<div class="product-price-row">' +
+                    '<p><span class="product-price">' + TodoTala.formatearPrecio(producto.precio) + '</span>' +
+                    (tienePromo ? '<span class="old-price">' + TodoTala.formatearPrecio(producto.precioAnterior) + '</span>' : '') + '</p>' +
+                '</div>' +
+                '<div class="product-card__actions">' +
+                    '<button class="btn btn--primary" data-agregar type="button" ' + (producto.stock <= 0 ? 'disabled' : '') + '>' + (producto.stock > 0 ? 'Agregar' : 'Sin stock') + '</button>' +
+                    '<button class="btn btn--secondary btn-detail" data-detalle type="button" aria-label="Ver detalle">→</button>' +
+                '</div>' +
+            '</div>';
+
+        tarjeta.querySelectorAll("[data-detalle]").forEach(function (elemento) {
+            elemento.addEventListener("click", function () {
+                abrirDetalle(producto.id);
+            });
         });
-        /* Agrega la tarjeta al catálogo. */
+
+        const botonAgregar = tarjeta.querySelector("[data-agregar]");
+        botonAgregar.addEventListener("click", function () {
+            agregarRapido(producto.id);
+        });
+
         listaCatalogo.appendChild(tarjeta);
     });
 }
 
-/* Actualiza el número de unidades del carrito. */
 function actualizarContador() {
-    /* Obtiene datos. */
-    const datos = TodoTala.obtenerDatos();
-    /* Suma cantidades. */
-    const cantidad = datos.carrito.reduce(function (total, item) { return total + item.cantidad; }, 0);
-    /* Muestra el resultado. */
-    contadorCarrito.textContent = cantidad;
+    contadorCarrito.textContent = TodoTala.cantidadCarrito();
 }
 
-/* Filtra en tiempo real al escribir. */
-buscadorCatalogo.addEventListener("input", renderizarCatalogo);
-/* Filtra al cambiar comercio. */
-filtroComercio.addEventListener("change", renderizarCatalogo);
-/* Filtra al cambiar categoría. */
-filtroCategoria.addEventListener("change", renderizarCatalogo);
-/* Abre el carrito. */
-document.getElementById("btn-carrito").addEventListener("click", function () { TodoTala.irA("../carrito_pedidos/todo_tala_carrito_pedido.html"); });
-/* Abre mis pedidos. */
-document.getElementById("btn-pedidos").addEventListener("click", function () { TodoTala.irA("../mis_pedidos/todo_tala_mis_pedidos.html"); });
-/* Carga filtros iniciales. */
+function limpiarFiltros() {
+    buscadorCatalogo.value = "";
+    filtroComercio.value = "";
+    filtroCategoria.value = "";
+    filtroDisponibilidad.value = "";
+    filtroPromocion.checked = false;
+    precioMinimo.value = "";
+    precioMaximo.value = "";
+    ordenProductos.value = "relevancia";
+    renderizarCatalogo();
+}
+
+[
+    buscadorCatalogo,
+    precioMinimo,
+    precioMaximo
+].forEach(function (campo) {
+    campo.addEventListener("input", renderizarCatalogo);
+});
+
+[
+    filtroComercio,
+    filtroCategoria,
+    filtroDisponibilidad,
+    filtroPromocion,
+    ordenProductos
+].forEach(function (campo) {
+    campo.addEventListener("change", renderizarCatalogo);
+});
+
+document.getElementById("btn-limpiar").addEventListener("click", limpiarFiltros);
+document.getElementById("btn-carrito").addEventListener("click", function () {
+    TodoTala.irA("../carrito_pedidos/todo_tala_carrito_pedido.html");
+});
+document.getElementById("btn-pedidos").addEventListener("click", function () {
+    TodoTala.irA("../mis_pedidos/todo_tala_mis_pedidos.html");
+});
+
 cargarFiltros();
-/* Renderiza productos iniciales. */
 renderizarCatalogo();
-/* Actualiza el carrito. */
 actualizarContador();
