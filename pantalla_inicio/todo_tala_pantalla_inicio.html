@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo Tala | Inicio</title>
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="estilos.css?v=1.2.1">
 </head>
 <body>
     <main class="app-page home-page">
@@ -17,18 +17,19 @@
                     </a>
 
                     <div class="topbar-actions">
-                        <button id="btn-notificaciones" class="icon-button" type="button" aria-label="Notificaciones">🔔</button>
-                        <button id="btn-perfil" class="btn btn--secondary" type="button">Mi perfil</button>
-                        <button id="btn-login" class="btn btn--primary" type="button">Iniciar sesión</button>
-                        <button id="btn-registro" class="btn btn--secondary" type="button">Crear cuenta</button>
-                        <button id="btn-salir" class="btn btn--secondary" type="button">Salir</button>
+                        <button id="btn-notificaciones" class="icon-button" type="button" aria-label="Notificaciones" hidden>🔔</button>
+                        <a id="btn-panel" class="btn btn--secondary" href="../panel_comercio/todo_tala_panel_comercio.html" hidden>Panel del comercio</a>
+                        <a id="btn-perfil" class="btn btn--secondary" href="../perfil_cliente/tala_perfil_cliente.html" hidden>Mi perfil</a>
+                        <a id="btn-login" class="btn btn--primary" href="../pantalla_login/todo_tala_pantalla_login.html">Ingresar</a>
+                        <a id="btn-registro" class="btn btn--secondary" href="../pantalla_reguistro/todo_tala_pantalla_registro.html">Crear cuenta</a>
+                        <button id="btn-salir" class="btn btn--secondary" type="button" hidden>Salir</button>
                     </div>
                 </nav>
 
                 <section class="hero-copy">
-                    <p id="saludo" class="hero-kicker">Comercio local, más simple</p>
+                    <p class="hero-kicker">Todo Tala · v1.2.1</p>
                     <h1>Encontrá lo que necesitás cerca de vos.</h1>
-                    <p>Buscá productos, compará opciones, consultá stock y prepará tu pedido para retirarlo en el comercio.</p>
+                    <p id="saludo">Buscá productos, compará opciones, consultá stock y prepará tu pedido para retirarlo en el comercio.</p>
                 </section>
 
                 <form id="form-busqueda" class="home-actions" role="search">
@@ -54,23 +55,23 @@
                             <p class="section-kicker">Cerca tuyo</p>
                             <h2>Productos destacados</h2>
                         </div>
-                        <button id="btn-catalogo" class="btn btn--secondary" type="button">Ver catálogo</button>
+                        <a class="btn btn--secondary" href="../catalogo_cliente/todo_tala_catalogo_cliente.html">Ver catálogo</a>
                     </div>
                     <div id="preview-grid" class="preview-grid"></div>
                 </section>
             </section>
 
-            <nav class="bottom-nav" aria-label="Accesos del cliente">
+            <nav class="bottom-nav" aria-label="Accesos principales">
                 <a class="active" href="todo_tala_pantalla_inicio.html">Inicio</a>
                 <a href="../resultados_busqueda/todo_tala_resultados_busqueda.html">Buscar</a>
                 <a href="../catalogo_cliente/todo_tala_catalogo_cliente.html">Catálogo</a>
-                <a href="../mis_pedidos/todo_tala_mis_pedidos.html">Mis pedidos</a>
-                <a href="../carrito_pedidos/todo_tala_carrito_pedido.html">Carrito</a>
+                <a id="nav-pedidos" href="../mis_pedidos/todo_tala_mis_pedidos.html" hidden>Mis pedidos</a>
+                <a id="nav-carrito" href="../carrito_pedidos/todo_tala_carrito_pedido.html" hidden>Carrito</a>
             </nav>
         </section>
     </main>
 
-    <script src="../assets/app.js"></script>
-    <script src="inicio.js"></script>
+    <script src="../assets/app.js?v=1.2.1"></script>
+    <script src="inicio.js?v=1.2.1"></script>
 </body>
 </html>
