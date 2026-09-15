@@ -1,77 +1,81 @@
-/* Importa el sistema visual común. */
 @import url("../assets/estilos_globales.css");
 
-/* Organiza el formulario de búsqueda avanzada. */
-.search-controls {
-    /* Usa una grilla responsiva. */
-    display: grid;
-    /* Define columnas adaptables. */
-    grid-template-columns: 2fr 1fr 1fr auto;
-    /* Separa controles. */
-    gap: 10px;
-    /* Alinea los controles al final. */
-    align-items: end;
-    /* Agrega margen inferior. */
-    margin-bottom: 18px;
+.search-card {
+    max-width: 980px;
 }
 
-/* Define cada resultado. */
-.result-item {
-    /* Usa una grilla con imagen y contenido. */
+.back-link {
     display: grid;
-    /* Define una columna angosta y otra flexible. */
-    grid-template-columns: 84px 1fr auto;
-    /* Separa elementos. */
-    gap: 14px;
-    /* Centra verticalmente. */
-    align-items: center;
-    /* Agrega padding. */
-    padding: 14px;
-    /* Dibuja borde. */
-    border: 1px solid var(--color-border);
-    /* Redondea. */
-    border-radius: 15px;
-    /* Agrega margen inferior. */
-    margin-bottom: 10px;
-}
-
-/* Simula imagen del producto. */
-.result-image {
-    /* Define ancho y alto. */
-    width: 84px;
-    /* Define altura. */
-    height: 74px;
-    /* Redondea. */
-    border-radius: 12px;
-    /* Usa fondo suave. */
-    background: #eef2f7;
-    /* Centra siglas. */
-    display: grid;
-    /* Centra completamente. */
     place-items: center;
-    /* Usa azul. */
-    color: var(--color-primary);
-    /* Usa negrita. */
-    font-weight: 850;
 }
 
-/* Ajusta búsqueda en móvil. */
-@media (max-width: 720px) {
-    /* Apila controles. */
+/* Controles de búsqueda. */
+.search-controls {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 10px;
+    align-items: end;
+}
+
+.stock-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 13px;
+}
+
+.stock-check input {
+    width: auto;
+}
+
+.search-summary {
+    margin: 16px 0 10px;
+}
+
+/* Lista de resultados. */
+.result-list {
+    display: grid;
+    gap: 10px;
+}
+
+.result-item {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+}
+
+.result-image {
+    height: 70px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: #eef2f7;
+    color: var(--color-primary);
+    font-weight: 800;
+}
+
+.result-info {
+    display: grid;
+    gap: 3px;
+}
+
+@media (max-width: 760px) {
     .search-controls {
-        /* Usa una sola columna. */
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .search-controls,
+    .result-item {
         grid-template-columns: 1fr;
     }
 
-    /* Simplifica cada resultado. */
-    .result-item {
-        /* Usa dos columnas. */
-        grid-template-columns: 70px 1fr;
-    }
-
-    /* Mueve la acción debajo del contenido. */
-    .result-item > .btn {
-        /* Ocupa las dos columnas. */
-        grid-column: 1 / -1;
+    .result-image {
+        width: 80px;
     }
 }

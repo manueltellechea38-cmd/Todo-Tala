@@ -1,92 +1,89 @@
-/* Importa los estilos compartidos. */
 @import url("../assets/estilos_globales.css");
 
-/* Organiza las pestañas de estados. */
+.orders-card {
+    max-width: 980px;
+}
+
+.back-link {
+    display: grid;
+    place-items: center;
+}
+
+/* Filtros superiores. */
 .tabs {
-    /* Usa flexbox. */
     display: flex;
-    /* Permite bajar botones en móvil. */
-    flex-wrap: wrap;
-    /* Separa pestañas. */
     gap: 8px;
-    /* Agrega margen inferior. */
+    flex-wrap: wrap;
     margin-bottom: 16px;
 }
 
-/* Estilo base de pestaña. */
 .tab {
-    /* Quita borde. */
-    border: 0;
-    /* Usa fondo suave. */
-    background: #eef1f5;
-    /* Redondea. */
-    border-radius: 999px;
-    /* Agrega padding. */
     padding: 8px 12px;
-    /* Permite clic. */
-    cursor: pointer;
-    /* Usa peso medio. */
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    background: white;
+}
+
+.tab.active {
+    border-color: var(--color-primary);
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
     font-weight: 700;
-    /* Usa color secundario. */
+}
+
+.order-list {
+    display: grid;
+    gap: 12px;
+}
+
+/* Tarjeta individual de pedido. */
+.order-card {
+    display: grid;
+    gap: 11px;
+    padding: 15px;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+}
+
+.order-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.order-items {
+    display: grid;
+    gap: 3px;
     color: var(--color-muted);
 }
 
-/* Marca la pestaña activa. */
-.tab.active {
-    /* Usa fondo azul. */
-    background: var(--color-primary);
-    /* Usa texto blanco. */
-    color: white;
+.order-code {
+    padding: 10px;
+    border-radius: 10px;
+    background: var(--color-primary-soft);
 }
 
-/* Define cada tarjeta de pedido. */
-.order-card {
-    /* Dibuja borde. */
-    border: 1px solid var(--color-border);
-    /* Redondea. */
-    border-radius: 16px;
-    /* Agrega padding. */
-    padding: 16px;
-    /* Agrega margen inferior. */
-    margin-bottom: 12px;
+.order-code strong {
+    color: var(--color-primary);
 }
 
-/* Organiza encabezado del pedido. */
-.order-head {
-    /* Usa flexbox. */
+.order-actions {
     display: flex;
-    /* Separa extremos. */
-    justify-content: space-between;
-    /* Separa elementos. */
-    gap: 10px;
-    /* Permite wrap. */
+    gap: 8px;
     flex-wrap: wrap;
 }
 
-/* Destaca el código de retiro. */
-.pickup-code {
-    /* Usa fondo azul suave. */
-    background: var(--color-primary-soft);
-    /* Dibuja borde. */
-    border: 1px dashed #9ab9e8;
-    /* Redondea. */
-    border-radius: 12px;
-    /* Agrega padding. */
+.cancel-form {
+    display: grid;
+    gap: 9px;
     padding: 12px;
-    /* Centra texto. */
-    text-align: center;
-    /* Agrega margen superior. */
-    margin-top: 12px;
+    border-radius: 10px;
+    background: #f8fafc;
 }
 
-/* Hace grande el código. */
-.pickup-code strong {
-    /* Muestra como bloque. */
-    display: block;
-    /* Aumenta tamaño. */
-    font-size: 1.35rem;
-    /* Aumenta espaciado entre letras. */
-    letter-spacing: 0.08em;
-    /* Usa color azul. */
-    color: var(--color-primary);
+@media (max-width: 560px) {
+    .order-heading {
+        flex-direction: column;
+    }
 }

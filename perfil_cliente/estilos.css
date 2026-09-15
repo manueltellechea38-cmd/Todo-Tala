@@ -1,50 +1,73 @@
-/* Importa estilos globales. */
 @import url("../assets/estilos_globales.css");
 
-/* Centra los datos principales del perfil. */
-.profile-summary {
-    /* Centra el texto. */
-    text-align: center;
-    /* Agrega margen inferior. */
-    margin-bottom: 22px;
+.profile-card {
+    max-width: 760px;
 }
 
-/* Crea un avatar textual simple. */
-.avatar {
-    /* Define ancho. */
-    width: 76px;
-    /* Define alto. */
-    height: 76px;
-    /* Redondea totalmente. */
-    border-radius: 50%;
-    /* Usa fondo azul suave. */
-    background: var(--color-primary-soft);
-    /* Usa texto azul. */
-    color: var(--color-primary);
-    /* Centra contenido. */
+.back-link {
     display: grid;
-    /* Centra totalmente. */
     place-items: center;
-    /* Centra el bloque. */
-    margin: 0 auto 12px;
-    /* Usa negrita. */
-    font-weight: 850;
-    /* Aumenta tamaño. */
-    font-size: 1.2rem;
 }
 
-/* Sección de edición oculta al inicio. */
-.edit-panel {
-    /* Oculta inicialmente. */
-    display: none;
-    /* Agrega margen superior. */
-    margin-top: 18px;
-}
-
-/* Muestra el formulario cuando se activa. */
-.edit-panel.is-visible {
-    /* Usa grilla. */
+.profile-content {
     display: grid;
-    /* Separa campos. */
-    gap: 14px;
+    gap: 18px;
+}
+
+/* Resumen superior del usuario. */
+.profile-summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+    font-weight: 800;
+}
+
+/* Datos guardados de la cuenta. */
+.profile-data {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.profile-data article {
+    display: grid;
+    gap: 4px;
+    padding: 13px;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+}
+
+.profile-data small {
+    color: var(--color-muted);
+}
+
+/* Formulario de edición. */
+.edit-panel {
+    display: grid;
+    gap: 11px;
+    padding: 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+.edit-panel label {
+    display: grid;
+    gap: 6px;
+}
+
+@media (max-width: 640px) {
+    .profile-data {
+        grid-template-columns: 1fr;
+    }
 }

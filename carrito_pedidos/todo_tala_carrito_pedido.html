@@ -1,32 +1,74 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo Tala | Carrito</title><link rel="stylesheet" href="estilos.css?v=1.3">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Tala | Carrito</title>
+    <link rel="stylesheet" href="estilos.css?v=1.3.3">
 </head>
-<body class="cart-page">
-<main class="app-page"><section class="app-card cart-shell">
-<header class="app-header cart-header">
-<section class="app-header__title"><button id="btn-volver" class="icon-button" type="button" aria-label="Volver">←</button><section><h1>Carrito</h1><p class="muted">Cada comercio recibirá su pedido por separado.</p></section></section>
-<button id="btn-vaciar" class="btn btn--secondary" type="button">Vaciar carrito</button>
-</header>
-<section class="content cart-content">
-<section class="cart-main">
-<article class="important-note"><strong>Antes de confirmar</strong><p>El stock se reserva durante 10 minutos. Cuando el pedido esté listo tendrás 48 horas para retirarlo.</p></article>
-<section id="lista-carrito" class="commerce-groups"></section>
-<label class="form-group observation-box">Observación para los comercios<textarea id="observacion" placeholder="Ej: retiro por la tarde"></textarea></label>
-</section>
-<aside class="cart-summary">
-<h2>Resumen</h2>
-<p class="summary-row"><span>Productos</span><strong id="cantidad-total">0</strong></p>
-<p class="summary-row"><span>Comercios</span><strong id="comercios-total">0</strong></p>
-<p class="summary-row summary-total"><span>Total</span><strong id="total-total">$0</strong></p>
-<button id="btn-reservar" class="btn btn--primary btn--block" type="button">Reservar stock</button>
-<section id="confirmacion-reserva" class="reservation-panel" hidden><p>Stock reservado</p><strong id="tiempo-reserva">10:00</strong><p>Confirmá antes de que termine el tiempo.</p><button id="btn-confirmar" class="btn btn--primary btn--block" type="button">Confirmar pedidos</button></section>
-<p class="helper">El pedido se paga y se retira en el comercio.</p>
-</aside>
-</section>
-<nav class="bottom-nav"><a href="../pantalla_inicio/todo_tala_pantalla_inicio.html">Inicio</a><a href="../resultados_busqueda/todo_tala_resultados_busqueda.html">Buscar</a><a href="../catalogo_cliente/todo_tala_catalogo_cliente.html">Catálogo</a><a href="../mis_pedidos/todo_tala_mis_pedidos.html">Pedidos</a><a href="../perfil_cliente/tala_perfil_cliente.html">Perfil</a></nav>
-</section></main>
-<script src="../assets/app.js?v=1.3"></script><script src="../assets/acceso.js?v=1.3"></script><script src="carrito.js?v=1.3"></script>
-</body></html>
+<body>
+    <main class="app-page cart-page">
+        <section class="app-card cart-shell">
+            <!-- Encabezado del carrito. -->
+            <header class="app-header cart-header">
+                <section class="app-header__title">
+                    <a class="icon-button back-link" href="../catalogo_cliente/todo_tala_catalogo_cliente.html" aria-label="Volver">←</a>
+                    <section>
+                        <h1>Carrito</h1>
+                        <p class="muted">Cada comercio recibirá su pedido por separado.</p>
+                    </section>
+                </section>
+                <button id="btn-vaciar" class="btn btn--secondary" type="button">Vaciar carrito</button>
+            </header>
+
+            <section class="content cart-content">
+                <!-- Productos agrupados por comercio. -->
+                <section class="cart-main">
+                    <article class="important-note">
+                        <strong>Antes de confirmar</strong>
+                        <p>El stock se reserva durante 10 minutos. Cuando el pedido esté listo tendrás 48 horas para retirarlo.</p>
+                    </article>
+
+                    <section id="lista-carrito" class="commerce-groups"></section>
+
+                    <label class="form-group observation-box" for="observacion">
+                        Observación para los comercios
+                        <textarea id="observacion" placeholder="Ej: retiro por la tarde"></textarea>
+                    </label>
+                </section>
+
+                <!-- Resumen general de la compra. -->
+                <aside class="cart-summary">
+                    <h2>Resumen</h2>
+                    <p class="summary-row"><span>Productos</span><strong id="cantidad-total">0</strong></p>
+                    <p class="summary-row"><span>Comercios</span><strong id="comercios-total">0</strong></p>
+                    <p class="summary-row summary-total"><span>Total</span><strong id="total-total">$0</strong></p>
+
+                    <button id="btn-reservar" class="btn btn--primary btn--block" type="button">Reservar stock</button>
+
+                    <section id="confirmacion-reserva" class="reservation-panel" hidden>
+                        <p>Stock reservado</p>
+                        <strong id="tiempo-reserva">10:00</strong>
+                        <p>Confirmá antes de que termine el tiempo.</p>
+                        <button id="btn-confirmar" class="btn btn--primary btn--block" type="button">Confirmar pedidos</button>
+                    </section>
+
+                    <p class="helper">El pedido se paga y se retira en el comercio.</p>
+                </aside>
+            </section>
+
+            <nav class="bottom-nav" aria-label="Navegación del cliente">
+                <a href="../pantalla_inicio/todo_tala_pantalla_inicio.html">Inicio</a>
+                <a href="../resultados_busqueda/todo_tala_resultados_busqueda.html">Buscar</a>
+                <a href="../catalogo_cliente/todo_tala_catalogo_cliente.html">Catálogo</a>
+                <a href="../mis_pedidos/todo_tala_mis_pedidos.html">Pedidos</a>
+                <a href="../perfil_cliente/tala_perfil_cliente.html">Perfil</a>
+            </nav>
+        </section>
+    </main>
+
+    <script src="../assets/app.js?v=1.3.3"></script>
+    <script src="../assets/acceso.js?v=1.3.3"></script>
+    <script src="carrito.js?v=1.3.3"></script>
+</body>
+</html>

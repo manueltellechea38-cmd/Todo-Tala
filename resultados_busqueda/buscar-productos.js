@@ -1,99 +1,75 @@
-/* Obtiene los elementos de control. */
+/* Referencias a los filtros de búsqueda. */
 const inputBuscar = document.getElementById("search-input");
-/* Obtiene el selector de categoría. */
 const selectCategoria = document.getElementById("categoria");
-/* Obtiene el precio máximo. */
 const inputPrecioMax = document.getElementById("precio-max");
-/* Obtiene la casilla de disponibilidad. */
 const checkStock = document.getElementById("solo-stock");
-/* Obtiene el contenedor de resultados. */
 const contenedorResultados = document.getElementById("lista-resultados");
-/* Obtiene el resumen. */
 const resumenResultados = document.getElementById("resumen");
 
-/* Carga categorías disponibles. */
-function cargarCategoriasBusqueda() {
-    /* Obtiene datos. */
+/* Carga las categorías sin repetir. */
+function cargarCategorias() {
     const datos = TodoTala.obtenerDatos();
-    /* Obtiene categorías sin repetir. */
-    const categorias = [...new Set(datos.productos.map(function (producto) { return producto.categoria; }))];
-    /* Recorre categorías. */
+    const categorias = [...new Set(datos.productos.map(function (producto) { return producto.categoria; }))].sort();
+
     categorias.forEach(function (categoria) {
-        /* Crea una opción. */
         const opcion = document.createElement("option");
-        /* Define valor. */
         opcion.value = categoria;
-        /* Define texto. */
         opcion.textContent = categoria;
-        /* Agrega opción. */
         selectCategoria.appendChild(opcion);
     });
 }
 
-/* Ejecuta la búsqueda con los filtros elegidos. */
+/* Filtra y muestra los productos que coinciden. */
 function ejecutarBusqueda() {
-    /* Obtiene datos actuales. */
     const datos = TodoTala.obtenerDatos();
-    /* Normaliza texto. */
     const texto = inputBuscar.value.trim().toLowerCase();
-    /* Convierte precio máximo o usa infinito si está vacío. */
     const maximo = inputPrecioMax.value ? Number(inputPrecioMax.value) : Infinity;
-    /* Filtra productos. */
+
     const resultados = datos.productos.filter(function (producto) {
-        /* Comprueba texto. */
-        const coincideTexto = (producto.nombre + " " + producto.marca + " " + producto.comercio).toLowerCase().includes(texto);
-        /* Comprueba categoría. */
-        const coincideCategoria = !selectCategoria.value || producto.categoria === selectCategoria.value;
-        /* Comprueba precio. */
-        const coincidePrecio = producto.precio <= maximo;
-        /* Comprueba stock si la casilla está marcada. */
-        const coincideStock = !checkStock.checked || producto.stock > 0;
-        /* Solo devuelve productos visibles. */
-        return producto.visible && coincideTexto && coincideCategoria && coincidePrecio && coincideStock;
+        const contenido = (producto.nombre + " " + producto.marca + " " + producto.comercio + " " + producto.categoria).toLowerCase();
+        return producto.visible &&
+            contenido.includes(texto) &&
+            (!selectCategoria.value || producto.categoria === selectCategoria.value) &&
+            producto.precio <= maximo &&
+            (!checkStock.checked || producto.stock > 0);
     });
-    /* Limpia el contenedor. */
-    contenedorResultados.innerHTML = "";
-    /* Muestra cantidad. */
-    resumenResultados.textContent = resultados.length + " resultado(s)";
-    /* Gestiona el estado vacío. */
+
+    resumenResultados.textContent = resultados.length + (resultados.length === 1 ? " resultado" : " resultados");
+
     if (resultados.length === 0) {
-        /* Muestra mensaje. */
-        contenedorResultados.innerHTML = '<div class="empty-state">No encontramos productos con esos criterios.</div>';
-        /* Finaliza. */
+        contenedorResultados.innerHTML = '<p class="empty-state">No encontramos productos con esos criterios.</p>';
         return;
     }
-    /* Recorre resultados. */
-    resultados.forEach(function (producto) {
-        /* Crea artículo. */
-        const item = document.createElement("article");
-        /* Asigna clase. */
-        item.className = "result-item";
-        /* Crea contenido. */
-        item.innerHTML = '<div class="result-image">' + producto.imagenTexto + '</div>' +
-            '<div><strong>' + producto.nombre + '</strong><p class="muted">' + producto.comercio + ' · ' + producto.categoria + '</p>' +
-            '<p><strong>' + TodoTala.formatearPrecio(producto.precio) + '</strong> · <span class="' + (producto.stock > 0 ? 'badge badge--success' : 'badge badge--danger') + '">' + (producto.stock > 0 ? producto.stock + ' disponibles' : 'Sin stock') + '</span></p></div>' +
-            '<button class="btn btn--secondary" type="button">Ver detalle</button>';
-        /* Abre detalle desde el botón. */
+
+    contenedorResultados.innerHTML = resultados.map(function (producto) {
+        const estado = TodoTala.estadoStock(producto);
+        return '<article class="result-item" data-id="' + producto.id + '">' +
+            '<figure class="result-image">' + producto.imagenTexto + '</figure>' +
+            '<section class="result-info"><strong>' + producto.nombre + '</strong><p class="muted">' + producto.comercio + ' · ' + producto.categoria + '</p><p><strong>' + TodoTala.formatearPrecio(producto.precio) + '</strong> · <span class="' + estado.clase + '">' + estado.texto + '</span></p></section>' +
+            '<button class="btn btn--secondary" type="button">Ver detalle</button>' +
+        '</article>';
+    }).join("");
+
+    document.querySelectorAll("[data-id]").forEach(function (item) {
         item.querySelector("button").addEventListener("click", function () {
-            /* Navega con el id. */
-            TodoTala.irA("../detalle_producto/todo_tala_detalle_producto.html?id=" + producto.id);
+            TodoTala.irA("../detalle_producto/todo_tala_detalle_producto.html?id=" + item.dataset.id);
         });
-        /* Agrega al listado. */
-        contenedorResultados.appendChild(item);
     });
 }
 
-/* Lee una consulta recibida desde otra ventana. */
+/* Recupera una búsqueda enviada desde la pantalla de inicio. */
 const consultaInicial = TodoTala.parametro("q");
-/* Si existe, la coloca en el buscador. */
 if (consultaInicial) inputBuscar.value = consultaInicial;
-/* Carga categorías. */
-cargarCategoriasBusqueda();
-/* Ejecuta búsqueda inicial. */
+
+cargarCategorias();
 ejecutarBusqueda();
-/* Busca al tocar el botón. */
-document.getElementById("btn-buscar").addEventListener("click", ejecutarBusqueda);
-/* Actualiza al cambiar stock. */
+
+document.getElementById("form-busqueda").addEventListener("submit", function (evento) {
+    evento.preventDefault();
+    ejecutarBusqueda();
+});
+
+inputBuscar.addEventListener("input", ejecutarBusqueda);
+selectCategoria.addEventListener("change", ejecutarBusqueda);
+inputPrecioMax.addEventListener("input", ejecutarBusqueda);
 checkStock.addEventListener("change", ejecutarBusqueda);
-/* Regresa al inicio. */
-document.getElementById("btn-volver").addEventListener("click", function () { TodoTala.irA("../pantalla_inicio/todo_tala_pantalla_inicio.html"); });

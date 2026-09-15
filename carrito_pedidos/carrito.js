@@ -1,3 +1,4 @@
+/* Elementos principales de la pantalla. */
 const listaCarrito = document.getElementById("lista-carrito");
 const cantidadTotal = document.getElementById("cantidad-total");
 const comerciosTotal = document.getElementById("comercios-total");
@@ -8,13 +9,9 @@ const botonVaciar = document.getElementById("btn-vaciar");
 const panelReserva = document.getElementById("confirmacion-reserva");
 const tiempoReserva = document.getElementById("tiempo-reserva");
 const observacion = document.getElementById("observacion");
-
 let intervaloReserva = null;
 
-function cancelarReservaSilenciosa(datos) {
-    datos.reservaCarrito = null;
-}
-
+/* Agrupa los productos del carrito según el comercio al que pertenecen. */
 function obtenerGrupos(datos) {
     const grupos = {};
 
@@ -34,27 +31,22 @@ function obtenerGrupos(datos) {
         }
 
         const subtotal = producto.precio * item.cantidad;
-        grupos[producto.comercioId].items.push({
-            producto: producto,
-            cantidad: item.cantidad,
-            subtotal: subtotal
-        });
+        grupos[producto.comercioId].items.push({ producto: producto, cantidad: item.cantidad, subtotal: subtotal });
         grupos[producto.comercioId].subtotal += subtotal;
     });
 
     return Object.values(grupos);
 }
 
+/* Dibuja el carrito y actualiza sus totales. */
 function renderizarCarrito() {
     const datos = TodoTala.obtenerDatos();
     const grupos = obtenerGrupos(datos);
     let total = 0;
     let unidades = 0;
 
-    listaCarrito.innerHTML = "";
-
     if (datos.carrito.length === 0) {
-        listaCarrito.innerHTML = '<div class="empty-state"><strong>Tu carrito está vacío.</strong><br>Agregá productos desde el catálogo para empezar un pedido.</div>';
+        listaCarrito.innerHTML = '<p class="empty-state">Tu carrito está vacío. Agregá productos desde el catálogo.</p>';
         cantidadTotal.textContent = "0";
         comerciosTotal.textContent = "0";
         totalCarrito.textContent = "$0";
@@ -68,95 +60,75 @@ function renderizarCarrito() {
     botonReservar.disabled = false;
     botonVaciar.disabled = false;
 
-    grupos.forEach(function (grupo) {
+    listaCarrito.innerHTML = grupos.map(function (grupo) {
         total += grupo.subtotal;
 
-        const seccion = document.createElement("section");
-        seccion.className = "commerce-group";
-        seccion.innerHTML =
-            '<header class="commerce-group__header">' +
-                '<div><strong>' + grupo.nombre + '</strong><p>Retiro: ' + grupo.direccion + '</p></div>' +
-                '<span class="badge">Pedido separado</span>' +
-            '</header>' +
-            '<div class="commerce-group__items"></div>' +
-            '<div class="commerce-subtotal">Subtotal del comercio: <strong>' + TodoTala.formatearPrecio(grupo.subtotal) + '</strong></div>';
-
-        const contenedorItems = seccion.querySelector(".commerce-group__items");
-
-        grupo.items.forEach(function (detalle) {
+        const items = grupo.items.map(function (detalle) {
             unidades += detalle.cantidad;
 
-            const articulo = document.createElement("article");
-            articulo.className = "cart-item";
-            articulo.innerHTML =
-                '<div class="cart-item__meta">' +
-                    '<strong>' + detalle.producto.nombre + '</strong>' +
-                    '<span class="muted">' + detalle.producto.marca + ' · ' + TodoTala.formatearPrecio(detalle.producto.precio) + ' c/u</span>' +
-                    '<span>Subtotal: <strong>' + TodoTala.formatearPrecio(detalle.subtotal) + '</strong></span>' +
-                '</div>' +
-                '<div class="cart-actions">' +
-                    '<button data-action="restar" type="button" aria-label="Restar una unidad">−</button>' +
-                    '<strong>' + detalle.cantidad + '</strong>' +
-                    '<button data-action="sumar" type="button" aria-label="Sumar una unidad">+</button>' +
-                    '<button data-action="eliminar" type="button" aria-label="Eliminar producto">×</button>' +
-                '</div>';
+            return '<article class="cart-item" data-producto="' + detalle.producto.id + '">' +
+                '<section class="cart-item__meta"><strong>' + detalle.producto.nombre + '</strong><span class="muted">' + detalle.producto.marca + ' · ' + TodoTala.formatearPrecio(detalle.producto.precio) + ' c/u</span><span>Subtotal: <strong>' + TodoTala.formatearPrecio(detalle.subtotal) + '</strong></span></section>' +
+                '<nav class="cart-actions"><button data-action="restar" type="button">−</button><strong>' + detalle.cantidad + '</strong><button data-action="sumar" type="button">+</button><button data-action="eliminar" type="button">×</button></nav>' +
+            '</article>';
+        }).join("");
 
-            articulo.querySelector('[data-action="restar"]').addEventListener("click", function () {
-                cambiarCantidadCarrito(detalle.producto.id, -1);
-            });
-            articulo.querySelector('[data-action="sumar"]').addEventListener("click", function () {
-                cambiarCantidadCarrito(detalle.producto.id, 1);
-            });
-            articulo.querySelector('[data-action="eliminar"]').addEventListener("click", function () {
-                eliminarDelCarrito(detalle.producto.id);
-            });
-
-            contenedorItems.appendChild(articulo);
-        });
-
-        listaCarrito.appendChild(seccion);
-    });
+        return '<section class="commerce-group">' +
+            '<header class="commerce-group__header"><section><strong>' + grupo.nombre + '</strong><p>Retiro: ' + grupo.direccion + '</p></section><span class="badge">Pedido separado</span></header>' +
+            '<section class="commerce-group__items">' + items + '</section>' +
+            '<p class="commerce-subtotal">Subtotal del comercio: <strong>' + TodoTala.formatearPrecio(grupo.subtotal) + '</strong></p>' +
+        '</section>';
+    }).join("");
 
     cantidadTotal.textContent = unidades;
     comerciosTotal.textContent = grupos.length;
     totalCarrito.textContent = TodoTala.formatearPrecio(total);
 
+    /* Conecta los botones de cantidad y eliminación. */
+    document.querySelectorAll("[data-producto]").forEach(function (articulo) {
+        const id = Number(articulo.dataset.producto);
+        articulo.querySelector('[data-action="restar"]').addEventListener("click", function () { cambiarCantidad(id, -1); });
+        articulo.querySelector('[data-action="sumar"]').addEventListener("click", function () { cambiarCantidad(id, 1); });
+        articulo.querySelector('[data-action="eliminar"]').addEventListener("click", function () { eliminarProducto(id); });
+    });
+
     mostrarReservaExistente(datos);
 }
 
-function cambiarCantidadCarrito(id, cambio) {
+/* Modifica la cantidad y elimina cualquier reserva anterior. */
+function cambiarCantidad(id, cambio) {
     const datos = TodoTala.obtenerDatos();
     const item = datos.carrito.find(function (elemento) { return elemento.id === id; });
     const producto = datos.productos.find(function (elemento) { return elemento.id === id; });
 
     if (!item || !producto) return;
 
-    const nueva = item.cantidad + cambio;
+    const nuevaCantidad = item.cantidad + cambio;
 
-    if (nueva < 1) {
-        eliminarDelCarrito(id);
+    if (nuevaCantidad < 1) {
+        eliminarProducto(id);
         return;
     }
 
-    if (nueva > producto.stock) {
-        TodoTala.toast("No hay más stock disponible", "danger");
+    if (nuevaCantidad > producto.stock) {
+        TodoTala.toast("No hay más stock disponible.");
         return;
     }
 
-    item.cantidad = nueva;
-    cancelarReservaSilenciosa(datos);
+    item.cantidad = nuevaCantidad;
+    datos.reservaCarrito = null;
     TodoTala.guardarDatos(datos);
     renderizarCarrito();
 }
 
-function eliminarDelCarrito(id) {
+function eliminarProducto(id) {
     const datos = TodoTala.obtenerDatos();
     datos.carrito = datos.carrito.filter(function (item) { return item.id !== id; });
-    cancelarReservaSilenciosa(datos);
+    datos.reservaCarrito = null;
     TodoTala.guardarDatos(datos);
     renderizarCarrito();
 }
 
+/* Comprueba que el stock siga alcanzando antes de reservar o confirmar. */
 function validarStock(datos) {
     return datos.carrito.every(function (item) {
         const producto = datos.productos.find(function (p) { return p.id === item.id; });
@@ -164,23 +136,15 @@ function validarStock(datos) {
     });
 }
 
+/* Inicia la reserva de stock por diez minutos. */
 function iniciarReserva() {
     const usuario = TodoTala.usuarioActual();
-
-    if (!usuario || usuario.rol !== "cliente") {
-        TodoTala.toast("Iniciá sesión como cliente para confirmar pedidos", "danger");
-        window.setTimeout(function () {
-            TodoTala.irA("../pantalla_login/todo_tala_pantalla_login.html");
-        }, 800);
-        return;
-    }
-
     const datos = TodoTala.obtenerDatos();
 
-    if (datos.carrito.length === 0) return;
+    if (!usuario || datos.carrito.length === 0) return;
 
     if (!validarStock(datos)) {
-        TodoTala.toast("El stock cambió. Revisá las cantidades del carrito", "danger");
+        TodoTala.toast("El stock cambió. Revisá las cantidades del carrito.");
         renderizarCarrito();
         return;
     }
@@ -189,28 +153,22 @@ function iniciarReserva() {
     datos.reservaCarrito = {
         clienteId: usuario.id,
         vence: vence,
-        items: datos.carrito.map(function (item) {
-            return { id: item.id, cantidad: item.cantidad };
-        })
+        items: datos.carrito.map(function (item) { return { id: item.id, cantidad: item.cantidad }; })
     };
 
     TodoTala.guardarDatos(datos);
     panelReserva.hidden = false;
     botonReservar.hidden = true;
     iniciarTemporizador(vence);
-    TodoTala.toast("Stock reservado durante 10 minutos", "success");
 }
 
+/* Recupera una reserva vigente después de recargar la página. */
 function mostrarReservaExistente(datos) {
-    if (!datos.reservaCarrito || !datos.reservaCarrito.vence) {
-        panelReserva.hidden = true;
-        botonReservar.hidden = false;
-        return;
-    }
-
-    if (datos.reservaCarrito.vence <= Date.now()) {
-        cancelarReservaSilenciosa(datos);
-        TodoTala.guardarDatos(datos);
+    if (!datos.reservaCarrito || datos.reservaCarrito.vence <= Date.now()) {
+        if (datos.reservaCarrito) {
+            datos.reservaCarrito = null;
+            TodoTala.guardarDatos(datos);
+        }
         panelReserva.hidden = true;
         botonReservar.hidden = false;
         return;
@@ -221,25 +179,26 @@ function mostrarReservaExistente(datos) {
     iniciarTemporizador(datos.reservaCarrito.vence);
 }
 
+/* Actualiza el contador de la reserva una vez por segundo. */
 function iniciarTemporizador(vence) {
     detenerTemporizador();
 
     function actualizar() {
         const restante = Math.max(0, vence - Date.now());
-        const totalSegundos = Math.floor(restante / 1000);
-        const minutos = Math.floor(totalSegundos / 60);
-        const segundos = totalSegundos % 60;
+        const segundosTotales = Math.floor(restante / 1000);
+        const minutos = Math.floor(segundosTotales / 60);
+        const segundos = segundosTotales % 60;
 
         tiempoReserva.textContent = String(minutos).padStart(2, "0") + ":" + String(segundos).padStart(2, "0");
 
         if (restante <= 0) {
             detenerTemporizador();
             const datos = TodoTala.obtenerDatos();
-            cancelarReservaSilenciosa(datos);
+            datos.reservaCarrito = null;
             TodoTala.guardarDatos(datos);
             panelReserva.hidden = true;
             botonReservar.hidden = false;
-            TodoTala.toast("La reserva de stock venció. Podés iniciarla nuevamente", "danger");
+            TodoTala.toast("La reserva venció. Podés reservar nuevamente.");
         }
     }
 
@@ -254,20 +213,19 @@ function detenerTemporizador() {
     }
 }
 
+/* Crea un pedido diferente para cada comercio y descuenta el stock. */
 function confirmarPedidos() {
     const datos = TodoTala.obtenerDatos();
     const usuario = TodoTala.usuarioActual();
 
-    if (!usuario || usuario.rol !== "cliente") return;
-
-    if (!datos.reservaCarrito || datos.reservaCarrito.vence <= Date.now()) {
-        TodoTala.toast("La reserva venció. Volvé a reservar el stock", "danger");
+    if (!usuario || !datos.reservaCarrito || datos.reservaCarrito.vence <= Date.now()) {
+        TodoTala.toast("La reserva venció. Volvé a reservar el stock.");
         renderizarCarrito();
         return;
     }
 
     if (!validarStock(datos)) {
-        TodoTala.toast("Ya no hay stock suficiente para completar el pedido", "danger");
+        TodoTala.toast("Ya no hay stock suficiente para completar el pedido.");
         return;
     }
 
@@ -276,7 +234,7 @@ function confirmarPedidos() {
     const textoObservacion = observacion.value.trim();
 
     grupos.forEach(function (grupo, indice) {
-        const pedido = {
+        datos.pedidos.unshift({
             id: Date.now() + indice,
             clienteId: usuario.id,
             comercioId: grupo.comercioId,
@@ -285,16 +243,14 @@ function confirmarPedidos() {
             codigo: TodoTala.generarCodigo(),
             fecha: fecha,
             total: grupo.subtotal,
-            items: grupo.items.map(function (detalle) {
-                return detalle.producto.nombre + " x" + detalle.cantidad;
-            }),
+            items: grupo.items.map(function (detalle) { return detalle.producto.nombre + " x" + detalle.cantidad; }),
+            detalle: grupo.items.map(function (detalle) { return { productoId: detalle.producto.id, cantidad: detalle.cantidad, precio: detalle.producto.precio }; }),
             observacion: textoObservacion,
             motivoCancelacion: null,
             listoDesde: null,
-            venceRetiro: null
-        };
-
-        datos.pedidos.unshift(pedido);
+            venceRetiro: null,
+            stockRestaurado: false
+        });
     });
 
     datos.carrito.forEach(function (item) {
@@ -306,11 +262,11 @@ function confirmarPedidos() {
     datos.reservaCarrito = null;
     TodoTala.guardarDatos(datos);
     detenerTemporizador();
-    TodoTala.toast(grupos.length === 1 ? "Pedido confirmado" : grupos.length + " pedidos confirmados, uno por comercio", "success");
 
+    TodoTala.toast(grupos.length === 1 ? "Pedido confirmado." : "Pedidos confirmados por comercio.");
     window.setTimeout(function () {
         TodoTala.irA("../mis_pedidos/todo_tala_mis_pedidos.html");
-    }, 900);
+    }, 500);
 }
 
 function vaciarCarrito() {
@@ -320,15 +276,10 @@ function vaciarCarrito() {
     TodoTala.guardarDatos(datos);
     detenerTemporizador();
     renderizarCarrito();
-    TodoTala.toast("Carrito vaciado");
 }
 
 botonReservar.addEventListener("click", iniciarReserva);
 botonConfirmar.addEventListener("click", confirmarPedidos);
 botonVaciar.addEventListener("click", vaciarCarrito);
-
-document.getElementById("btn-volver").addEventListener("click", function () {
-    TodoTala.irA("../catalogo_cliente/todo_tala_catalogo_cliente.html");
-});
 
 renderizarCarrito();
