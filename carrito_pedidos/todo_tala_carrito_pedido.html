@@ -1,67 +1,75 @@
 <!DOCTYPE html>
-<!-- Declara HTML5. -->
 <html lang="es">
-<!-- Define idioma español. -->
 <head>
-    <!-- Configura caracteres. -->
     <meta charset="UTF-8">
-    <!-- Activa responsive. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Título del navegador. -->
     <title>Todo Tala | Carrito</title>
-    <!-- Carga estilos del carrito. -->
     <link rel="stylesheet" href="estilos.css">
 </head>
-<!-- Comienza la interfaz. -->
-<body>
-    <!-- Contenedor general. -->
+<body class="cart-page">
     <main class="app-page">
-        <!-- Tarjeta principal. -->
-        <section class="app-card app-card--narrow">
-            <!-- Encabezado. -->
-            <header class="app-header">
-                <!-- Agrupa volver y título. -->
+        <section class="app-card cart-shell">
+            <header class="app-header cart-header">
                 <div class="app-header__title">
-                    <!-- Regresa al catálogo. -->
                     <button id="btn-volver" class="icon-button" type="button" aria-label="Volver">←</button>
-                    <!-- Título. -->
                     <div>
-                        <!-- Nombre de pantalla. -->
-                        <h1>Tu pedido</h1>
-                        <!-- Aclara el modelo de retiro. -->
-                        <p class="muted">Confirmá y retiralo mostrando el código generado.</p>
+                        <p class="section-kicker">Tu compra</p>
+                        <h1>Carrito</h1>
+                        <p class="muted">Si comprás en varios comercios, Todo Tala genera un pedido separado para cada local.</p>
                     </div>
                 </div>
+                <button id="btn-vaciar" class="btn btn--secondary" type="button">Vaciar carrito</button>
             </header>
-            <!-- Contenido. -->
-            <section class="content">
-                <!-- Lista dinámica del carrito. -->
-                <section id="lista-carrito"></section>
-                <!-- Observación simple. -->
-                <div class="form-group" style="margin-top:16px;">
-                    <!-- Etiqueta. -->
-                    <label for="observacion">Observación para el comercio</label>
-                    <!-- Campo de texto. -->
-                    <textarea id="observacion" placeholder="Ej: lo retiro después de las 18:00"></textarea>
-                    <!-- Ayuda. -->
-                    <p class="helper">Opcional. En una versión con backend esta observación quedará asociada al pedido.</p>
-                </div>
-                <!-- Resumen de totales. -->
-                <section class="cart-total">
-                    <!-- Subtotal. -->
-                    <div class="total-row"><span>Subtotal</span><span id="subtotal-total">$0</span></div>
-                    <!-- Total final. -->
-                    <div class="total-row total-row--strong"><span>Total</span><span id="total-total">$0</span></div>
+
+            <section class="content cart-content">
+                <section class="cart-main">
+                    <div class="important-note">
+                        <strong>Antes de confirmar</strong>
+                        <p>Al continuar, el stock de tus productos se reserva durante 10 minutos. Cuando el comercio marque el pedido como “Listo para retirar”, tendrás 48 horas para levantarlo en el local.</p>
+                    </div>
+
+                    <section id="lista-carrito" class="commerce-groups"></section>
+
+                    <div class="form-group observation-box">
+                        <label for="observacion">Observación para los comercios</label>
+                        <textarea id="observacion" placeholder="Ej: retiro por la tarde"></textarea>
+                        <p class="helper">La observación se incluirá en cada pedido generado.</p>
+                    </div>
                 </section>
-                <!-- Acción de confirmar. -->
-                <button id="btn-confirmar" class="btn btn--primary btn--block" type="button" style="margin-top:16px;">Confirmar pedido</button>
+
+                <aside class="cart-summary">
+                    <p class="section-kicker">Resumen</p>
+                    <h2>Tu compra</h2>
+
+                    <div class="summary-row">
+                        <span>Productos</span>
+                        <strong id="cantidad-total">0</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>Comercios</span>
+                        <strong id="comercios-total">0</strong>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span>Total</span>
+                        <strong id="total-total">$0</strong>
+                    </div>
+
+                    <button id="btn-reservar" class="btn btn--primary btn--block" type="button">Continuar y reservar stock</button>
+
+                    <section id="confirmacion-reserva" class="reservation-panel" hidden>
+                        <p class="reservation-label">Stock reservado</p>
+                        <strong id="tiempo-reserva">10:00</strong>
+                        <p>Confirmá antes de que termine el tiempo para mantener la reserva.</p>
+                        <button id="btn-confirmar" class="btn btn--primary btn--block" type="button">Confirmar pedidos</button>
+                    </section>
+
+                    <p class="helper summary-help">No se realizan pagos dentro de Todo Tala. El pedido se retira directamente en cada comercio.</p>
+                </aside>
             </section>
         </section>
     </main>
-    <!-- Carga utilidades generales. -->
+
     <script src="../assets/app.js"></script>
-    <!-- Carga la lógica del carrito. -->
     <script src="carrito.js"></script>
 </body>
-<!-- Finaliza el documento. -->
 </html>
