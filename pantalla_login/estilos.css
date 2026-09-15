@@ -2,116 +2,65 @@
 
 .login-page {
     align-items: center;
-    background:
-        radial-gradient(circle at top left, rgba(31, 95, 191, 0.16), transparent 32%),
-        linear-gradient(180deg, #f7f9fc 0%, #edf2f8 100%);
 }
 
 .login-card {
-    max-width: 520px;
+    max-width: 500px;
 }
 
-.login-brand {
+.login-header {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 24px;
+    gap: 12px;
+    padding: 20px;
+    background: var(--color-primary);
     color: white;
-    background: linear-gradient(135deg, #0d2f59 0%, #1f5fbf 100%);
+}
+
+.login-header p {
+    font-size: 0.85rem;
+    opacity: 0.85;
 }
 
 .login-logo {
-    width: 58px;
-    height: 58px;
+    width: 52px;
+    height: 52px;
     display: grid;
     place-items: center;
-    border-radius: 16px;
+    border-radius: 12px;
     background: white;
     color: var(--color-primary);
-    font-weight: 900;
-    font-size: 1.2rem;
+    font-weight: 800;
 }
 
-.login-eyebrow {
-    margin-bottom: 2px;
-    color: rgba(255, 255, 255, 0.78);
-    font-size: 0.82rem;
-}
-
-.login-content {
-    padding: 28px;
-}
-
-.login-heading {
-    margin-bottom: 22px;
-}
-
-.login-heading h2 {
-    margin-bottom: 5px;
-    font-size: 1.35rem;
+.login-text {
+    margin: 6px 0 18px;
 }
 
 .login-form {
     display: grid;
-    gap: 16px;
+    gap: 12px;
 }
 
-.password-wrap {
+.login-form label {
+    display: grid;
+    gap: 6px;
+}
+
+.password-label {
     position: relative;
 }
 
-.password-wrap input {
-    padding-right: 86px;
+.password-label input {
+    padding-right: 78px;
 }
 
 .password-toggle {
     position: absolute;
-    right: 9px;
-    top: 50%;
-    transform: translateY(-50%);
+    right: 8px;
+    bottom: 8px;
     border: 0;
     background: transparent;
     color: var(--color-primary);
-    cursor: pointer;
-    font-size: 0.82rem;
     font-weight: 700;
-}
-
-.link-button {
-    border: 0;
-    background: transparent;
-    color: var(--color-primary);
-    cursor: pointer;
-    font-weight: 700;
-    padding: 6px;
-}
-
-.demo-access {
-    margin-top: 22px;
-    padding: 14px;
-    border: 1px solid var(--color-border);
-    border-radius: 14px;
-    background: #f8fafc;
-    color: var(--color-muted);
-    font-size: 0.82rem;
-}
-
-.demo-access strong {
-    display: block;
-    margin-bottom: 6px;
-    color: var(--color-text);
-}
-
-.demo-access p + p {
-    margin-top: 3px;
-}
-
-@media (max-width: 560px) {
-    .login-content {
-        padding: 22px 18px;
-    }
-
-    .login-brand {
-        padding: 20px 18px;
-    }
 }

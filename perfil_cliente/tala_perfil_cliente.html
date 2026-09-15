@@ -1,87 +1,24 @@
 <!DOCTYPE html>
-<!-- Declara HTML5. -->
 <html lang="es">
-<!-- Define idioma. -->
 <head>
-    <!-- Configura caracteres. -->
-    <meta charset="UTF-8">
-    <!-- Activa responsive. -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Título de pestaña. -->
-    <title>Todo Tala | Mi perfil</title>
-    <!-- Carga estilos. -->
-    <link rel="stylesheet" href="estilos.css">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Tala | Mi perfil</title><link rel="stylesheet" href="estilos.css?v=1.3">
 </head>
-<!-- Comienza la interfaz. -->
 <body>
-    <!-- Contenedor general. -->
-    <main class="app-page">
-        <!-- Tarjeta angosta. -->
-        <section class="app-card app-card--narrow">
-            <!-- Encabezado. -->
-            <header class="app-header">
-                <!-- Agrupa volver y título. -->
-                <div class="app-header__title">
-                    <!-- Regresa al catálogo. -->
-                    <button id="btn-volver" class="icon-button" type="button" aria-label="Volver">←</button>
-                    <!-- Título. -->
-                    <h1>Mi perfil</h1>
-                </div>
-            </header>
-            <!-- Contenido. -->
-            <section class="content">
-                <!-- Resumen de usuario. -->
-                <section class="profile-summary">
-                    <!-- Avatar. -->
-                    <div id="avatar" class="avatar">MR</div>
-                    <!-- Nombre. -->
-                    <h2 id="nombre-visible">Manuel Rodríguez</h2>
-                    <!-- Rol. -->
-                    <p class="muted">Cliente del MVP</p>
-                </section>
-                <!-- Datos visibles. -->
-                <section class="card-grid">
-                    <!-- Correo. -->
-                    <article class="mini-card"><small class="muted">Correo</small><p id="email-visible"></p></article>
-                    <!-- Teléfono. -->
-                    <article class="mini-card"><small class="muted">Teléfono</small><p id="telefono-visible"></p></article>
-                </section>
-                <!-- Acciones. -->
-                <div class="toolbar" style="margin-top:18px;">
-                    <!-- Abre edición. -->
-                    <button id="btn-editar" class="btn btn--primary" type="button">Editar datos</button>
-                    <!-- Cierra sesión demo. -->
-                    <button id="btn-salir" class="btn btn--danger" type="button">Cerrar sesión</button>
-                </div>
-                <!-- Panel editable. -->
-                <form id="form-edicion" class="edit-panel">
-                    <!-- Nombre. -->
-                    <div class="form-group"><label for="nombre">Nombre</label><input id="nombre" type="text"></div>
-                    <!-- Correo. -->
-                    <div class="form-group"><label for="email">Correo</label><input id="email" type="email"></div>
-                    <!-- Teléfono. -->
-                    <div class="form-group"><label for="telefono">Teléfono</label><input id="telefono" type="tel"></div>
-                    <!-- Guarda. -->
-                    <button class="btn btn--primary" type="submit">Guardar cambios</button>
-                </form>
-            </section>
-            <!-- Navegación inferior. -->
-            <nav class="bottom-nav">
-                <!-- Inicio. -->
-                <a href="../pantalla_inicio/todo_tala_pantalla_inicio.html">Inicio</a>
-                <!-- Buscar. -->
-                <a href="../resultados_busqueda/todo_tala_resultados_busqueda.html">Buscar</a>
-                <!-- Catálogo. -->
-                <a href="../catalogo_cliente/todo_tala_catalogo_cliente.html">Catálogo</a>
-                <!-- Perfil activo. -->
-                <a class="active" href="tala_perfil_cliente.html">Perfil</a>
-            </nav>
-        </section>
-    </main>
-    <!-- Carga utilidades. -->
-    <script src="../assets/app.js"></script>
-    <!-- Carga lógica del perfil. -->
-    <script src="perfil.js"></script>
-</body>
-<!-- Finaliza documento. -->
-</html>
+<main class="app-page"><section class="app-card app-card--narrow">
+<header class="app-header"><h1>Mi perfil</h1></header>
+<section class="content">
+<section class="profile-summary"><span id="avatar" class="avatar">JP</span><h2 id="nombre-visible"></h2><p class="muted">Cliente</p></section>
+<section class="card-grid"><article class="mini-card"><small class="muted">Correo</small><p id="email-visible"></p></article><article class="mini-card"><small class="muted">Teléfono</small><p id="telefono-visible"></p></article></section>
+<nav class="toolbar profile-actions"><button id="btn-editar" class="btn btn--primary" type="button">Editar datos</button><button id="btn-salir" class="btn btn--danger" type="button">Cerrar sesión</button></nav>
+<form id="form-edicion" class="edit-panel">
+<label class="form-group">Nombre<input id="nombre" type="text" required></label>
+<label class="form-group">Correo<input id="email" type="email" required></label>
+<label class="form-group">Teléfono<input id="telefono" type="tel"></label>
+<button class="btn btn--primary" type="submit">Guardar cambios</button>
+</form>
+</section>
+<nav class="bottom-nav"><a href="../pantalla_inicio/todo_tala_pantalla_inicio.html">Inicio</a><a href="../resultados_busqueda/todo_tala_resultados_busqueda.html">Buscar</a><a href="../catalogo_cliente/todo_tala_catalogo_cliente.html">Catálogo</a><a href="../mis_pedidos/todo_tala_mis_pedidos.html">Pedidos</a><a class="active" href="tala_perfil_cliente.html">Perfil</a></nav>
+</section></main>
+<script src="../assets/app.js?v=1.3"></script><script src="../assets/acceso.js?v=1.3"></script><script src="perfil.js?v=1.3"></script>
+</body></html>

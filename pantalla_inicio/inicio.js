@@ -1,168 +1,97 @@
-const formularioBusqueda = document.getElementById("form-busqueda");
-const busquedaInicio = document.getElementById("busqueda-inicio");
-const botonLogin = document.getElementById("btn-login");
-const botonRegistro = document.getElementById("btn-registro");
-const botonSalir = document.getElementById("btn-salir");
-const botonPerfil = document.getElementById("btn-perfil");
-const botonPanel = document.getElementById("btn-panel");
-const botonNotificaciones = document.getElementById("btn-notificaciones");
-const navPedidos = document.getElementById("nav-pedidos");
-const navCarrito = document.getElementById("nav-carrito");
-const saludo = document.getElementById("saludo");
+const datos = TodoTala.obtenerDatos();
+const usuario = TodoTala.usuarioActual();
 const promoGrid = document.getElementById("promo-grid");
 const previewGrid = document.getElementById("preview-grid");
+const buscador = document.getElementById("busqueda-inicio");
 
-let datos = TodoTala.obtenerDatos();
-let usuario = TodoTala.usuarioActual();
-
-function actualizarSesionVisual() {
-    const haySesion = Boolean(usuario);
-    const esCliente = haySesion && usuario.rol === "cliente";
-    const esComercio = haySesion && (usuario.rol === "jefe" || usuario.rol === "empleado");
-
-    botonLogin.hidden = haySesion;
-    botonRegistro.hidden = haySesion;
-    botonSalir.hidden = !haySesion;
-    botonNotificaciones.hidden = !haySesion;
-    botonPerfil.hidden = !esCliente;
-    botonPanel.hidden = !esComercio;
-    navPedidos.hidden = !esCliente;
-    navCarrito.hidden = !esCliente;
-
-    if (haySesion) {
-        const primerNombre = usuario.nombre.split(" ")[0];
-        saludo.textContent = "Hola, " + primerNombre + ". Buscá productos, revisá promociones y accedé a tus opciones desde aquí.";
-    } else {
-        saludo.textContent = "Buscá productos, compará opciones y consultá stock. Para realizar pedidos, iniciá sesión como cliente.";
-    }
-}
-
-function promocionesActivas() {
-    const hoy = new Date().toISOString().slice(0, 10);
-
-    return datos.promociones.filter(function (promocion) {
-        return promocion.activa && promocion.inicio <= hoy && promocion.fin >= hoy;
-    });
+if (usuario) {
+    document.getElementById("saludo").textContent = "Hola, " + usuario.nombre.split(" ")[0];
 }
 
 function renderizarPromociones() {
-    const promociones = promocionesActivas();
+    const hoy = new Date().toISOString().slice(0, 10);
+    const promociones = datos.promociones.filter(function (promo) {
+        return promo.activa && promo.inicio <= hoy && promo.fin >= hoy;
+    });
 
     if (promociones.length === 0) {
-        promoGrid.innerHTML = '<p class="muted">No hay promociones activas en este momento.</p>';
+        promoGrid.innerHTML = '<p class="muted">No hay promociones activas.</p>';
         return;
     }
 
-    promoGrid.innerHTML = promociones.map(function (promocion) {
+    promoGrid.innerHTML = promociones.map(function (promo) {
         const producto = datos.productos.find(function (item) {
-            return item.id === promocion.productoId;
+            return item.id === promo.productoId;
         });
         const comercio = datos.comercios.find(function (item) {
-            return item.id === promocion.comercioId;
+            return item.id === promo.comercioId;
         });
-        const detalle = promocion.tipo === "porcentaje"
-            ? promocion.valor + "% de descuento"
-            : TodoTala.formatearPrecio(promocion.valor);
+        const detalle = promo.tipo === "porcentaje"
+            ? promo.valor + "% de descuento"
+            : TodoTala.formatearPrecio(promo.valor);
 
-        return `
-            <article class="promo-card">
-                <span class="promo-label">Promoción</span>
-                <strong>${promocion.nombre}</strong>
-                <p>${detalle}${producto ? " · " + producto.nombre : ""}</p>
-                <small>${comercio ? comercio.nombre : "Todo Tala"}</small>
-            </article>
-        `;
+        return '<article class="promo-card">' +
+            '<strong>' + promo.nombre + '</strong>' +
+            '<p>' + detalle + '</p>' +
+            '<small>' + (producto ? producto.nombre + " · " : "") + (comercio ? comercio.nombre : "") + '</small>' +
+        '</article>';
     }).join("");
 }
 
 function tarjetaProducto(producto) {
     const estado = TodoTala.estadoStock(producto);
 
-    return `
-        <article class="preview-card" data-producto-id="${producto.id}" tabindex="0" role="link">
-            <div class="product-placeholder">${producto.imagenTexto || "TT"}</div>
-            <div class="preview-card__body">
-                <div><span class="${estado.clase}">${estado.texto}</span></div>
-                <strong>${producto.nombre}</strong>
-                <p class="muted">${producto.comercio}</p>
-                <span class="preview-price">${TodoTala.formatearPrecio(producto.precio)}</span>
-            </div>
-        </article>
-    `;
+    return '<article class="preview-card" data-producto-id="' + producto.id + '" tabindex="0">' +
+        '<span class="product-placeholder">' + producto.imagenTexto + '</span>' +
+        '<span class="' + estado.clase + '">' + estado.texto + '</span>' +
+        '<strong>' + producto.nombre + '</strong>' +
+        '<p class="muted">' + producto.comercio + '</p>' +
+        '<b>' + TodoTala.formatearPrecio(producto.precio) + '</b>' +
+    '</article>';
 }
 
-function activarTarjetasProducto() {
+function activarTarjetas() {
     document.querySelectorAll("[data-producto-id]").forEach(function (tarjeta) {
-        function abrirDetalle() {
+        tarjeta.addEventListener("click", function () {
             TodoTala.irA("../detalle_producto/todo_tala_detalle_producto.html?id=" + tarjeta.dataset.productoId);
-        }
-
-        tarjeta.addEventListener("click", abrirDetalle);
-        tarjeta.addEventListener("keydown", function (evento) {
-            if (evento.key === "Enter" || evento.key === " ") {
-                evento.preventDefault();
-                abrirDetalle();
-            }
         });
     });
 }
 
-function renderizarProductos(productos) {
-    const lista = productos || datos.productos.filter(function (producto) {
-        return producto.visible;
-    }).slice(0, 4);
-
-    if (lista.length === 0) {
-        previewGrid.innerHTML = '<div class="empty-state">No encontramos productos con esa búsqueda.</div>';
-        return;
-    }
-
-    previewGrid.innerHTML = lista.map(tarjetaProducto).join("");
-    activarTarjetasProducto();
+function renderizarProductos(lista) {
+    previewGrid.innerHTML = lista.slice(0, 4).map(tarjetaProducto).join("");
+    activarTarjetas();
 }
 
-formularioBusqueda.addEventListener("submit", function (evento) {
+renderizarPromociones();
+renderizarProductos(datos.productos.filter(function (producto) {
+    return producto.visible;
+}));
+
+document.getElementById("form-busqueda").addEventListener("submit", function (evento) {
     evento.preventDefault();
-    const consulta = encodeURIComponent(busquedaInicio.value.trim());
-    TodoTala.irA("../resultados_busqueda/todo_tala_resultados_busqueda.html?q=" + consulta);
+    TodoTala.irA("../resultados_busqueda/todo_tala_resultados_busqueda.html?q=" + encodeURIComponent(buscador.value.trim()));
 });
 
-busquedaInicio.addEventListener("input", function () {
-    const texto = busquedaInicio.value.trim().toLowerCase();
+buscador.addEventListener("input", function () {
+    const texto = buscador.value.trim().toLowerCase();
 
     if (texto.length < 2) {
-        renderizarProductos();
+        renderizarProductos(datos.productos.filter(function (producto) {
+            return producto.visible;
+        }));
         return;
     }
 
-    const coincidencias = datos.productos.filter(function (producto) {
-        return producto.visible && (
-            producto.nombre.toLowerCase().includes(texto) ||
-            producto.comercio.toLowerCase().includes(texto) ||
-            producto.categoria.toLowerCase().includes(texto) ||
-            String(producto.marca || "").toLowerCase().includes(texto)
-        );
-    }).slice(0, 8);
+    const resultados = datos.productos.filter(function (producto) {
+        const contenido = producto.nombre + " " + producto.comercio + " " + producto.categoria;
+        return producto.visible && contenido.toLowerCase().includes(texto);
+    });
 
-    renderizarProductos(coincidencias);
+    renderizarProductos(resultados);
 });
 
-botonSalir.addEventListener("click", function () {
+document.getElementById("btn-salir").addEventListener("click", function () {
     TodoTala.cerrarSesion();
-    usuario = null;
-    datos = TodoTala.obtenerDatos();
-    actualizarSesionVisual();
-    TodoTala.toast("Sesión cerrada", "success");
+    TodoTala.abrir("pantalla_login/todo_tala_pantalla_login.html");
 });
-
-botonNotificaciones.addEventListener("click", function () {
-    const noLeidas = datos.notificaciones.filter(function (notificacion) {
-        return usuario && notificacion.usuarioId === usuario.id && !notificacion.leida;
-    }).length;
-
-    TodoTala.toast(noLeidas === 0 ? "No tenés notificaciones nuevas" : "Tenés " + noLeidas + " notificación(es) nueva(s)");
-});
-
-actualizarSesionVisual();
-renderizarPromociones();
-renderizarProductos();

@@ -1,72 +1,25 @@
 <!DOCTYPE html>
-<!-- Declara HTML5. -->
 <html lang="es">
-<!-- Define idioma español. -->
 <head>
-    <!-- Configura caracteres. -->
-    <meta charset="UTF-8">
-    <!-- Activa responsive. -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Título de pestaña. -->
-    <title>Todo Tala | Nuevo producto</title>
-    <!-- Carga estilos. -->
-    <link rel="stylesheet" href="estilos.css">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Tala | Nuevo producto</title><link rel="stylesheet" href="estilos.css?v=1.3">
 </head>
-<!-- Comienza la interfaz. -->
 <body>
-    <!-- Contenedor general. -->
-    <main class="app-page">
-        <!-- Tarjeta principal angosta. -->
-        <section class="app-card app-card--narrow">
-            <!-- Encabezado. -->
-            <header class="app-header">
-                <!-- Agrupa volver y título. -->
-                <div class="app-header__title">
-                    <!-- Vuelve a gestión de productos. -->
-                    <button id="btn-volver" class="icon-button" type="button" aria-label="Volver">←</button>
-                    <!-- Título. -->
-                    <h1>Nuevo producto</h1>
-                </div>
-            </header>
-            <!-- Contenido. -->
-            <section class="content">
-                <!-- Formulario de alta. -->
-                <form id="form-producto" class="form-grid" novalidate>
-                    <!-- Selector de imagen local. -->
-                    <div class="image-upload form-grid__full">
-                        <!-- Texto. -->
-                        <strong>Imagen del producto</strong>
-                        <!-- Ayuda. -->
-                        <p class="helper">Opcional en el MVP. La vista previa no se guarda en una base de datos.</p>
-                        <!-- Campo de archivo. -->
-                        <input id="imagen" type="file" accept="image/*" style="margin-top:10px;">
-                        <!-- Vista previa. -->
-                        <img id="vista-previa" class="image-preview" alt="Vista previa del producto">
-                    </div>
-                    <!-- Nombre. -->
-                    <div class="form-group form-grid__full"><label for="nombre">Nombre *</label><input id="nombre" type="text" placeholder="Ej: Pan de campo"></div>
-                    <!-- Marca. -->
-                    <div class="form-group"><label for="marca">Marca *</label><input id="marca" type="text" placeholder="Ej: El Sol"></div>
-                    <!-- Categoría. -->
-                    <div class="form-group"><label for="categoria">Categoría *</label><select id="categoria"><option>Panadería</option><option>Repostería</option><option>Almacén</option><option>Indumentaria</option><option>Tecnología</option><option>Ferretería</option></select></div>
-                    <!-- Precio. -->
-                    <div class="form-group"><label for="precio">Precio *</label><input id="precio" type="number" min="0" placeholder="0"></div>
-                    <!-- Stock. -->
-                    <div class="form-group"><label for="stock">Stock *</label><input id="stock" type="number" min="0" placeholder="0"></div>
-                    <!-- Descripción. -->
-                    <div class="form-group form-grid__full"><label for="descripcion">Descripción</label><textarea id="descripcion" placeholder="Descripción breve del producto"></textarea></div>
-                    <!-- Error. -->
-                    <p id="error-form" class="error-message form-grid__full">Completá nombre, marca, precio y stock correctamente.</p>
-                    <!-- Guarda. -->
-                    <button class="btn btn--primary btn--block form-grid__full" type="submit">Guardar producto</button>
-                </form>
-            </section>
-        </section>
-    </main>
-    <!-- Carga utilidades. -->
-    <script src="../assets/app.js"></script>
-    <!-- Carga lógica del formulario. -->
-    <script src="producto.js"></script>
-</body>
-<!-- Finaliza el documento. -->
-</html>
+<main class="app-page"><section class="app-card app-card--narrow">
+<header class="app-header"><button id="btn-volver" class="icon-button" type="button" aria-label="Volver">←</button><h1>Nuevo producto</h1></header>
+<section class="content">
+<form id="form-producto" class="form-grid" novalidate>
+<section class="image-upload form-grid__full"><strong>Imagen del producto</strong><input id="imagen" type="file" accept="image/*"><img id="vista-previa" class="image-preview" alt="Vista previa del producto"></section>
+<label class="form-group form-grid__full">Nombre *<input id="nombre" type="text"></label>
+<label class="form-group">Marca *<input id="marca" type="text"></label>
+<label class="form-group">Categoría *<select id="categoria"><option>Panadería</option><option>Repostería</option><option>Almacén</option><option>Indumentaria</option><option>Tecnología</option><option>Ferretería</option></select></label>
+<label class="form-group">Precio *<input id="precio" type="number" min="0"></label>
+<label class="form-group">Stock *<input id="stock" type="number" min="0"></label>
+<label class="form-group form-grid__full">Descripción<textarea id="descripcion"></textarea></label>
+<p id="error-form" class="error-message form-grid__full">Completá nombre, marca, precio y stock correctamente.</p>
+<button class="btn btn--primary btn--block form-grid__full" type="submit">Guardar producto</button>
+</form>
+</section>
+</section></main>
+<script src="../assets/app.js?v=1.3"></script><script src="../assets/acceso.js?v=1.3"></script><script src="producto.js?v=1.3"></script>
+</body></html>

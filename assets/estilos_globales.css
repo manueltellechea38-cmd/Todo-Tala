@@ -1,610 +1,327 @@
-/* Define variables de color y medidas para mantener todas las ventanas con el mismo estilo. */
 :root {
-    /* Azul principal usado en botones y elementos destacados. */
     --color-primary: #1f5fbf;
-    /* Azul oscuro usado al pasar el mouse por botones principales. */
     --color-primary-dark: #174a96;
-    /* Azul muy claro usado como fondo de elementos informativos. */
     --color-primary-soft: #eaf2ff;
-    /* Amarillo suave usado solo como acento secundario del proyecto. */
     --color-accent: #f2c94c;
-    /* Fondo general gris muy claro para separar las tarjetas blancas. */
     --color-background: #f4f6f8;
-    /* Fondo blanco de tarjetas y controles. */
     --color-surface: #ffffff;
-    /* Color principal del texto. */
     --color-text: #172033;
-    /* Color de texto secundario. */
     --color-muted: #697386;
-    /* Color de bordes discretos. */
     --color-border: #dfe4ea;
-    /* Verde usado para estados correctos o disponibles. */
     --color-success: #238636;
-    /* Fondo verde suave para etiquetas de éxito. */
     --color-success-soft: #eaf7ed;
-    /* Rojo usado para errores y acciones destructivas. */
     --color-danger: #c9362b;
-    /* Fondo rojo suave para mensajes de error. */
     --color-danger-soft: #fff0ef;
-    /* Naranja usado para avisos de stock bajo o estados pendientes. */
     --color-warning: #a66b00;
-    /* Fondo naranja suave para avisos. */
     --color-warning-soft: #fff6df;
-    /* Sombra discreta usada en las tarjetas principales. */
-    --shadow-card: 0 18px 50px rgba(23, 32, 51, 0.10);
-    /* Radio principal de las tarjetas. */
-    --radius-card: 20px;
-    /* Radio de botones e inputs. */
-    --radius-control: 12px;
 }
 
-/* Elimina márgenes y paddings predeterminados para evitar diferencias entre navegadores. */
 * {
-    /* Incluye padding y borde dentro del ancho total de cada elemento. */
     box-sizing: border-box;
-    /* Elimina el margen externo predeterminado. */
     margin: 0;
-    /* Elimina el relleno predeterminado. */
     padding: 0;
 }
 
-/* Define el comportamiento general de la página. */
-html {
-    /* Hace que los enlaces internos se desplacen suavemente. */
-    scroll-behavior: smooth;
-}
-
-/* Configura la tipografía, colores y fondo general. */
 body {
-    /* Usa fuentes del sistema para no depender de librerías externas. */
-    font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    /* Aplica el fondo general del MVP. */
+    font-family: Arial, sans-serif;
     background: var(--color-background);
-    /* Aplica el color principal de texto. */
     color: var(--color-text);
-    /* Mejora la legibilidad del texto. */
     line-height: 1.5;
 }
 
-/* Hace que botones, campos y listas desplegables utilicen la misma tipografía que el resto. */
 button,
 input,
 select,
 textarea {
-    /* Hereda la tipografía definida en body. */
     font: inherit;
 }
 
-/* Quita el subrayado predeterminado de los enlaces. */
 a {
-    /* Mantiene el color heredado del elemento padre. */
     color: inherit;
-    /* Elimina el subrayado. */
     text-decoration: none;
 }
 
-/* Evita viñetas automáticas en listas usadas como componentes visuales. */
-ul {
-    /* Quita las viñetas. */
-    list-style: none;
+button {
+    cursor: pointer;
 }
 
-/* Contenedor general que centra las ventanas del MVP. */
+[hidden] {
+    display: none !important;
+}
+
 .app-page {
-    /* Asegura que cada pantalla ocupe como mínimo toda la altura visible. */
     min-height: 100vh;
-    /* Usa flexbox para centrar el contenido principal. */
     display: flex;
-    /* Centra horizontalmente la tarjeta. */
     justify-content: center;
-    /* Alinea arriba en pantallas pequeñas y deja espacio alrededor. */
     align-items: flex-start;
-    /* Agrega separación exterior. */
-    padding: 32px 18px;
+    padding: 24px 16px;
 }
 
-/* Tarjeta principal reutilizada por todas las ventanas. */
 .app-card {
-    /* Ocupa el ancho disponible sin superar el máximo. */
-    width: min(100%, 980px);
-    /* Usa fondo blanco para destacar sobre el fondo general. */
+    width: min(100%, 1000px);
     background: var(--color-surface);
-    /* Redondea las esquinas. */
-    border-radius: var(--radius-card);
-    /* Agrega una sombra suave. */
-    box-shadow: var(--shadow-card);
-    /* Oculta contenido que sobresalga de las esquinas redondeadas. */
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
     overflow: hidden;
-    /* Agrega un borde muy suave. */
-    border: 1px solid rgba(223, 228, 234, 0.8);
 }
 
-/* Versión angosta de la tarjeta para login, registro y formularios. */
 .app-card--narrow {
-    /* Limita el ancho para mejorar la lectura de formularios. */
     max-width: 560px;
 }
 
-/* Encabezado común de las pantallas internas. */
 .app-header {
-    /* Organiza los elementos en una fila. */
     display: flex;
-    /* Centra verticalmente los elementos. */
-    align-items: center;
-    /* Separa el título de las acciones. */
     justify-content: space-between;
-    /* Agrega espacio entre elementos. */
-    gap: 14px;
-    /* Agrega espacio interior. */
-    padding: 20px 22px;
-    /* Dibuja una línea de separación inferior. */
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px;
     border-bottom: 1px solid var(--color-border);
 }
 
-/* Agrupa el botón de volver con el título. */
 .app-header__title {
-    /* Organiza el contenido en una fila. */
     display: flex;
-    /* Centra verticalmente. */
     align-items: center;
-    /* Separa el botón del texto. */
-    gap: 12px;
-    /* Permite ocupar el espacio sobrante. */
-    flex: 1;
+    gap: 10px;
 }
 
-/* Estilo de títulos principales. */
+.content {
+    padding: 20px;
+}
+
 h1 {
-    /* Usa un tamaño adaptable. */
-    font-size: clamp(1.35rem, 3vw, 1.8rem);
-    /* Da peso visual al título. */
-    font-weight: 750;
-    /* Reduce levemente el espacio entre letras. */
-    letter-spacing: -0.02em;
+    font-size: 1.7rem;
 }
 
-/* Estilo de subtítulos de sección. */
 h2 {
-    /* Mantiene un tamaño moderado. */
-    font-size: 1.08rem;
-    /* Da suficiente peso sin competir con h1. */
-    font-weight: 700;
+    font-size: 1.15rem;
 }
 
-/* Texto secundario reutilizable. */
-.muted {
-    /* Usa el color de texto secundario. */
+.muted,
+.helper {
     color: var(--color-muted);
 }
 
-/* Botón circular o cuadrado para acciones pequeñas. */
-.icon-button {
-    /* Define un tamaño táctil cómodo. */
-    width: 42px;
-    /* Iguala alto y ancho. */
-    height: 42px;
-    /* Quita borde del navegador. */
-    border: 0;
-    /* Redondea totalmente el botón. */
-    border-radius: 50%;
-    /* Usa un fondo gris claro. */
-    background: #eef1f5;
-    /* Usa el color principal de texto. */
-    color: var(--color-text);
-    /* Muestra el cursor de acción. */
-    cursor: pointer;
-    /* Centra el contenido. */
-    display: inline-grid;
-    /* Centra el contenido horizontal y verticalmente. */
-    place-items: center;
-    /* Añade transición para hover. */
-    transition: 160ms ease;
+.helper {
+    font-size: 0.85rem;
 }
 
-/* Cambia el aspecto del botón pequeño al pasar el mouse. */
-.icon-button:hover {
-    /* Usa un fondo más oscuro. */
-    background: #e2e7ed;
-    /* Eleva levemente el botón. */
-    transform: translateY(-1px);
-}
-
-/* Contenedor general de contenido dentro de una tarjeta. */
-.content {
-    /* Agrega espacio interior. */
-    padding: 22px;
-}
-
-/* Crea una fila de controles que puede envolverse en pantallas angostas. */
 .toolbar {
-    /* Usa flexbox. */
     display: flex;
-    /* Permite bajar elementos a otra línea. */
     flex-wrap: wrap;
-    /* Separa controles. */
-    gap: 10px;
-    /* Alinea verticalmente. */
     align-items: center;
-    /* Agrega margen inferior. */
-    margin-bottom: 18px;
+    gap: 10px;
+    margin-bottom: 16px;
 }
 
-/* Hace que un control ocupe el espacio sobrante de una toolbar. */
 .toolbar__grow {
-    /* Permite crecer. */
     flex: 1 1 220px;
 }
 
-/* Define un grupo de formulario. */
 .form-group {
-    /* Organiza label, control y ayuda en columna. */
     display: grid;
-    /* Separa los elementos. */
-    gap: 7px;
+    gap: 6px;
 }
 
-/* Define una grilla reutilizable para formularios. */
 .form-grid {
-    /* Usa CSS Grid. */
     display: grid;
-    /* Crea dos columnas iguales. */
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    /* Separa filas y columnas. */
-    gap: 16px;
-}
-
-/* Permite que un campo ocupe las dos columnas. */
-.form-grid__full {
-    /* Extiende el elemento de la primera a la última columna. */
-    grid-column: 1 / -1;
-}
-
-/* Estilo de las etiquetas de formulario. */
-label {
-    /* Aumenta levemente el peso del texto. */
-    font-weight: 650;
-    /* Reduce un poco el tamaño. */
-    font-size: 0.92rem;
-}
-
-/* Estilo común de inputs, selects y textareas. */
-.input,
-select,
-textarea,
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-input[type="tel"],
-input[type="search"],
-input[type="date"] {
-    /* Ocupa todo el ancho del contenedor. */
-    width: 100%;
-    /* Agrega espacio interior cómodo. */
-    padding: 12px 13px;
-    /* Usa un borde discreto. */
-    border: 1px solid var(--color-border);
-    /* Redondea el control. */
-    border-radius: var(--radius-control);
-    /* Usa fondo blanco. */
-    background: var(--color-surface);
-    /* Mantiene el color de texto. */
-    color: var(--color-text);
-    /* Quita el contorno predeterminado. */
-    outline: none;
-    /* Añade una transición suave. */
-    transition: 160ms ease;
-}
-
-/* Resalta el control que está siendo utilizado. */
-.input:focus,
-select:focus,
-textarea:focus,
-input:focus {
-    /* Cambia el borde al azul principal. */
-    border-color: var(--color-primary);
-    /* Agrega un halo accesible. */
-    box-shadow: 0 0 0 3px rgba(31, 95, 191, 0.14);
-}
-
-/* Permite agrandar verticalmente las áreas de texto. */
-textarea {
-    /* Permite cambiar solo la altura. */
-    resize: vertical;
-    /* Define una altura mínima. */
-    min-height: 100px;
-}
-
-/* Texto de ayuda debajo de campos. */
-.helper {
-    /* Reduce el tamaño del texto. */
-    font-size: 0.82rem;
-    /* Usa color secundario. */
-    color: var(--color-muted);
-}
-
-/* Mensaje de error reutilizable. */
-.error-message {
-    /* Oculta el mensaje hasta que JS lo necesite. */
-    display: none;
-    /* Usa color rojo. */
-    color: var(--color-danger);
-    /* Reduce el tamaño. */
-    font-size: 0.82rem;
-    /* Usa un peso medio. */
-    font-weight: 600;
-}
-
-/* Muestra un mensaje de error cuando se agrega la clase visible. */
-.error-message.is-visible {
-    /* Hace visible el mensaje. */
-    display: block;
-}
-
-/* Botón reutilizable. */
-.btn {
-    /* Quita el borde predeterminado. */
-    border: 0;
-    /* Redondea el botón. */
-    border-radius: var(--radius-control);
-    /* Agrega espacio interior. */
-    padding: 11px 16px;
-    /* Usa peso fuerte. */
-    font-weight: 700;
-    /* Permite distinguir acciones. */
-    cursor: pointer;
-    /* Centra icono y texto cuando existan. */
-    display: inline-flex;
-    /* Centra verticalmente. */
-    align-items: center;
-    /* Centra horizontalmente. */
-    justify-content: center;
-    /* Separa icono y texto. */
-    gap: 8px;
-    /* Agrega transición. */
-    transition: 160ms ease;
-}
-
-/* Botón principal. */
-.btn--primary {
-    /* Usa azul principal. */
-    background: var(--color-primary);
-    /* Usa texto blanco. */
-    color: white;
-}
-
-/* Hover del botón principal. */
-.btn--primary:hover {
-    /* Oscurece el azul. */
-    background: var(--color-primary-dark);
-    /* Eleva levemente el botón. */
-    transform: translateY(-1px);
-}
-
-/* Botón secundario. */
-.btn--secondary {
-    /* Usa un fondo claro. */
-    background: #eef1f5;
-    /* Mantiene texto oscuro. */
-    color: var(--color-text);
-}
-
-/* Hover del botón secundario. */
-.btn--secondary:hover {
-    /* Oscurece un poco el fondo. */
-    background: #e3e8ef;
-}
-
-/* Botón de peligro. */
-.btn--danger {
-    /* Usa fondo rojo suave. */
-    background: var(--color-danger-soft);
-    /* Usa texto rojo. */
-    color: var(--color-danger);
-}
-
-/* Hover del botón de peligro. */
-.btn--danger:hover {
-    /* Intensifica el fondo. */
-    background: #ffe1de;
-}
-
-/* Botón de ancho completo. */
-.btn--block {
-    /* Ocupa todo el ancho. */
-    width: 100%;
-}
-
-/* Etiqueta pequeña de estado. */
-.badge {
-    /* Muestra la etiqueta en línea. */
-    display: inline-flex;
-    /* Centra verticalmente. */
-    align-items: center;
-    /* Agrega espacio interno. */
-    padding: 5px 9px;
-    /* Redondea la etiqueta. */
-    border-radius: 999px;
-    /* Reduce el tamaño del texto. */
-    font-size: 0.78rem;
-    /* Usa un peso medio. */
-    font-weight: 700;
-    /* Usa un fondo azul suave por defecto. */
-    background: var(--color-primary-soft);
-    /* Usa texto azul. */
-    color: var(--color-primary);
-}
-
-/* Variante verde de badge. */
-.badge--success {
-    /* Usa fondo verde suave. */
-    background: var(--color-success-soft);
-    /* Usa texto verde. */
-    color: var(--color-success);
-}
-
-/* Variante amarilla de badge. */
-.badge--warning {
-    /* Usa fondo amarillo suave. */
-    background: var(--color-warning-soft);
-    /* Usa texto marrón/naranja. */
-    color: var(--color-warning);
-}
-
-/* Variante roja de badge. */
-.badge--danger {
-    /* Usa fondo rojo suave. */
-    background: var(--color-danger-soft);
-    /* Usa texto rojo. */
-    color: var(--color-danger);
-}
-
-/* Grilla general de tarjetas. */
-.card-grid {
-    /* Usa CSS Grid. */
-    display: grid;
-    /* Crea columnas responsivas. */
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-    /* Separa tarjetas. */
     gap: 14px;
 }
 
-/* Tarjeta interna reutilizable. */
-.mini-card {
-    /* Dibuja un borde suave. */
+.form-grid__full {
+    grid-column: 1 / -1;
+}
+
+label {
+    font-weight: 700;
+    font-size: 0.92rem;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 11px 12px;
     border: 1px solid var(--color-border);
-    /* Redondea las esquinas. */
-    border-radius: 16px;
-    /* Agrega espacio interior. */
-    padding: 16px;
-    /* Usa fondo blanco. */
-    background: var(--color-surface);
+    border-radius: 10px;
+    background: white;
+    color: var(--color-text);
 }
 
-/* Barra inferior reutilizable en pantallas de cliente. */
-.bottom-nav {
-    /* Usa una grilla con cuatro columnas. */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid rgba(31, 95, 191, 0.18);
+    border-color: var(--color-primary);
+}
+
+textarea {
+    min-height: 95px;
+    resize: vertical;
+}
+
+.error-message {
+    display: none;
+    color: var(--color-danger);
+    font-size: 0.84rem;
+}
+
+.error-message.is-visible {
+    display: block;
+}
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+.btn--primary {
+    background: var(--color-primary);
+    color: white;
+}
+
+.btn--primary:hover {
+    background: var(--color-primary-dark);
+}
+
+.btn--secondary {
+    background: #eef1f5;
+    color: var(--color-text);
+}
+
+.btn--danger {
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
+}
+
+.btn--block {
+    width: 100%;
+}
+
+.icon-button {
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: #eef1f5;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 20px;
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.badge--success {
+    background: var(--color-success-soft);
+    color: var(--color-success);
+}
+
+.badge--warning {
+    background: var(--color-warning-soft);
+    color: var(--color-warning);
+}
+
+.badge--danger {
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
+}
+
+.card-grid {
     display: grid;
-    /* Reparte el ancho en cuatro partes iguales. */
-    grid-template-columns: repeat(4, 1fr);
-    /* Dibuja borde superior. */
-    border-top: 1px solid var(--color-border);
-    /* Usa fondo blanco. */
-    background: var(--color-surface);
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 12px;
 }
 
-/* Estilo de cada opción de navegación inferior. */
+.mini-card {
+    padding: 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background: white;
+}
+
+.bottom-nav {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-top: 1px solid var(--color-border);
+    background: white;
+}
+
 .bottom-nav a,
 .bottom-nav button {
-    /* Quita bordes de botones usados como navegación. */
     border: 0;
-    /* Usa fondo transparente. */
     background: transparent;
-    /* Agrega espacio interno. */
-    padding: 13px 8px;
-    /* Centra el texto. */
+    padding: 13px 6px;
     text-align: center;
-    /* Usa color secundario. */
     color: var(--color-muted);
-    /* Reduce el tamaño. */
     font-size: 0.82rem;
-    /* Usa cursor de enlace. */
-    cursor: pointer;
 }
 
-/* Marca la opción activa de navegación. */
 .bottom-nav .active {
-    /* Usa color azul. */
     color: var(--color-primary);
-    /* Aumenta el peso. */
-    font-weight: 750;
+    font-weight: 700;
 }
 
-/* Contenedor para estados vacíos. */
 .empty-state {
-    /* Centra el contenido. */
+    padding: 30px 16px;
     text-align: center;
-    /* Agrega bastante espacio vertical. */
-    padding: 36px 20px;
-    /* Usa color secundario. */
     color: var(--color-muted);
 }
 
-/* Toast simple para informar acciones del MVP. */
 .toast {
-    /* Lo fija sobre la interfaz. */
     position: fixed;
-    /* Lo ubica cerca del borde inferior. */
-    bottom: 22px;
-    /* Lo centra horizontalmente. */
     left: 50%;
-    /* Corrige el centrado por el ancho propio. */
-    transform: translate(-50%, 16px);
-    /* Usa fondo oscuro para buen contraste. */
+    bottom: 20px;
+    transform: translateX(-50%);
+    padding: 10px 14px;
+    border-radius: 10px;
     background: #172033;
-    /* Usa texto blanco. */
     color: white;
-    /* Agrega espacio interior. */
-    padding: 11px 15px;
-    /* Redondea el mensaje. */
-    border-radius: 12px;
-    /* Oculta el toast inicialmente. */
     opacity: 0;
-    /* Evita que intercepte clics. */
     pointer-events: none;
-    /* Agrega transición. */
-    transition: 180ms ease;
-    /* Asegura que se muestre encima del resto. */
+    transition: opacity 0.2s;
     z-index: 1000;
-    /* Limita el ancho para celulares. */
-    max-width: calc(100vw - 32px);
-    /* Centra el texto. */
-    text-align: center;
 }
 
-/* Estado visible del toast. */
 .toast.is-visible {
-    /* Muestra el toast. */
     opacity: 1;
-    /* Lo lleva a su posición final. */
-    transform: translate(-50%, 0);
 }
 
-/* Ajustes para celulares. */
 @media (max-width: 640px) {
-    /* Reduce el espacio exterior en pantallas chicas. */
     .app-page {
-        /* Usa menos margen exterior. */
-        padding: 10px;
+        padding: 8px;
     }
 
-    /* Reduce el radio para aprovechar mejor la pantalla. */
     .app-card {
-        /* Usa un radio algo menor. */
-        border-radius: 14px;
+        border-radius: 12px;
     }
 
-    /* Apila campos de formularios que estaban en dos columnas. */
+    .content,
+    .app-header {
+        padding: 16px;
+    }
+
     .form-grid {
-        /* Usa una sola columna. */
         grid-template-columns: 1fr;
     }
 
-    /* Mantiene los campos de ancho completo en una sola columna. */
     .form-grid__full {
-        /* Usa la única columna disponible. */
         grid-column: auto;
     }
 
-    /* Reduce padding del contenido. */
-    .content {
-        /* Usa menos espacio interior. */
-        padding: 17px;
-    }
-
-    /* Reduce padding del encabezado. */
-    .app-header {
-        /* Usa menos espacio interior. */
-        padding: 16px 17px;
+    .bottom-nav a,
+    .bottom-nav button {
+        padding: 11px 3px;
+        font-size: 0.74rem;
     }
 }

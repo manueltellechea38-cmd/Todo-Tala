@@ -1,0 +1,75 @@
+@import url("../assets/estilos_globales.css");
+
+.employee-card {
+    max-width: 1000px;
+}
+
+.employee-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.employee-form {
+    display: grid;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.employee-form label {
+    display: grid;
+    gap: 6px;
+}
+
+.employee-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.employee-item {
+    display: grid;
+    gap: 5px;
+    padding: 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+}
+
+.employee-item span {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+}
+
+.employee-item .btn {
+    margin-top: 6px;
+    justify-self: start;
+}
+
+.commerce-nav {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-top: 1px solid var(--color-border);
+}
+
+.commerce-nav a {
+    padding: 13px 6px;
+    text-align: center;
+    color: var(--color-muted);
+    font-size: 0.82rem;
+}
+
+.commerce-nav .active {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+@media (max-width: 700px) {
+    .employee-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .commerce-nav a {
+        font-size: 0.72rem;
+        padding: 11px 3px;
+    }
+}

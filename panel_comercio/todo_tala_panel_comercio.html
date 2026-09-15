@@ -1,72 +1,82 @@
 <!DOCTYPE html>
-<!-- Declara HTML5. -->
 <html lang="es">
-<!-- Define idioma español. -->
 <head>
-    <!-- Configura caracteres. -->
     <meta charset="UTF-8">
-    <!-- Activa responsive. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Título del navegador. -->
     <title>Todo Tala | Panel del comercio</title>
-    <!-- Carga estilos. -->
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="estilos.css?v=1.3">
 </head>
-<!-- Comienza la interfaz. -->
 <body>
-    <!-- Contenedor general. -->
     <main class="app-page">
-        <!-- Tarjeta principal. -->
-        <section class="app-card">
-            <!-- Encabezado del panel. -->
+        <section class="app-card panel-card">
             <header class="app-header">
-                <!-- Título y descripción. -->
-                <div>
-                    <!-- Nombre del comercio demo. -->
-                    <h1>Panadería El Sol</h1>
-                    <!-- Rol actual. -->
-                    <p id="rol-actual" class="muted">Panel del comercio</p>
-                </div>
-                <!-- Cierra sesión. -->
-                <button id="btn-salir" class="btn btn--secondary" type="button">Salir</button>
+                <section>
+                    <h1 id="nombre-comercio">Comercio</h1>
+                    <p id="rol-actual" class="muted"></p>
+                </section>
+                <button id="btn-salir" class="btn btn--danger" type="button">Salir</button>
             </header>
-            <!-- Contenido principal. -->
+
             <section class="content">
-                <!-- Título del resumen. -->
-                <h2>Resumen rápido</h2>
-                <!-- Métricas calculadas con JS. -->
-                <section class="summary-grid" style="margin-top:12px;">
-                    <!-- Productos. -->
-                    <article class="metric"><strong id="cantidad-productos">0</strong><span>Productos</span></article>
-                    <!-- Pedidos. -->
-                    <article class="metric"><strong id="cantidad-pedidos">0</strong><span>Pedidos activos</span></article>
-                    <!-- Promociones. -->
-                    <article class="metric"><strong id="cantidad-promos">0</strong><span>Promociones</span></article>
+                <h2>Resumen</h2>
+                <section class="summary-grid">
+                    <article class="metric">
+                        <strong id="cantidad-productos">0</strong>
+                        <span>Productos</span>
+                    </article>
+                    <article class="metric">
+                        <strong id="cantidad-pedidos">0</strong>
+                        <span>Pedidos activos</span>
+                    </article>
+                    <article class="metric">
+                        <strong id="cantidad-promos">0</strong>
+                        <span>Promociones</span>
+                    </article>
+                    <article id="metric-empleados" class="metric">
+                        <strong id="cantidad-empleados">0</strong>
+                        <span>Empleados</span>
+                    </article>
                 </section>
-                <!-- Aviso de stock bajo generado por JS. -->
-                <div id="aviso-stock" style="margin-top:14px;"></div>
-                <!-- Título de accesos. -->
-                <h2 style="margin-top:24px;">Accesos rápidos</h2>
-                <!-- Accesos conectados a las ventanas existentes. -->
+
+                <section id="aviso-stock" class="stock-area"></section>
+
+                <h2>Administración</h2>
                 <section class="quick-grid">
-                    <!-- Agrega producto. -->
-                    <button id="btn-agregar" class="quick-card" type="button"><strong>Agregar producto</strong><p class="muted">Crear una publicación nueva.</p></button>
-                    <!-- Gestiona productos. -->
-                    <button id="btn-productos" class="quick-card" type="button"><strong>Gestionar productos</strong><p class="muted">Editar, ocultar o revisar stock.</p></button>
-                    <!-- Gestiona pedidos. -->
-                    <button id="btn-pedidos" class="quick-card" type="button"><strong>Pedidos recibidos</strong><p class="muted">Aceptar, preparar y entregar pedidos.</p></button>
-                    <!-- Gestiona promociones. -->
-                    <button id="btn-promos" class="quick-card" type="button"><strong>Promociones</strong><p class="muted">Crear y activar promociones.</p></button>
+                    <a class="quick-card" href="../agregar_editar_producto/todo_tala_agregar_editar_producto.html">
+                        <strong>Agregar producto</strong>
+                        <span>Crear un producto nuevo.</span>
+                    </a>
+                    <a class="quick-card" href="../gestioinar_productos/todo_tala_gestion_productos.html">
+                        <strong>Gestionar productos</strong>
+                        <span>Editar productos y controlar stock.</span>
+                    </a>
+                    <a class="quick-card" href="../pedidos_recibidos/todo_tala_pedidos_recibidos.html">
+                        <strong>Pedidos recibidos</strong>
+                        <span>Revisar y actualizar pedidos.</span>
+                    </a>
+                    <a class="quick-card" href="../gestionar_promociones/todo_tala_gestion_promociones.html">
+                        <strong>Promociones</strong>
+                        <span>Crear y modificar promociones.</span>
+                    </a>
+                    <a id="acceso-empleados" class="quick-card" href="../gestionar_empleados/todo_tala_gestion_empleados.html">
+                        <strong>Administrar empleados</strong>
+                        <span>Crear y eliminar cuentas de empleados.</span>
+                    </a>
                 </section>
-                <!-- Nota de alcance. -->
-                <p class="helper" style="margin-top:18px;">Este panel usa datos locales de demostración. La base de datos y el backend todavía forman parte de las próximas etapas del proyecto.</p>
             </section>
+
+            <nav id="nav-comercio" class="commerce-nav commerce-nav--5" aria-label="Navegación del comercio">
+                <a class="active" href="todo_tala_panel_comercio.html">Panel</a>
+                <a href="../gestioinar_productos/todo_tala_gestion_productos.html">Productos</a>
+                <a href="../pedidos_recibidos/todo_tala_pedidos_recibidos.html">Pedidos</a>
+                <a href="../gestionar_promociones/todo_tala_gestion_promociones.html">Promociones</a>
+                <a id="nav-empleados" href="../gestionar_empleados/todo_tala_gestion_empleados.html">Empleados</a>
+            </nav>
         </section>
     </main>
-    <!-- Carga utilidades. -->
-    <script src="../assets/app.js"></script>
-    <!-- Carga lógica del panel. -->
-    <script src="panel.js"></script>
+
+    <script src="../assets/app.js?v=1.3"></script>
+    <script src="../assets/acceso.js?v=1.3"></script>
+    <script src="panel.js?v=1.3"></script>
 </body>
-<!-- Finaliza el documento. -->
 </html>
