@@ -1,19 +1,23 @@
 @import url("../assets/estilos_globales.css");
 
+/* Fondo general de la pantalla de inicio. */
 .home-page {
     background: #eef2f7;
 }
 
+/* Limita el ancho para que el contenido no quede demasiado estirado. */
 .home-card {
     max-width: 1120px;
 }
 
+/* Encabezado de la portada. */
 .home-header {
     padding: 22px;
     background: white;
     border-bottom: 1px solid var(--color-border);
 }
 
+/* Navegación superior. */
 .top-nav {
     display: flex;
     align-items: center;
@@ -39,6 +43,7 @@
     font-weight: 800;
 }
 
+/* Presentación principal. */
 .hero-copy {
     max-width: 680px;
     margin-top: 34px;
@@ -53,6 +58,7 @@
     color: var(--color-muted);
 }
 
+/* Buscador de la portada. */
 .home-search {
     display: grid;
     grid-template-columns: 1fr auto;
@@ -61,6 +67,7 @@
     margin-top: 18px;
 }
 
+/* Agrupa promociones y productos destacados. */
 .home-content {
     display: grid;
     gap: 28px;
@@ -75,6 +82,7 @@
     margin-bottom: 12px;
 }
 
+/* Grillas de tarjetas. */
 .promo-grid,
 .preview-grid {
     display: grid;
@@ -124,6 +132,7 @@
     font-weight: 800;
 }
 
+/* Ajustes para tablet. */
 @media (max-width: 850px) {
     .preview-grid,
     .promo-grid {
@@ -131,6 +140,7 @@
     }
 }
 
+/* Ajustes para celular. */
 @media (max-width: 620px) {
     .top-nav {
         align-items: stretch;
