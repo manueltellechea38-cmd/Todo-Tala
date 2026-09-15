@@ -2,6 +2,7 @@ const usuarioJefe = TodoTala.usuarioActual();
 const listaEmpleados = document.getElementById("lista-empleados");
 const errorEmpleado = document.getElementById("error-empleado");
 
+/* Muestra solamente los empleados que pertenecen al comercio del jefe. */
 function renderizarEmpleados() {
     const datos = TodoTala.obtenerDatos();
     const comercio = datos.comercios.find(function (item) {
@@ -28,13 +29,16 @@ function renderizarEmpleados() {
         '</article>';
     }).join("");
 
+    /* Conecta el botón eliminar de cada empleado. */
     document.querySelectorAll("[data-eliminar]").forEach(function (boton) {
         boton.addEventListener("click", function () {
             const id = Number(boton.dataset.eliminar);
             const datosActuales = TodoTala.obtenerDatos();
+
             datosActuales.usuarios = datosActuales.usuarios.filter(function (usuario) {
                 return usuario.id !== id;
             });
+
             TodoTala.guardarDatos(datosActuales);
             renderizarEmpleados();
             TodoTala.toast("Empleado eliminado");
@@ -42,6 +46,7 @@ function renderizarEmpleados() {
     });
 }
 
+/* Crea una nueva cuenta de empleado para el comercio actual. */
 document.getElementById("form-empleado").addEventListener("submit", function (evento) {
     evento.preventDefault();
 
@@ -56,12 +61,14 @@ document.getElementById("form-empleado").addEventListener("submit", function (ev
         return usuario.correo.toLowerCase() === correo || usuario.cedula === cedula;
     });
 
+    /* Valida los campos obligatorios. */
     if (!nombre || !cedula || !correo || password.length < 8) {
         errorEmpleado.textContent = "Completá los datos obligatorios. La contraseña debe tener al menos 8 caracteres.";
         errorEmpleado.classList.add("is-visible");
         return;
     }
 
+    /* Evita repetir correo o cédula. */
     if (repetido) {
         errorEmpleado.textContent = "Ese correo o cédula ya está registrado.";
         errorEmpleado.classList.add("is-visible");
