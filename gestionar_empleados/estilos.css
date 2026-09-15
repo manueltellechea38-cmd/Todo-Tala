@@ -1,15 +1,18 @@
 @import url("../assets/estilos_globales.css");
 
+/* Ancho máximo de la pantalla. */
 .employee-card {
     max-width: 1000px;
 }
 
+/* Separa el formulario de la lista de empleados. */
 .employee-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
 }
 
+/* Formulario de alta. */
 .employee-form {
     display: grid;
     gap: 12px;
@@ -21,6 +24,7 @@
     gap: 6px;
 }
 
+/* Listado de cuentas creadas. */
 .employee-list {
     display: grid;
     gap: 10px;
@@ -45,6 +49,7 @@
     justify-self: start;
 }
 
+/* Navegación inferior del jefe. */
 .commerce-nav {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -63,6 +68,7 @@
     font-weight: 700;
 }
 
+/* En celular se muestra una sola columna. */
 @media (max-width: 700px) {
     .employee-layout {
         grid-template-columns: 1fr;
