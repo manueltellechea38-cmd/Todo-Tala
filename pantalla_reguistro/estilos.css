@@ -1,60 +1,127 @@
-/* Importa los estilos globales. */
 @import url("../assets/estilos_globales.css");
 
-/* Organiza los botones de tipo de cuenta. */
+.registration-page {
+    background:
+        radial-gradient(circle at top right, rgba(31, 95, 191, 0.12), transparent 32%),
+        var(--color-background);
+}
+
+.registration-card {
+    max-width: 880px;
+}
+
+.registration-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 24px;
+    color: white;
+    background: linear-gradient(135deg, #0d2f59 0%, #1f5fbf 100%);
+}
+
+.registration-header .icon-button {
+    flex: 0 0 auto;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.registration-header p {
+    margin-top: 5px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.registration-eyebrow {
+    margin: 0 !important;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
 .account-selector {
-    /* Usa dos columnas. */
     display: grid;
-    /* Reparte el espacio. */
-    grid-template-columns: repeat(2, 1fr);
-    /* Separa los botones. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.account-selector button {
+    display: grid;
+    gap: 4px;
+    text-align: left;
+    border: 1px solid var(--color-border);
+    background: white;
+    border-radius: 14px;
+    padding: 15px;
+    cursor: pointer;
+    color: var(--color-text);
+}
+
+.account-selector button span {
+    color: var(--color-muted);
+    font-size: 0.82rem;
+}
+
+.account-selector button.active {
+    border-color: var(--color-primary);
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(31, 95, 191, 0.08);
+}
+
+.section-title {
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.section-title p {
+    margin-top: 3px;
+    color: var(--color-muted);
+    font-size: 0.84rem;
+}
+
+.business-fields {
+    display: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding: 18px;
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    background: #f8fafc;
+}
+
+.business-fields.is-visible {
+    display: grid;
+}
+
+.business-fields .section-title,
+.business-fields .form-grid__full {
+    grid-column: 1 / -1;
+}
+
+.registration-actions {
+    display: flex;
+    justify-content: flex-end;
     gap: 10px;
 }
 
-/* Estilo base de cada tipo de cuenta. */
-.account-selector button {
-    /* Dibuja un borde. */
-    border: 1px solid var(--color-border);
-    /* Usa fondo blanco. */
-    background: white;
-    /* Redondea. */
-    border-radius: 12px;
-    /* Agrega padding. */
-    padding: 12px;
-    /* Permite clic. */
-    cursor: pointer;
-    /* Usa peso medio. */
-    font-weight: 700;
-}
+@media (max-width: 680px) {
+    .account-selector,
+    .business-fields,
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
 
-/* Marca la opción activa. */
-.account-selector button.active {
-    /* Usa borde azul. */
-    border-color: var(--color-primary);
-    /* Usa fondo azul suave. */
-    background: var(--color-primary-soft);
-    /* Usa texto azul. */
-    color: var(--color-primary);
-}
+    .form-grid__full,
+    .business-fields .section-title,
+    .business-fields .form-grid__full {
+        grid-column: auto;
+    }
 
-/* Oculta inicialmente los campos exclusivos del jefe. */
-.business-fields {
-    /* No se muestran hasta seleccionar jefe. */
-    display: none;
-    /* Usa fondo suave. */
-    background: #f8fafc;
-    /* Dibuja borde. */
-    border: 1px solid var(--color-border);
-    /* Redondea. */
-    border-radius: 14px;
-    /* Agrega padding. */
-    padding: 15px;
-}
+    .registration-actions {
+        flex-direction: column;
+    }
 
-/* Muestra los campos comerciales cuando JS agrega la clase. */
-.business-fields.is-visible {
-    /* Hace visible la sección. */
-    display: grid;
-    /* Separa los campos. */
-    gap: 14px;
+    .registration-actions .btn {
+        width: 100%;
+    }
 }
