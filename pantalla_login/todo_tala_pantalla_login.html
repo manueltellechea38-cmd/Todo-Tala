@@ -1,97 +1,60 @@
 <!DOCTYPE html>
-<!-- Declara HTML5. -->
 <html lang="es">
-<!-- Indica idioma español. -->
 <head>
-    <!-- Configura caracteres especiales. -->
     <meta charset="UTF-8">
-    <!-- Activa diseño responsive. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Define el título del navegador. -->
     <title>Todo Tala | Iniciar sesión</title>
-    <!-- Carga estilos de esta ventana. -->
     <link rel="stylesheet" href="estilos.css">
 </head>
-<!-- Comienza la interfaz visible. -->
 <body>
-    <!-- Centra el formulario en pantalla. -->
-    <main class="app-page">
-        <!-- Tarjeta angosta del login. -->
-        <section class="app-card app-card--narrow">
-            <!-- Encabezado con botón de volver. -->
-            <header class="app-header">
-                <!-- Agrupa botón y título. -->
-                <div class="app-header__title">
-                    <!-- Regresa a la pantalla inicial. -->
-                    <button id="btn-volver" class="icon-button" type="button" aria-label="Volver">←</button>
-                    <!-- Título de la pantalla. -->
-                    <h1>Iniciar sesión</h1>
+    <main class="app-page login-page">
+        <section class="app-card app-card--narrow login-card">
+            <header class="login-brand">
+                <div class="login-logo" aria-hidden="true">TT</div>
+                <div>
+                    <p class="login-eyebrow">Comercio digital local</p>
+                    <h1>Todo Tala</h1>
                 </div>
             </header>
-            <!-- Contenido del formulario. -->
-            <section class="content">
-                <!-- Introducción visual. -->
-                <div class="login-intro">
-                    <!-- Marca textual provisoria. -->
-                    <div class="login-mark">TT</div>
-                    <!-- Nombre del proyecto. -->
-                    <h2>Todo Tala</h2>
-                    <!-- Texto de apoyo. -->
-                    <p class="muted">Accedé al MVP como cliente, jefe o empleado.</p>
+
+            <section class="content login-content">
+                <div class="login-heading">
+                    <h2>Iniciar sesión</h2>
+                    <p class="muted">Ingresá con tu correo y contraseña. El sistema identifica automáticamente tu tipo de cuenta.</p>
                 </div>
-                <!-- Aviso transparente sobre el alcance actual. -->
-                <p class="demo-note">Modo demostración: todavía no existe autenticación real ni base de datos. El rol elegido solo permite recorrer los distintos flujos del MVP.</p>
-                <!-- Formulario de acceso. -->
+
                 <form id="login-form" class="login-form" novalidate>
-                    <!-- Grupo de correo. -->
                     <div class="form-group">
-                        <!-- Etiqueta del correo. -->
                         <label for="email">Correo electrónico</label>
-                        <!-- Campo de correo. -->
                         <input id="email" type="email" placeholder="nombre@correo.com" autocomplete="email" required>
-                        <!-- Mensaje de validación. -->
                         <p id="error-email" class="error-message">Ingresá un correo válido.</p>
                     </div>
-                    <!-- Grupo de contraseña. -->
+
                     <div class="form-group">
-                        <!-- Etiqueta de contraseña. -->
                         <label for="password">Contraseña</label>
-                        <!-- Contenedor para campo y botón. -->
                         <div class="password-wrap">
-                            <!-- Campo de contraseña. -->
-                            <input id="password" type="password" placeholder="Mínimo 8 caracteres" autocomplete="current-password" required>
-                            <!-- Permite mostrar u ocultar la contraseña. -->
+                            <input id="password" type="password" placeholder="Tu contraseña" autocomplete="current-password" required>
                             <button id="btn-ver-password" class="password-toggle" type="button">Mostrar</button>
                         </div>
-                        <!-- Mensaje de validación. -->
-                        <p id="error-password" class="error-message">La contraseña debe tener al menos 8 caracteres.</p>
+                        <p id="error-login" class="error-message">Correo o contraseña incorrectos.</p>
                     </div>
-                    <!-- Grupo del rol usado solo para la demo. -->
-                    <div class="form-group">
-                        <!-- Etiqueta del selector. -->
-                        <label for="rol">Tipo de usuario para la demostración</label>
-                        <!-- Selector que define el flujo posterior. -->
-                        <select id="rol">
-                            <!-- Opción cliente. -->
-                            <option value="cliente">Cliente</option>
-                            <!-- Opción jefe. -->
-                            <option value="jefe">Jefe del comercio</option>
-                            <!-- Opción empleado. -->
-                            <option value="empleado">Empleado del comercio</option>
-                        </select>
-                    </div>
-                    <!-- Botón principal de acceso. -->
-                    <button class="btn btn--primary btn--block" type="submit">Ingresar al MVP</button>
-                    <!-- Botón que lleva al registro. -->
+
+                    <button class="btn btn--primary btn--block" type="submit">Ingresar</button>
                     <button id="btn-registro" class="btn btn--secondary btn--block" type="button">Crear una cuenta</button>
+                    <button id="btn-volver" class="link-button" type="button">Volver al inicio</button>
                 </form>
+
+                <aside class="demo-access" aria-label="Cuentas de prueba">
+                    <strong>Cuentas de prueba</strong>
+                    <p>Cliente: juan@gmail.com · Juan1234</p>
+                    <p>Jefe: sofia@gmail.com · Sofia1234</p>
+                    <p>Empleado: valentina@gmail.com · Vale1234</p>
+                </aside>
             </section>
         </section>
     </main>
-    <!-- Carga funciones compartidas. -->
+
     <script src="../assets/app.js"></script>
-    <!-- Carga la lógica del login. -->
     <script src="login.js"></script>
 </body>
-<!-- Finaliza la página. -->
 </html>
