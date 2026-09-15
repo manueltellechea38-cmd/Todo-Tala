@@ -4,16 +4,7 @@ const campoPassword = document.getElementById("password");
 const errorEmail = document.getElementById("error-email");
 const errorLogin = document.getElementById("error-login");
 const botonVerPassword = document.getElementById("btn-ver-password");
-const botonVolver = document.getElementById("btn-volver");
-const botonRegistro = document.getElementById("btn-registro");
-
-botonVolver.addEventListener("click", function () {
-    TodoTala.irA("../pantalla_inicio/todo_tala_pantalla_inicio.html");
-});
-
-botonRegistro.addEventListener("click", function () {
-    TodoTala.irA("../pantalla_reguistro/todo_tala_pantalla_registro.html");
-});
+const botonIngresar = document.getElementById("btn-ingresar");
 
 botonVerPassword.addEventListener("click", function () {
     const estaOculta = campoPassword.type === "password";
@@ -32,12 +23,22 @@ formularioLogin.addEventListener("submit", function (evento) {
     errorLogin.classList.remove("is-visible");
 
     if (!emailValido || password === "") {
+        if (password === "") {
+            errorLogin.textContent = "Ingresá tu contraseña.";
+            errorLogin.classList.add("is-visible");
+        }
         return;
     }
+
+    botonIngresar.disabled = true;
+    botonIngresar.textContent = "Ingresando...";
 
     const usuario = TodoTala.iniciarSesion(correo, password);
 
     if (!usuario) {
+        botonIngresar.disabled = false;
+        botonIngresar.textContent = "Ingresar";
+        errorLogin.textContent = "Correo o contraseña incorrectos.";
         errorLogin.classList.add("is-visible");
         return;
     }
@@ -46,10 +47,10 @@ formularioLogin.addEventListener("submit", function (evento) {
 
     window.setTimeout(function () {
         if (usuario.rol === "cliente") {
-            TodoTala.irA("../pantalla_inicio/todo_tala_pantalla_inicio.html");
+            window.location.href = "../pantalla_inicio/todo_tala_pantalla_inicio.html";
             return;
         }
 
-        TodoTala.irA("../panel_comercio/todo_tala_panel_comercio.html");
-    }, 450);
+        window.location.href = "../panel_comercio/todo_tala_panel_comercio.html";
+    }, 300);
 });
