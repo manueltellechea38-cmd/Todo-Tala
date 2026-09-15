@@ -20,6 +20,21 @@ TodoTala.irSegunRol = function (usuario) {
 TodoTala.controlarAcceso = function () {
     const ruta = window.location.pathname.toLowerCase();
     const usuario = TodoTala.usuarioActual();
+
+    /*
+       Cuando probamos el proyecto con Live Server en el puerto 5678,
+       dejamos abrir directamente la pantalla elegida desde VS Code.
+       Esto facilita revisar cada HTML sin que nos mande automáticamente
+       a otra pantalla. Fuera de este puerto, el control de acceso sigue normal.
+    */
+    const esLiveServer =
+        (window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost") &&
+        window.location.port === "5678";
+
+    if (esLiveServer) {
+        return;
+    }
+
     const esLogin = ruta.includes("/pantalla_login/");
     const esRegistro = ruta.includes("/pantalla_registro/");
     const esRaiz = ruta.endsWith("/index.html") || ruta.endsWith("/");
