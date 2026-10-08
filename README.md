@@ -1,5 +1,7 @@
 # Todo Tala
 
+Versión actual: 0.6.0
+
 Plataforma web para consultar productos de comercios, realizar pedidos para retiro y administrar comercios locales.
 
 ## Estructura actual
