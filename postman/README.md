@@ -1,3 +1,5 @@
+Versión actual: 0.6.0
+
 # Postman - Todo Tala
 
 Esta carpeta se usará para guardar y compartir los archivos exportados de Postman del proyecto.
