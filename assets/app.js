@@ -1,6 +1,6 @@
 window.TodoTala = window.TodoTala || {};
 
-TodoTala.VERSION = "1.3.3";
+TodoTala.VERSION = "0.6.0";
 TodoTala.STORAGE_KEY = "todoTalaDataV12";
 
 /* Datos iniciales usados mientras la aplicación trabaja en el navegador. */
