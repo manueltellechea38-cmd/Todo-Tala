@@ -1,3 +1,5 @@
+Versión actual: 0.6.0
+
 # API Todo Tala
 
 Esta carpeta se usará para las APIs en PHP del proyecto Todo Tala.
