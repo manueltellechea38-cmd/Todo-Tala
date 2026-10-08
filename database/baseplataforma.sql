@@ -1,3 +1,5 @@
+-- Todo Tala v0.6.0
+
 create database if not exists baseplataforma;
 use baseplataforma;
 
