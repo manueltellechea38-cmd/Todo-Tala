@@ -26,8 +26,7 @@ if ($mysqlCmd) {
 
 $candidatos = @(
     "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe",
-    "C:\xampp\mysql\bin\mysql.exe",
-    "C:\wamp64\bin\mysql\mysql8.0.31\bin\mysql.exe"
+    "C:\xampp\mysql\bin\mysql.exe"
 )
 
 if (-not $mysql) {
@@ -50,33 +49,34 @@ if (-not (Test-Path $dbFile)) {
 }
 
 $mysqlPass = Read-Host "Escribi la contraseña del usuario root de MySQL"
+$passPHP = $mysqlPass.Replace('\', '\\').Replace("'", "\'")
 
-$passPHP = $mysqlPass.Replace("\", "\\").Replace("'", "\'")
-
-$conexion = @"
+$conexion = @'
 <?php
 
-\$host = '127.0.0.1';
-\$user = 'root';
-\$pass = '$passPHP';
-\$db = 'baseplataforma';
+$host = '127.0.0.1';
+$user = 'root';
+$pass = '__MYSQL_PASS__';
+$db = 'baseplataforma';
 
 try {
-    \$conexion = new PDO(
-        "mysql:host=\$host;dbname=\$db;charset=utf8mb4",
-        \$user,
-        \$pass
+    $conexion = new PDO(
+        "mysql:host=$host;dbname=$db;charset=utf8mb4",
+        $user,
+        $pass
     );
 
-    \$conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-} catch (PDOException \$e) {
+} catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(["error" => "Error de conexión a la base de datos"]);
     exit;
 }
 ?>
-"@
+'@
+
+$conexion = $conexion.Replace('__MYSQL_PASS__', $passPHP)
 
 [System.IO.File]::WriteAllText(
     $conexionFile,
