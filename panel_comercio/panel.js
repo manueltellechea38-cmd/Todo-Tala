@@ -37,7 +37,10 @@ if (stockBajo.length > 0) {
 }
 
 /* Cierra la sesión desde el panel. */
-document.getElementById("btn-salir").addEventListener("click", function () {
-    TodoTala.cerrarSesion();
-    TodoTala.abrir("pantalla_login/todo_tala_pantalla_login.html");
+document.getElementById("btn-salir").addEventListener("click", async function () {
+    await TodoTala.cerrarSesion();
+
+    TodoTala.abrir(
+        "pantalla_login/todo_tala_pantalla_login.html"
+    );
 });

@@ -202,10 +202,53 @@ TodoTala.toast = function (mensaje) {
     }, 2400);
 };
 
-/* Sesión y datos del usuario actual. */
 TodoTala.usuarioActual = function () {
     const datos = TodoTala.obtenerDatos();
 
+    /*
+       Primero intentamos usar la sesión nueva creada por login.php.
+       Algunas pantallas todavía utilizan datos locales mientras las
+       vamos conectando poco a poco con la API.
+    */
+    try {
+        const sesionNueva = JSON.parse(
+            localStorage.getItem("sesion-todo-tala")
+        );
+
+        if (
+            sesionNueva &&
+            sesionNueva.token &&
+            sesionNueva.usuario &&
+            Date.now() < sesionNueva.vence
+        ) {
+            const usuarioLocal = datos.usuarios.find(function (usuario) {
+                return usuario.correo.toLowerCase() ===
+                    sesionNueva.usuario.correo.toLowerCase();
+            });
+
+            return {
+                id: sesionNueva.usuario.id_persona,
+                id_persona: sesionNueva.usuario.id_persona,
+                nombre: sesionNueva.usuario.nombre,
+                correo: sesionNueva.usuario.correo,
+                rol: sesionNueva.usuario.rol,
+                cedula: usuarioLocal ? usuarioLocal.cedula : "",
+                fechaNacimiento: usuarioLocal
+                    ? usuarioLocal.fechaNacimiento
+                    : "",
+                comercioId: usuarioLocal
+                    ? usuarioLocal.comercioId
+                    : null
+            };
+        }
+    } catch (error) {
+        localStorage.removeItem("sesion-todo-tala");
+    }
+
+    /*
+       Sesión anterior.
+       La mantenemos temporalmente mientras migramos las demás pantallas.
+    */
     if (!datos.sesion || !datos.sesion.iniciada) {
         return null;
     }
@@ -249,9 +292,37 @@ TodoTala.iniciarSesion = function (correo, password) {
     return usuario;
 };
 
-TodoTala.cerrarSesion = function () {
+TodoTala.cerrarSesion = async function () {
+    const sesion = JSON.parse(
+        localStorage.getItem("sesion-todo-tala")
+    );
+
+    if (sesion && sesion.token) {
+        try {
+            await fetch("http://localhost:3000/logout.php", {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + sesion.token
+                }
+            });
+        } catch (error) {
+            /*
+               Aunque el servidor no responda, igualmente se borra
+               la sesión local del navegador.
+            */
+        }
+    }
+
+    localStorage.removeItem("sesion-todo-tala");
+
     const datos = TodoTala.obtenerDatos();
-    datos.sesion = { usuarioId: null, rol: null, iniciada: false };
+
+    datos.sesion = {
+        usuarioId: null,
+        rol: null,
+        iniciada: false
+    };
+
     TodoTala.guardarDatos(datos);
 };
 

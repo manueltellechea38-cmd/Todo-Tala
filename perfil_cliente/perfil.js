@@ -48,10 +48,10 @@ formularioPerfil.addEventListener("submit", function (evento) {
     TodoTala.toast("Perfil actualizado.");
 });
 
-/* Cierra la sesión desde el perfil. */
-document.getElementById("btn-salir").addEventListener("click", function () {
-    TodoTala.cerrarSesion();
-    TodoTala.abrir("pantalla_login/todo_tala_pantalla_login.html");
-});
+document.getElementById("btn-salir").addEventListener("click", async function () {
+    await TodoTala.cerrarSesion();
 
-renderizarPerfil();
+    TodoTala.abrir(
+        "pantalla_login/todo_tala_pantalla_login.html"
+    );
+});

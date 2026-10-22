@@ -84,8 +84,10 @@ buscador.addEventListener("input", function () {
     renderizarProductos(productos);
 });
 
-/* Cierra la sesión y vuelve al login. */
-document.getElementById("btn-salir").addEventListener("click", function () {
-    TodoTala.cerrarSesion();
-    TodoTala.abrir("pantalla_login/todo_tala_pantalla_login.html");
+document.getElementById("btn-salir").addEventListener("click", async function () {
+    await TodoTala.cerrarSesion();
+
+    TodoTala.abrir(
+        "pantalla_login/todo_tala_pantalla_login.html"
+    );
 });
