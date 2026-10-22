@@ -89,8 +89,8 @@ Write-Host "conexion.php creado." -ForegroundColor Green
 $env:MYSQL_PWD = $mysqlPass
 
 try {
-    $sql = Get-Content -Raw -Encoding UTF8 $dbFile
-    $sql | & $mysql "--default-character-set=utf8mb4" "-u" "root"
+    $comandoImportar = "`"$mysql`" --default-character-set=utf8mb4 -u root < `"$dbFile`""
+    cmd /c $comandoImportar
 
     if ($LASTEXITCODE -ne 0) {
         throw "MySQL devolvio un error al cargar la base."

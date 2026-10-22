@@ -13,12 +13,22 @@ CREATE TABLE usuario (
     nombre VARCHAR(100) NOT NULL,
     cedula VARCHAR(20) NOT NULL UNIQUE,
     correo VARCHAR(100) NOT NULL UNIQUE,
-    contraseña VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    rol ENUM('cliente', 'empleado', 'jefe') NOT NULL,
+    intentos_fallidos INT NOT NULL DEFAULT 0,
+    bloqueado_hasta DATETIME NULL,
     fecha_nacimiento DATE,
     fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     activo BOOLEAN NOT NULL DEFAULT TRUE
 );
 
+CREATE TABLE sesiones (
+    token_hash CHAR(64) PRIMARY KEY,
+    id_persona INT NOT NULL,
+    expira_en DATETIME NOT NULL,
+    creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_persona) REFERENCES usuario(id_persona) ON DELETE CASCADE
+);
 
 CREATE TABLE cliente (
     id_persona INT PRIMARY KEY,
@@ -309,12 +319,35 @@ DELIMITER ;
 -- =========================
 
 INSERT INTO usuario
-(id_persona, nombre, cedula, correo, contraseña, fecha_nacimiento)
+(id_persona, nombre, cedula, correo, password_hash, rol, fecha_nacimiento)
 VALUES
-(1, 'Juan Perez', '45678901', 'juan@gmail.com', '1234', '2005-03-15'),
-(2, 'Sofia Silva', '50123456', 'sofia@gmail.com', 'sofia123', '2004-12-02'),
-(3, 'Valentina Diaz', '52345678', 'valentina@gmail.com', 'vale123', '2005-06-30');
-
+(
+    1,
+    'Juan Perez',
+    '45678901',
+    'juan@gmail.com',
+    '$2y$12$SjYx1dXlbdYBVC6cn7K.d.wh.QBxs2B/nLsXXtynvX5I0O.ZHjf5W',
+    'cliente',
+    '2005-03-15'
+),
+(
+    2,
+    'Sofia Silva',
+    '50123456',
+    'sofia@gmail.com',
+    '$2y$12$L5.p.GdkWxxj7txkbbjBP.7b7NivkgDv4o4DmA/SNSizdZuYScDUS',
+    'jefe',
+    '2004-12-02'
+),
+(
+    3,
+    'Valentina Diaz',
+    '52345678',
+    'valentina@gmail.com',
+    '$2y$12$Wup0QwiaHr4vCX2oiNkqDO.l.x.xwEKlNXrSMOijyXq1J9u8hPYiu',
+    'empleado',
+    '2005-06-30'
+);
 
 INSERT INTO cliente
 (id_persona)
