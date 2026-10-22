@@ -9,5 +9,4 @@ Sitio web simple para presentar las principales pantallas del proyecto Todo Tala
 - Jefe/comercio: panel, productos, promociones, empleados y pedidos recibidos.
 - Modo oscuro por defecto y botón para cambiar a modo claro.
 - Las capturas se pueden ampliar haciendo clic sobre ellas.
-
-Las imágenes se cargan desde la carpeta pública de Google Drive del proyecto.
+- Todas las capturas están incluidas dentro del propio repositorio.
