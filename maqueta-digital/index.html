@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Maqueta digital de Todo Tala: pantallas principales del cliente y del comercio." />
+  <title>Todo Tala | Maqueta digital</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --surface: #101010;
+      --surface-2: #171717;
+      --text: #f5f7fb;
+      --muted: #aeb5c0;
+      --border: #292929;
+      --accent: #2f6fda;
+      --accent-soft: rgba(47, 111, 218, .16);
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+    }
+    html[data-theme="light"] {
+      --bg: #f3f5f8;
+      --surface: #ffffff;
+      --surface-2: #f7f9fc;
+      --text: #101827;
+      --muted: #5f6b7a;
+      --border: #dfe4eb;
+      --accent: #2867c7;
+      --accent-soft: rgba(40, 103, 199, .10);
+      --shadow: 0 18px 50px rgba(24, 39, 75, .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      transition: background .25s ease, color .25s ease;
+    }
+    .theme-toggle {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 100;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform .18s ease, background .25s ease, color .25s ease;
+    }
+    .theme-toggle:hover { transform: translateY(-1px); }
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 92px 0 64px;
+    }
+    header { margin-bottom: 42px; text-align: center; }
+    .badge {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: #8eb9ff;
+      background: var(--accent-soft);
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 6vw, 64px);
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+    .intro {
+      width: min(760px, 100%);
+      margin: 18px auto 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 17px;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 44px 0 18px;
+      font-size: 22px;
+    }
+    .section-title::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .card {
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      transition: transform .2s ease, border-color .2s ease, background .25s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    }
+    .image-button {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: var(--surface-2);
+      cursor: zoom-in;
+    }
+    .image-button img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: contain;
+      display: block;
+      background: #eef1f5;
+    }
+    .content { padding: 20px 20px 22px; }
+    .screen-type {
+      color: #78a8f4;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    h2 { margin: 7px 0 8px; font-size: 21px; line-height: 1.2; }
+    .description {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    footer {
+      margin-top: 52px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+    dialog {
+      width: min(96vw, 1500px);
+      max-width: none;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+    dialog::backdrop { background: rgba(0,0,0,.82); }
+    .modal-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-top strong { font-size: 15px; }
+    .close-modal {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 8px 11px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    #modalImage { width: 100%; max-height: 80vh; object-fit: contain; display: block; background: #eef1f5; }
+    @media (max-width: 780px) {
+      .wrap { width: min(100% - 20px, 1180px); padding-top: 78px; }
+      .grid { grid-template-columns: 1fr; }
+      .theme-toggle { top: 12px; left: 12px; }
+      .intro { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <button id="themeToggle" class="theme-toggle" type="button" aria-label="Cambiar tema">☀ Modo claro</button>
+  <main class="wrap">
+    <header>
+      <span class="badge">Prototipo / Maqueta digital</span>
+      <h1>Todo Tala</h1>
+      <p class="intro">Recorrido visual por las principales pantallas de la plataforma. Cada ventana muestra una función del sistema desde la perspectiva del cliente o de la administración del comercio.</p>
+    </header>
+    <section aria-labelledby="acceso-title">
+      <h3 id="acceso-title" class="section-title">Acceso al sistema</h3>
+      <div class="grid">
+        <article class="card">
+          <button class="image-button" data-title="Pantalla de inicio de sesión" data-src="https://drive.google.com/uc?export=view&id=1d6cxNTm_o27b8TLZT0LtkhTD_XNQQi3l"><img src="https://drive.google.com/uc?export=view&id=1d6cxNTm_o27b8TLZT0LtkhTD_XNQQi3l" alt="Pantalla de inicio de sesión de Todo Tala"></button>
+          <div class="content"><span class="screen-type">Acceso</span><h2>Pantalla de inicio de sesión</h2><p class="description">Permite que un usuario ingrese a Todo Tala mediante su correo electrónico y contraseña. También ofrece el acceso al registro de una nueva cuenta.</p></div>
+        </article>
+        <article class="card">
+          <button class="image-button" data-title="Pantalla de registro" data-src="https://drive.google.com/uc?export=view&id=1ntSitugn8XX3ZxO6CX9VKvL5rwO1NUHx"><img src="https://drive.google.com/uc?export=view&id=1ntSitugn8XX3ZxO6CX9VKvL5rwO1NUHx" alt="Pantalla de registro de Todo Tala"></button>
+          <div class="content"><span class="screen-type">Acceso</span><h2>Pantalla de registro</h2><p class="description">Permite crear una cuenta nueva como cliente o jefe de comercio, completando los datos personales y las credenciales de acceso.</p></div>
+        </article>
+      </div>
+    </section>
+    <section aria-labelledby="cliente-title">
+      <h3 id="cliente-title" class="section-title">Perspectiva del cliente</h3>
+      <div class="grid">
+        <article class="card">
+          <button class="image-button" data-title="Pantalla de inicio" data-src="https://drive.google.com/uc?export=view&id=1dasUxal1k0mHefhzfteNnvEqa6hIK4UU"><img src="https://drive.google.com/uc?export=view&id=1dasUxal1k0mHefhzfteNnvEqa6hIK4UU" alt="Pantalla de inicio del cliente"></button>
+          <div class="content"><span class="screen-type">Cliente</span><h2>Pantalla de inicio</h2><p class="description">Presenta el buscador principal, promociones y productos destacados, además de accesos rápidos al carrito, perfil, catálogo y pedidos.</p></div>
+        </article>
+        <article class="card">
+          <button class="image-button" data-title="Catálogo de productos" data-src="https://drive.google.com/uc?export=view&id=1IEOfG_B5ZerqxBCVsbkW5IJUsTOctvYt"><img src="https://drive.google.com/uc?export=view&id=1IEOfG_B5ZerqxBCVsbkW5IJUsTOctvYt" alt="Catálogo de productos"></button>
+          <div class="content"><span class="screen-type">Cliente</span><h2>Catálogo de productos</h2><p class="description">Muestra los productos disponibles y permite filtrarlos por comercio, categoría, disponibilidad, promociones y rango de precios.</p></div>
+        </article>
+        <article class="card">
+          <button class="image-button" data-title="Resultados de búsqueda" data-src="https://drive.google.com/uc?export=view&id=1lTJM--1ObC2DTz1_oo8DeoOSaJC4SimT"><img src="https://drive.google.com/uc?export=view&id=1lTJM--1ObC2DTz1_oo8DeoOSaJC4SimT" alt="Resultados de búsqueda"></button>
+          <div class="content"><span class="screen-type">Cliente</span><h2>Resultados de búsqueda</h2><p class="description">Muestra los productos que coinciden con una búsqueda y mantiene disponibles los filtros para acotar rápidamente los resultados.</p></div>
+        </article>
+        <article class="card">
+          <button class="image-button" data-title="Detalle del producto" data-src="https://drive.google.com/uc?export=view&id=1Fz1YyA9FOM5a88FjBWlvVYOuPbujuzvq"><img src="https://drive.google.com/uc?export=view&id=1Fz1YyA9FOM5a88FjBWlvVYOuPbujuzvq" alt="Detalle del producto"></button>
+          <div class="content"><span class="screen-type">Cliente</span><h2>Detalle del producto</h2><p class="description">Presenta la información completa de un producto, incluyendo comercio, precio, categoría, descripción, stock y cantidad a agregar al carrito.</p></div>
+        </article>
+        <article class="card">
+          <button class="image-button" data-title="Carrito de compras" data-src="https://drive.google.com/uc?export=view&id=1iDR2y4cpOtRz02uNr8cOLwJn5ocbIvFQ"><img src="https://drive.google.com/uc?export=view&id=1iDR2y4cpOtRz02uNr8cOLwJn5ocbIvFQ" alt="Carrito de compras"></button>
+          <div class="content"><span class="screen-type">Cliente</span><h2>Carrito de compras</h2><p class="description">Permite revisar los productos seleccionados, modificar cantidades, agregar una observación y reservar el stock antes de confirmar el pedido.</p></div>
+        </article>
+        <article class="card">
+          <button class="image-button" data-title="Mis pedidos" data-src="https://drive.google.com/uc?export=view&id=1AYeV2Lc1lWHmixj_9wpwYm3WiyivGAST"><img src="https://drive.google.com/uc?export=view&id=1AYeV2Lc1lWHmixj_9wpwYm3WiyivGAST" alt="Mis pedidos"></button>
+          <div class="content"><span class="screen-type">Cliente</span><h2>Mis pedidos</h2><p class="description">Permite consultar pedidos activos, finalizados o cancelados, revisar su estado y visualizar el código de retiro cuando corresponde.</p></div>
+        </article>
+        <article class="card">
+          <button class="image-button" data-title="Perfil del cliente" data-src="https://drive.google.com/uc?export=view&id=1VNlgKp2a7007xX6zX80hezAz3XwhGJUr"><img src="https://drive.google.com/uc?export=view&id=1VNlgKp2a7007xX6zX80hezAz3XwhGJUr" alt="Perfil del cliente"></button>
+          <div class="content"><span class="screen-type">Cliente</span><h2>Perfil del cliente</h2><p class="description">Muestra los datos personales de la cuenta y permite acceder a la edición de la información o cerrar la sesión.</p></div>
+        </article>
+      </div>
+    </section>
+    <section aria-labelledby="comercio-title">
+      <h3 id="comercio-title" class="section-title">Perspectiva del jefe del comercio</h3>
+      <div class="grid">
+        <article class="card">
+          <button class="image-button" data-title="Panel del comercio" data-src="https://drive.google.com/uc?export=view&id=160zxMIk62D8ozbhNfo4eiilnlRqrO0O3"><img src="https://drive.google.com/uc?export=view&id=160zxMIk62D8ozbhNfo4eiilnlRqrO0O3" alt="Panel del comercio"></button>
+          <div class="content"><span class="screen-type">Jefe / Comercio</span><h2>Panel del comercio</h2><p class="description">Resume la actividad del comercio, muestra alertas de stock bajo y centraliza los accesos a productos, pedidos, promociones y empleados.</p></div>
+        </article>
+        <article class="card">
+          <button class="image-button" data-title="Gestión de productos" data-src="https://drive.google.com/uc?export=view&id=1CHBi0dDd757Uy_-BoSd6p3-E0GngGa0Q"><img src="https://drive.google.com/uc?export=view&id=1CHBi0dDd757Uy_-BoSd6p3-E0GngGa0Q" alt="Gestión de productos"></button>
+          <div class="content"><span class="screen-type">Jefe / Comercio</span><h2>Gestión de productos</h2><p class="description">Permite consultar el catálogo del comercio, revisar stock y estado de publicación, agregar productos y editar u ocultar los existentes.</p></div>
+        </article>
+        <article class="card">
+          <button class="image-button" data-title="Gestión de promociones" data-src="https://drive.google.com/uc?export=view&id=1rqDayA0DmluzpahKgZuLVhDxQ03I80DF"><img src="https://drive.google.com/uc?export=view&id=1rqDayA0DmluzpahKgZuLVhDxQ03I80DF" alt="Gestión de promociones"></button>
+          <div class="content"><span class="screen-type">Jefe / Comercio</span><h2>Gestión de promociones</h2><p class="description">Permite crear y administrar promociones aplicadas a los productos, así como activarlas, desactivarlas o eliminarlas.</p></div>
+        </article>
+        <article class="card">
+          <button class="image-button" data-title="Gestión de empleados" data-src="https://drive.google.com/uc?export=view&id=1G-uH9A2lpaNoFniZcYmZ2Zz8H3FJW5IZ"><img src="https://drive.google.com/uc?export=view&id=1G-uH9A2lpaNoFniZcYmZ2Zz8H3FJW5IZ" alt="Gestión de empleados"></button>
+          <div class="content"><span class="screen-type">Jefe / Comercio</span><h2>Gestión de empleados</h2><p class="description">Permite al jefe registrar cuentas de empleados asociadas al comercio, visualizar las existentes y eliminarlas cuando sea necesario.</p></div>
+        </article>
+        <article class="card">
+          <button class="image-button" data-title="Pedidos recibidos" data-src="https://drive.google.com/uc?export=view&id=1RqSiecUfsGyMwvmn25gKoHMkAfe19sZ1"><img src="https://drive.google.com/uc?export=view&id=1RqSiecUfsGyMwvmn25gKoHMkAfe19sZ1" alt="Pedidos recibidos"></button>
+          <div class="content"><span class="screen-type">Jefe / Comercio</span><h2>Pedidos recibidos</h2><p class="description">Muestra los pedidos realizados por clientes, permite filtrarlos por estado y realizar acciones como aceptar, rechazar o continuar su gestión.</p></div>
+        </article>
+      </div>
+    </section>
+    <footer>Todo Tala · Maqueta digital del proyecto</footer>
+  </main>
+  <dialog id="imageModal">
+    <div class="modal-top"><strong id="modalTitle">Vista ampliada</strong><button class="close-modal" id="closeModal" type="button">Cerrar</button></div>
+    <img id="modalImage" src="" alt="Vista ampliada de la pantalla">
+  </dialog>
+  <script>
+    const root = document.documentElement;
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('todo-tala-maqueta-theme');
+    if (savedTheme === 'light') {
+      root.dataset.theme = 'light';
+      themeToggle.textContent = '☾ Modo oscuro';
+    }
+    themeToggle.addEventListener('click', () => {
+      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      localStorage.setItem('todo-tala-maqueta-theme', next);
+      themeToggle.textContent = next === 'dark' ? '☀ Modo claro' : '☾ Modo oscuro';
+    });
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const closeModal = document.getElementById('closeModal');
+    document.querySelectorAll('.image-button').forEach(button => {
+      button.addEventListener('click', () => {
+        modalImage.src = button.dataset.src;
+        modalTitle.textContent = button.dataset.title;
+        modal.showModal();
+      });
+    });
+    closeModal.addEventListener('click', () => modal.close());
+    modal.addEventListener('click', event => {
+      if (event.target === modal) modal.close();
+    });
+  </script>
+</body>
+</html>
