@@ -1,146 +1,373 @@
 <?php
 
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-
-if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
-    http_response_code(204);
-    exit;
-}
-
+require_once "comun.php";
 require_once "conexion.php";
+require_once "seguridad.php";
 
+$usuario = requerirLogin($conexion);
 $metodo = $_SERVER["REQUEST_METHOD"];
 
-// Traemos los pedidos
+
+/*
+Obtiene el comercio del jefe o empleado autenticado.
+*/
+function obtenerComercioUsuario($conexion, $usuario) {
+
+    $idPersona = (int) $usuario["id_persona"];
+
+    if ($usuario["rol"] === "jefe") {
+
+        $consulta = $conexion->prepare(
+            "SELECT id_comercio
+             FROM comercio
+             WHERE id_jefe = ?"
+        );
+
+        $consulta->execute([$idPersona]);
+
+    } elseif ($usuario["rol"] === "empleado") {
+
+        $consulta = $conexion->prepare(
+            "SELECT id_comercio
+             FROM empleado
+             WHERE id_persona = ?"
+        );
+
+        $consulta->execute([$idPersona]);
+
+    } else {
+        return null;
+    }
+
+    $fila = $consulta->fetch(PDO::FETCH_ASSOC);
+
+    return $fila
+        ? (int) $fila["id_comercio"]
+        : null;
+}
+
+
+/*
+Agrega los productos a cada pedido obtenido.
+*/
+function agregarDetallePedidos($conexion, $pedidos) {
+
+    foreach ($pedidos as &$pedido) {
+
+        $consulta = $conexion->prepare(
+            "SELECT
+                pp.id_producto,
+                p.nombre,
+                p.marca,
+                pp.cantidad,
+                pp.precio_unitario,
+                (pp.cantidad * pp.precio_unitario) AS subtotal
+             FROM pedido_producto pp
+             INNER JOIN producto p
+                ON p.id_producto = pp.id_producto
+             WHERE pp.id_pedido = ?
+             ORDER BY p.nombre"
+        );
+
+        $consulta->execute([
+            $pedido["id_pedido"]
+        ]);
+
+        $pedido["productos"] =
+            $consulta->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    return $pedidos;
+}
+
+
+/*
+GET
+Cliente: solamente sus pedidos.
+Jefe/empleado: solamente pedidos de su comercio.
+*/
 if ($metodo === "GET") {
+
+    $parametros = [];
+
+    $sql = "SELECT
+                pe.*,
+                c.nombre AS comercio,
+                COALESCE(
+                    SUM(
+                        pp.cantidad *
+                        pp.precio_unitario
+                    ),
+                    0
+                ) AS total
+            FROM pedido pe
+            INNER JOIN comercio c
+                ON c.id_comercio = pe.id_comercio
+            LEFT JOIN pedido_producto pp
+                ON pp.id_pedido = pe.id_pedido";
+
+    if ($usuario["rol"] === "cliente") {
+
+        $sql .= " WHERE pe.id_cliente = ?";
+        $parametros[] =
+            (int) $usuario["id_persona"];
+
+    } elseif (
+        $usuario["rol"] === "jefe" ||
+        $usuario["rol"] === "empleado"
+    ) {
+
+        $idComercio =
+            obtenerComercioUsuario(
+                $conexion,
+                $usuario
+            );
+
+        if ($idComercio === null) {
+            responder(404, [
+                "error" => "Comercio no encontrado"
+            ]);
+        }
+
+        $sql .= " WHERE pe.id_comercio = ?";
+        $parametros[] = $idComercio;
+
+    } else {
+
+        responder(403, [
+            "error" => "No autorizado"
+        ]);
+    }
+
+    /*
+    Si se pide un pedido específico,
+    también debe pertenecer al usuario.
+    */
+    if (isset($_GET["id"])) {
+
+        $sql .= " AND pe.id_pedido = ?";
+        $parametros[] =
+            intval($_GET["id"]);
+    }
+
+    $sql .= "
+        GROUP BY pe.id_pedido
+        ORDER BY pe.fecha_pedido DESC";
+
+    $consulta = $conexion->prepare($sql);
+    $consulta->execute($parametros);
+
+    $pedidos =
+        $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+    $pedidos =
+        agregarDetallePedidos(
+            $conexion,
+            $pedidos
+        );
 
     if (isset($_GET["id"])) {
 
-        $consulta = $conexion->prepare(
-            "SELECT * FROM pedido
-             WHERE id_pedido = ?"
-        );
+        if (count($pedidos) === 0) {
+            responder(404, [
+                "error" => "Pedido no encontrado"
+            ]);
+        }
 
-        $consulta->execute([
-            intval($_GET["id"])
-        ]);
-
-        echo json_encode($consulta->fetch(PDO::FETCH_ASSOC));
-        exit;
+        responder(200, $pedidos[0]);
     }
 
-    if (isset($_GET["cliente_id"])) {
-
-        $consulta = $conexion->prepare(
-            "SELECT * FROM pedido
-             WHERE id_cliente = ?
-             ORDER BY fecha_pedido DESC"
-        );
-
-        $consulta->execute([
-            intval($_GET["cliente_id"])
-        ]);
-
-        echo json_encode($consulta->fetchAll(PDO::FETCH_ASSOC));
-        exit;
-    }
-
-    if (isset($_GET["comercio_id"])) {
-
-        $consulta = $conexion->prepare(
-            "SELECT * FROM pedido
-             WHERE id_comercio = ?
-             ORDER BY fecha_pedido DESC"
-        );
-
-        $consulta->execute([
-            intval($_GET["comercio_id"])
-        ]);
-
-        echo json_encode($consulta->fetchAll(PDO::FETCH_ASSOC));
-        exit;
-    }
-
-    $consulta = $conexion->query(
-        "SELECT * FROM pedido
-         ORDER BY fecha_pedido DESC"
-    );
-
-    echo json_encode($consulta->fetchAll(PDO::FETCH_ASSOC));
-    exit;
+    responder(200, $pedidos);
 }
 
-// Creamos un pedido
+
+/*
+POST
+Crea los pedidos usando directamente
+el carrito del cliente autenticado.
+*/
 if ($metodo === "POST") {
 
-    $datos = json_decode(file_get_contents("php://input"), true);
+    if ($usuario["rol"] !== "cliente") {
+        responder(403, [
+            "error" =>
+                "Solo los clientes pueden crear pedidos"
+        ]);
+    }
+$datos = leerJson();
+
+$observacion = isset($datos["observacion"])
+    ? trim($datos["observacion"])
+    : "";
+
+if (strlen($observacion) > 255) {
+    responder(400, [
+        "error" => "La observación no puede superar los 255 caracteres"
+    ]);
+}
+
+if ($observacion === "") {
+    $observacion = null;
+}
+    $idCliente =
+        (int) $usuario["id_persona"];
 
     try {
 
         $conexion->beginTransaction();
 
-        $sql = "INSERT INTO pedido
-                (id_cliente, id_comercio, estado)
-                VALUES (?, ?, ?)";
+        /*
+        Buscamos el carrito activo.
+        */
+        $consulta = $conexion->prepare(
+            "SELECT id_carrito
+             FROM carrito
+             WHERE id_cliente = ?
+               AND estado = 'activo'
+             ORDER BY id_carrito DESC
+             LIMIT 1"
+        );
 
-        $consulta = $conexion->prepare($sql);
+        $consulta->execute([$idCliente]);
 
-        $consulta->execute([
-            $datos["id_cliente"],
-            $datos["id_comercio"],
-            $datos["estado"] ?? "Pendiente"
-        ]);
+        $carrito =
+            $consulta->fetch(PDO::FETCH_ASSOC);
 
-        $idPedido = $conexion->lastInsertId();
+        if (!$carrito) {
+            throw new Exception(
+                "El carrito está vacío"
+            );
+        }
 
-        if (isset($datos["productos"])) {
+        $idCarrito =
+            (int) $carrito["id_carrito"];
 
-            foreach ($datos["productos"] as $producto) {
+        /*
+        Traemos los productos reales del carrito.
+        FOR UPDATE bloquea esos productos
+        mientras se crea el pedido.
+        */
+        $consulta = $conexion->prepare(
+            "SELECT
+                cp.id_producto,
+                cp.cantidad,
+                p.id_comercio,
+                p.nombre,
+                p.precio,
+                p.stock,
+                p.visible
+             FROM carrito_producto cp
+             INNER JOIN producto p
+                ON p.id_producto =
+                   cp.id_producto
+             WHERE cp.id_carrito = ?
+             FOR UPDATE"
+        );
 
-                // Consultamos el producto
-                $consulta = $conexion->prepare(
-                    "SELECT precio, stock
-                     FROM producto
-                     WHERE id_producto = ?
-                     AND id_comercio = ?"
+        $consulta->execute([$idCarrito]);
+
+        $productos =
+            $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($productos) === 0) {
+            throw new Exception(
+                "El carrito está vacío"
+            );
+        }
+
+        /*
+        Agrupamos por comercio porque
+        cada comercio recibe un pedido separado.
+        */
+        $grupos = [];
+
+        foreach ($productos as $producto) {
+
+            if ((int) $producto["visible"] !== 1) {
+                throw new Exception(
+                    "El producto " .
+                    $producto["nombre"] .
+                    " ya no está disponible"
                 );
+            }
 
-                $consulta->execute([
-                    $producto["id_producto"],
-                    $datos["id_comercio"]
-                ]);
+            if (
+                (int) $producto["stock"] <
+                (int) $producto["cantidad"]
+            ) {
+                throw new Exception(
+                    "Stock insuficiente para " .
+                    $producto["nombre"]
+                );
+            }
 
-                $productoBD = $consulta->fetch(PDO::FETCH_ASSOC);
+            $idComercio =
+                (int) $producto["id_comercio"];
 
-                if (!$productoBD) {
-                    throw new Exception("Producto no encontrado");
-                }
+            if (!isset($grupos[$idComercio])) {
+                $grupos[$idComercio] = [];
+            }
 
-                if ($productoBD["stock"] < $producto["cantidad"]) {
-                    throw new Exception("Stock insuficiente");
-                }
+            $grupos[$idComercio][] =
+                $producto;
+        }
 
-                $precio = $producto["precio_unitario"]
-                    ?? $productoBD["precio"];
+        $pedidosCreados = [];
 
-                // Guardamos el producto del pedido
+        /*
+        Creamos un pedido por comercio.
+        */
+        foreach (
+            $grupos as
+            $idComercio => $productosGrupo
+        ) {
+
+            $consulta = $conexion->prepare(
+    "INSERT INTO pedido
+     (
+        id_cliente,
+        id_comercio,
+        estado,
+        observacion
+     )
+     VALUES (?, ?, 'Pendiente', ?)"
+);
+
+$consulta->execute([
+    $idCliente,
+    $idComercio,
+    $observacion
+]);
+
+            $idPedido =
+                (int) $conexion->lastInsertId();
+
+            /*
+            Guardamos productos y descontamos stock.
+            El precio siempre sale de MySQL.
+            */
+            foreach (
+                $productosGrupo as $producto
+            ) {
+
                 $consulta = $conexion->prepare(
                     "INSERT INTO pedido_producto
-                    (id_pedido, id_producto, cantidad, precio_unitario)
-                    VALUES (?, ?, ?, ?)"
+                     (
+                        id_pedido,
+                        id_producto,
+                        cantidad,
+                        precio_unitario
+                     )
+                     VALUES (?, ?, ?, ?)"
                 );
 
                 $consulta->execute([
                     $idPedido,
                     $producto["id_producto"],
                     $producto["cantidad"],
-                    $precio
+                    $producto["precio"]
                 ]);
 
-                // Actualizamos el stock
                 $consulta = $conexion->prepare(
                     "UPDATE producto
                      SET stock = stock - ?
@@ -152,92 +379,218 @@ if ($metodo === "POST") {
                     $producto["id_producto"]
                 ]);
             }
+
+            $pedidosCreados[] = [
+                "id_pedido" => $idPedido,
+                "id_comercio" => $idComercio
+            ];
         }
+
+        /*
+        Vacíamos el carrito usado.
+        */
+        $consulta = $conexion->prepare(
+            "DELETE FROM carrito_producto
+             WHERE id_carrito = ?"
+        );
+
+        $consulta->execute([$idCarrito]);
+
+        /*
+        Lo marcamos como confirmado.
+        La próxima vez carrito.php
+        creará un carrito activo nuevo.
+        */
+        $consulta = $conexion->prepare(
+            "UPDATE carrito
+             SET estado = 'confirmado'
+             WHERE id_carrito = ?"
+        );
+
+        $consulta->execute([$idCarrito]);
 
         $conexion->commit();
 
-        echo json_encode([
-            "mensaje" => "Pedido creado correctamente",
-            "id" => $idPedido
+        responder(201, [
+            "mensaje" =>
+                count($pedidosCreados) === 1
+                    ? "Pedido creado correctamente"
+                    : "Pedidos creados correctamente",
+
+            "pedidos" =>
+                $pedidosCreados
         ]);
 
     } catch (Exception $e) {
 
-        $conexion->rollBack();
+        if ($conexion->inTransaction()) {
+            $conexion->rollBack();
+        }
 
-        http_response_code(400);
-
-        echo json_encode([
+        responder(400, [
             "error" => $e->getMessage()
         ]);
     }
-
-    exit;
 }
 
-// Actualizamos el estado del pedido
+/*
+PUT
+Por ahora permite que un cliente cancele
+solamente sus propios pedidos.
+*/
 if ($metodo === "PUT") {
 
     if (!isset($_GET["id"])) {
-        http_response_code(400);
-        echo json_encode(["error" => "Falta el id"]);
-        exit;
-    }
-
-    $id = intval($_GET["id"]);
-    $datos = json_decode(file_get_contents("php://input"), true);
-
-    if (!isset($datos["estado"])) {
-        http_response_code(400);
-        echo json_encode(["error" => "Falta el estado"]);
-        exit;
-    }
-
-    $estado = $datos["estado"];
-
-    if ($estado === "Listo para retirar") {
-
-        $codigo = "TT-" . strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
-
-        $sql = "UPDATE pedido
-                SET estado = ?,
-                    codigo_retiro = COALESCE(codigo_retiro, ?),
-                    fecha_listo = NOW(),
-                    vence_retiro = DATE_ADD(NOW(), INTERVAL 48 HOUR)
-                WHERE id_pedido = ?";
-
-        $consulta = $conexion->prepare($sql);
-
-        $consulta->execute([
-            $estado,
-            $codigo,
-            $id
-        ]);
-
-    } else {
-
-        $sql = "UPDATE pedido
-                SET estado = ?,
-                    motivo_cancelacion = ?
-                WHERE id_pedido = ?";
-
-        $consulta = $conexion->prepare($sql);
-
-        $consulta->execute([
-            $estado,
-            $datos["motivo_cancelacion"] ?? null,
-            $id
+        responder(400, [
+            "error" => "Falta el id del pedido"
         ]);
     }
 
-    echo json_encode([
-        "mensaje" => "Pedido actualizado correctamente"
-    ]);
+    if ($usuario["rol"] !== "cliente") {
+        responder(403, [
+            "error" => "No autorizado"
+        ]);
+    }
 
-    exit;
+    $idPedido = intval($_GET["id"]);
+    $datos = leerJson();
+
+    $nuevoEstado = $datos["estado"] ?? "";
+
+    if ($nuevoEstado !== "Cancelado") {
+        responder(400, [
+            "error" => "Estado no permitido"
+        ]);
+    }
+
+    $motivo = isset($datos["motivo_cancelacion"])
+        ? trim($datos["motivo_cancelacion"])
+        : "";
+
+    if ($motivo === "") {
+        responder(400, [
+            "error" => "Debés indicar el motivo de cancelación"
+        ]);
+    }
+
+    if (strlen($motivo) > 255) {
+        responder(400, [
+            "error" => "El motivo es demasiado largo"
+        ]);
+    }
+
+    try {
+
+        $conexion->beginTransaction();
+
+        /*
+        Buscamos el pedido y comprobamos
+        que pertenezca al cliente autenticado.
+        */
+        $consulta = $conexion->prepare(
+            "SELECT id_pedido, estado
+             FROM pedido
+             WHERE id_pedido = ?
+               AND id_cliente = ?
+             FOR UPDATE"
+        );
+
+        $consulta->execute([
+            $idPedido,
+            $usuario["id_persona"]
+        ]);
+
+        $pedido = $consulta->fetch(PDO::FETCH_ASSOC);
+
+        if (!$pedido) {
+            throw new Exception(
+                "Pedido no encontrado"
+            );
+        }
+
+        $estadosCancelables = [
+            "Pendiente",
+            "Aceptado",
+            "En preparación"
+        ];
+
+        if (
+            !in_array(
+                $pedido["estado"],
+                $estadosCancelables,
+                true
+            )
+        ) {
+            throw new Exception(
+                "Este pedido ya no se puede cancelar"
+            );
+        }
+
+        /*
+        Recuperamos los productos del pedido.
+        */
+        $consulta = $conexion->prepare(
+            "SELECT id_producto, cantidad
+             FROM pedido_producto
+             WHERE id_pedido = ?"
+        );
+
+        $consulta->execute([$idPedido]);
+
+        $productos =
+            $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+        /*
+        Devolvemos el stock.
+        */
+        foreach ($productos as $producto) {
+
+            $consulta = $conexion->prepare(
+                "UPDATE producto
+                 SET stock = stock + ?
+                 WHERE id_producto = ?"
+            );
+
+            $consulta->execute([
+                $producto["cantidad"],
+                $producto["id_producto"]
+            ]);
+        }
+
+        /*
+        Marcamos el pedido como cancelado.
+        */
+        $consulta = $conexion->prepare(
+            "UPDATE pedido
+             SET estado = 'Cancelado',
+                 motivo_cancelacion = ?
+             WHERE id_pedido = ?"
+        );
+
+        $consulta->execute([
+            $motivo,
+            $idPedido
+        ]);
+
+        $conexion->commit();
+
+        responder(200, [
+            "mensaje" =>
+                "Pedido cancelado correctamente"
+        ]);
+
+    } catch (Exception $e) {
+
+        if ($conexion->inTransaction()) {
+            $conexion->rollBack();
+        }
+
+        responder(400, [
+            "error" => $e->getMessage()
+        ]);
+    }
 }
 
-http_response_code(405);
-echo json_encode(["error" => "Método no permitido"]);
-
-?>
+responder(405, [
+    "error" => "Método no permitido"
+]);
