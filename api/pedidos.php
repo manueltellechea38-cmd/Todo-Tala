@@ -90,21 +90,24 @@ if ($metodo === "GET") {
 
     $parametros = [];
 
-    $sql = "SELECT
-                pe.*,
-                c.nombre AS comercio,
-                COALESCE(
-                    SUM(
-                        pp.cantidad *
-                        pp.precio_unitario
-                    ),
-                    0
-                ) AS total
-            FROM pedido pe
-            INNER JOIN comercio c
-                ON c.id_comercio = pe.id_comercio
-            LEFT JOIN pedido_producto pp
-                ON pp.id_pedido = pe.id_pedido";
+$sql = "SELECT
+            pe.*,
+            c.nombre AS comercio,
+            u.nombre AS cliente,
+            COALESCE(
+                SUM(
+                    pp.cantidad *
+                    pp.precio_unitario
+                ),
+                0
+            ) AS total
+        FROM pedido pe
+        INNER JOIN comercio c
+            ON c.id_comercio = pe.id_comercio
+        INNER JOIN usuario u
+            ON u.id_persona = pe.id_cliente
+        LEFT JOIN pedido_producto pp
+            ON pp.id_pedido = pe.id_pedido";
 
     if ($usuario["rol"] === "cliente") {
 
@@ -438,6 +441,15 @@ PUT
 Por ahora permite que un cliente cancele
 solamente sus propios pedidos.
 */
+/*
+PUT
+Cliente:
+- puede cancelar sus pedidos.
+
+Jefe o empleado:
+- puede cambiar el estado de pedidos
+  de su propio comercio.
+*/
 if ($metodo === "PUT") {
 
     if (!isset($_GET["id"])) {
@@ -446,61 +458,190 @@ if ($metodo === "PUT") {
         ]);
     }
 
-    if ($usuario["rol"] !== "cliente") {
+    $idPedido = intval($_GET["id"]);
+    $datos = leerJson();
+
+    /*
+    CANCELACIÓN POR EL CLIENTE
+    */
+    if ($usuario["rol"] === "cliente") {
+
+        $nuevoEstado = $datos["estado"] ?? "";
+
+        if ($nuevoEstado !== "Cancelado") {
+            responder(400, [
+                "error" => "Estado no permitido"
+            ]);
+        }
+
+        $motivo = isset($datos["motivo_cancelacion"])
+            ? trim($datos["motivo_cancelacion"])
+            : "";
+
+        if ($motivo === "") {
+            responder(400, [
+                "error" =>
+                    "Debés indicar el motivo de cancelación"
+            ]);
+        }
+
+        try {
+
+            $conexion->beginTransaction();
+
+            $consulta = $conexion->prepare(
+                "SELECT id_pedido, estado
+                 FROM pedido
+                 WHERE id_pedido = ?
+                   AND id_cliente = ?
+                 FOR UPDATE"
+            );
+
+            $consulta->execute([
+                $idPedido,
+                $usuario["id_persona"]
+            ]);
+
+            $pedido =
+                $consulta->fetch(PDO::FETCH_ASSOC);
+
+            if (!$pedido) {
+                throw new Exception(
+                    "Pedido no encontrado"
+                );
+            }
+
+            $estadosCancelables = [
+                "Pendiente",
+                "Aceptado",
+                "En preparación"
+            ];
+
+            if (
+                !in_array(
+                    $pedido["estado"],
+                    $estadosCancelables,
+                    true
+                )
+            ) {
+                throw new Exception(
+                    "Este pedido ya no se puede cancelar"
+                );
+            }
+
+            /*
+            Devolvemos el stock.
+            */
+            $consulta = $conexion->prepare(
+                "SELECT id_producto, cantidad
+                 FROM pedido_producto
+                 WHERE id_pedido = ?"
+            );
+
+            $consulta->execute([$idPedido]);
+
+            $productos =
+                $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($productos as $producto) {
+
+                $consulta = $conexion->prepare(
+                    "UPDATE producto
+                     SET stock = stock + ?
+                     WHERE id_producto = ?"
+                );
+
+                $consulta->execute([
+                    $producto["cantidad"],
+                    $producto["id_producto"]
+                ]);
+            }
+
+            $consulta = $conexion->prepare(
+                "UPDATE pedido
+                 SET estado = 'Cancelado',
+                     motivo_cancelacion = ?
+                 WHERE id_pedido = ?"
+            );
+
+            $consulta->execute([
+                $motivo,
+                $idPedido
+            ]);
+
+            $conexion->commit();
+
+            responder(200, [
+                "mensaje" =>
+                    "Pedido cancelado correctamente"
+            ]);
+
+        } catch (Exception $e) {
+
+            if ($conexion->inTransaction()) {
+                $conexion->rollBack();
+            }
+
+            responder(400, [
+                "error" => $e->getMessage()
+            ]);
+        }
+    }
+
+
+    /*
+    GESTIÓN POR JEFE O EMPLEADO
+    */
+    if (
+        $usuario["rol"] !== "jefe" &&
+        $usuario["rol"] !== "empleado"
+    ) {
         responder(403, [
             "error" => "No autorizado"
         ]);
     }
 
-    $idPedido = intval($_GET["id"]);
-    $datos = leerJson();
+    $idComercio =
+        obtenerComercioUsuario(
+            $conexion,
+            $usuario
+        );
 
-    $nuevoEstado = $datos["estado"] ?? "";
-
-    if ($nuevoEstado !== "Cancelado") {
-        responder(400, [
-            "error" => "Estado no permitido"
+    if ($idComercio === null) {
+        responder(404, [
+            "error" => "Comercio no encontrado"
         ]);
     }
 
-    $motivo = isset($datos["motivo_cancelacion"])
-        ? trim($datos["motivo_cancelacion"])
-        : "";
-
-    if ($motivo === "") {
-        responder(400, [
-            "error" => "Debés indicar el motivo de cancelación"
-        ]);
-    }
-
-    if (strlen($motivo) > 255) {
-        responder(400, [
-            "error" => "El motivo es demasiado largo"
-        ]);
-    }
+    $nuevoEstado =
+        $datos["estado"] ?? "";
 
     try {
 
         $conexion->beginTransaction();
 
         /*
-        Buscamos el pedido y comprobamos
-        que pertenezca al cliente autenticado.
+        El pedido debe pertenecer
+        al comercio autenticado.
         */
         $consulta = $conexion->prepare(
-            "SELECT id_pedido, estado
+            "SELECT
+                id_pedido,
+                estado,
+                codigo_retiro
              FROM pedido
              WHERE id_pedido = ?
-               AND id_cliente = ?
+               AND id_comercio = ?
              FOR UPDATE"
         );
 
         $consulta->execute([
             $idPedido,
-            $usuario["id_persona"]
+            $idComercio
         ]);
 
-        $pedido = $consulta->fetch(PDO::FETCH_ASSOC);
+        $pedido =
+            $consulta->fetch(PDO::FETCH_ASSOC);
 
         if (!$pedido) {
             throw new Exception(
@@ -508,75 +649,225 @@ if ($metodo === "PUT") {
             );
         }
 
-        $estadosCancelables = [
-            "Pendiente",
-            "Aceptado",
-            "En preparación"
-        ];
+        $estadoActual =
+            $pedido["estado"];
 
+
+        /*
+        Pendiente -> Aceptado
+        */
         if (
-            !in_array(
-                $pedido["estado"],
-                $estadosCancelables,
-                true
-            )
+            $estadoActual === "Pendiente" &&
+            $nuevoEstado === "Aceptado"
         ) {
-            throw new Exception(
-                "Este pedido ya no se puede cancelar"
-            );
-        }
-
-        /*
-        Recuperamos los productos del pedido.
-        */
-        $consulta = $conexion->prepare(
-            "SELECT id_producto, cantidad
-             FROM pedido_producto
-             WHERE id_pedido = ?"
-        );
-
-        $consulta->execute([$idPedido]);
-
-        $productos =
-            $consulta->fetchAll(PDO::FETCH_ASSOC);
-
-        /*
-        Devolvemos el stock.
-        */
-        foreach ($productos as $producto) {
 
             $consulta = $conexion->prepare(
-                "UPDATE producto
-                 SET stock = stock + ?
-                 WHERE id_producto = ?"
+                "UPDATE pedido
+                 SET estado = 'Aceptado'
+                 WHERE id_pedido = ?"
+            );
+
+            $consulta->execute([$idPedido]);
+        }
+
+
+        /*
+        Aceptado -> En preparación
+        */
+        elseif (
+            $estadoActual === "Aceptado" &&
+            $nuevoEstado === "En preparación"
+        ) {
+
+            $consulta = $conexion->prepare(
+                "UPDATE pedido
+                 SET estado = 'En preparación'
+                 WHERE id_pedido = ?"
+            );
+
+            $consulta->execute([$idPedido]);
+        }
+
+
+        /*
+        En preparación -> Listo para retirar
+        */
+        elseif (
+            $estadoActual === "En preparación" &&
+            $nuevoEstado === "Listo para retirar"
+        ) {
+
+            /*
+            Generamos un código de retiro.
+            */
+            do {
+
+                $codigo =
+                    (string) random_int(
+                        100000,
+                        999999
+                    );
+
+                $consulta = $conexion->prepare(
+                    "SELECT id_pedido
+                     FROM pedido
+                     WHERE codigo_retiro = ?"
+                );
+
+                $consulta->execute([$codigo]);
+
+                $existe =
+                    $consulta->fetch(PDO::FETCH_ASSOC);
+
+            } while ($existe);
+
+            $consulta = $conexion->prepare(
+                "UPDATE pedido
+                 SET estado = 'Listo para retirar',
+                     codigo_retiro = ?,
+                     fecha_listo = NOW(),
+                     vence_retiro =
+                        DATE_ADD(
+                            NOW(),
+                            INTERVAL 48 HOUR
+                        )
+                 WHERE id_pedido = ?"
             );
 
             $consulta->execute([
-                $producto["cantidad"],
-                $producto["id_producto"]
+                $codigo,
+                $idPedido
             ]);
         }
 
-        /*
-        Marcamos el pedido como cancelado.
-        */
-        $consulta = $conexion->prepare(
-            "UPDATE pedido
-             SET estado = 'Cancelado',
-                 motivo_cancelacion = ?
-             WHERE id_pedido = ?"
-        );
 
-        $consulta->execute([
-            $motivo,
-            $idPedido
-        ]);
+        /*
+        Listo para retirar -> Entregado
+        solamente si el código coincide.
+        */
+        elseif (
+            $estadoActual === "Listo para retirar" &&
+            $nuevoEstado === "Entregado"
+        ) {
+
+            $codigoIngresado =
+                isset($datos["codigo_retiro"])
+                    ? trim($datos["codigo_retiro"])
+                    : "";
+
+            if (
+                $codigoIngresado === "" ||
+                $codigoIngresado !==
+                    $pedido["codigo_retiro"]
+            ) {
+                throw new Exception(
+                    "Código de retiro incorrecto"
+                );
+            }
+
+            $consulta = $conexion->prepare(
+                "UPDATE pedido
+                 SET estado = 'Entregado',
+                     vence_retiro = NULL
+                 WHERE id_pedido = ?"
+            );
+
+            $consulta->execute([$idPedido]);
+        }
+
+
+        /*
+        Comercio rechaza o cancela.
+        Se devuelve el stock.
+        */
+        elseif (
+            (
+                $estadoActual === "Pendiente" &&
+                $nuevoEstado === "Rechazado"
+            ) ||
+            (
+                in_array(
+                    $estadoActual,
+                    [
+                        "Aceptado",
+                        "En preparación"
+                    ],
+                    true
+                ) &&
+                $nuevoEstado === "Cancelado"
+            )
+        ) {
+
+            $motivo =
+                isset($datos["motivo_cancelacion"])
+                    ? trim(
+                        $datos["motivo_cancelacion"]
+                    )
+                    : "";
+
+            if ($motivo === "") {
+                throw new Exception(
+                    "Debés indicar el motivo"
+                );
+            }
+
+            /*
+            Devolvemos el stock.
+            */
+            $consulta = $conexion->prepare(
+                "SELECT
+                    id_producto,
+                    cantidad
+                 FROM pedido_producto
+                 WHERE id_pedido = ?"
+            );
+
+            $consulta->execute([$idPedido]);
+
+            $productos =
+                $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($productos as $producto) {
+
+                $consulta = $conexion->prepare(
+                    "UPDATE producto
+                     SET stock = stock + ?
+                     WHERE id_producto = ?"
+                );
+
+                $consulta->execute([
+                    $producto["cantidad"],
+                    $producto["id_producto"]
+                ]);
+            }
+
+            $consulta = $conexion->prepare(
+                "UPDATE pedido
+                 SET estado = ?,
+                     motivo_cancelacion = ?
+                 WHERE id_pedido = ?"
+            );
+
+            $consulta->execute([
+                $nuevoEstado,
+                $motivo,
+                $idPedido
+            ]);
+        }
+
+
+        else {
+
+            throw new Exception(
+                "Cambio de estado no permitido"
+            );
+        }
 
         $conexion->commit();
 
         responder(200, [
             "mensaje" =>
-                "Pedido cancelado correctamente"
+                "Pedido actualizado correctamente"
         ]);
 
     } catch (Exception $e) {
