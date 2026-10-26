@@ -250,23 +250,56 @@ if ($observacion === "") {
         FOR UPDATE bloquea esos productos
         mientras se crea el pedido.
         */
-        $consulta = $conexion->prepare(
-            "SELECT
-                cp.id_producto,
-                cp.cantidad,
-                p.id_comercio,
-                p.nombre,
-                p.precio,
-                p.stock,
-                p.visible
-             FROM carrito_producto cp
-             INNER JOIN producto p
-                ON p.id_producto =
-                   cp.id_producto
-             WHERE cp.id_carrito = ?
-             FOR UPDATE"
-        );
+$consulta = $conexion->prepare(
+    "SELECT
+        cp.id_producto,
+        cp.cantidad,
+        p.id_comercio,
+        p.nombre,
 
+        p.precio AS precio_base,
+
+        CASE
+            WHEN pr.id_promocion IS NULL
+                THEN p.precio
+
+            WHEN pr.tipo = 'porcentaje'
+                THEN ROUND(
+                    p.precio * (1 - pr.valor / 100),
+                    2
+                )
+
+            WHEN pr.tipo = 'precio'
+                THEN pr.valor
+
+            ELSE p.precio
+        END AS precio_final,
+
+        p.stock,
+        p.visible
+
+     FROM carrito_producto cp
+
+     INNER JOIN producto p
+        ON p.id_producto =
+           cp.id_producto
+
+     LEFT JOIN promocion pr
+        ON pr.id_producto = p.id_producto
+       AND pr.estado = 'Activa'
+       AND (
+            pr.fecha_inicio IS NULL
+            OR pr.fecha_inicio <= CURDATE()
+       )
+       AND (
+            pr.fecha_fin IS NULL
+            OR pr.fecha_fin >= CURDATE()
+       )
+
+     WHERE cp.id_carrito = ?
+
+     FOR UPDATE"
+);
         $consulta->execute([$idCarrito]);
 
         $productos =
@@ -368,7 +401,7 @@ $consulta->execute([
                     $idPedido,
                     $producto["id_producto"],
                     $producto["cantidad"],
-                    $producto["precio"]
+                    $producto["precio_final"]
                 ]);
 
                 $consulta = $conexion->prepare(

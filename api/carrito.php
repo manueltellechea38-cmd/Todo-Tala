@@ -75,26 +75,79 @@ if ($metodo === "GET") {
         responder(200, []);
     }
 
-    $sql = "SELECT
-                p.id_producto,
-                p.nombre,
-                p.marca,
-                p.precio,
-                p.stock,
-                p.imagen,
-                p.visible,
-                p.id_comercio,
-                c.nombre AS comercio,
-                c.direccion,
-                cp.cantidad,
-                (p.precio * cp.cantidad) AS subtotal
-            FROM carrito_producto cp
-            INNER JOIN producto p
-                ON p.id_producto = cp.id_producto
-            INNER JOIN comercio c
-                ON c.id_comercio = p.id_comercio
-            WHERE cp.id_carrito = ?
-            ORDER BY c.nombre, p.nombre";
+$sql = "SELECT
+            p.id_producto,
+            p.nombre,
+            p.marca,
+
+            p.precio AS precio_base,
+
+            CASE
+                WHEN pr.id_promocion IS NULL
+                    THEN p.precio
+
+                WHEN pr.tipo = 'porcentaje'
+                    THEN ROUND(
+                        p.precio * (1 - pr.valor / 100),
+                        2
+                    )
+
+                WHEN pr.tipo = 'precio'
+                    THEN pr.valor
+
+                ELSE p.precio
+            END AS precio,
+
+            p.stock,
+            p.imagen,
+            p.visible,
+            p.id_comercio,
+            c.nombre AS comercio,
+            c.direccion,
+            cp.cantidad,
+
+            (
+                CASE
+                    WHEN pr.id_promocion IS NULL
+                        THEN p.precio
+
+                    WHEN pr.tipo = 'porcentaje'
+                        THEN ROUND(
+                            p.precio * (1 - pr.valor / 100),
+                            2
+                        )
+
+                    WHEN pr.tipo = 'precio'
+                        THEN pr.valor
+
+                    ELSE p.precio
+                END
+                * cp.cantidad
+            ) AS subtotal
+
+        FROM carrito_producto cp
+
+        INNER JOIN producto p
+            ON p.id_producto = cp.id_producto
+
+        INNER JOIN comercio c
+            ON c.id_comercio = p.id_comercio
+
+        LEFT JOIN promocion pr
+            ON pr.id_producto = p.id_producto
+           AND pr.estado = 'Activa'
+           AND (
+                pr.fecha_inicio IS NULL
+                OR pr.fecha_inicio <= CURDATE()
+           )
+           AND (
+                pr.fecha_fin IS NULL
+                OR pr.fecha_fin >= CURDATE()
+           )
+
+        WHERE cp.id_carrito = ?
+
+        ORDER BY c.nombre, p.nombre";
 
     $consulta = $conexion->prepare($sql);
     $consulta->execute([$idCarrito]);

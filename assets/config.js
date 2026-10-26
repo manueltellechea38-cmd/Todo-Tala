@@ -7,3 +7,4 @@ const EMPLEADOS_URL = API_BASE + "/empleados.php";
 const PRODUCTOS_URL = API_BASE + "/productos.php";
 const CARRITO_URL = API_BASE + "/carrito.php";
 const PEDIDOS_URL = API_BASE + "/pedidos.php";
+const PROMOCIONES_URL = API_BASE + "/promociones.php";

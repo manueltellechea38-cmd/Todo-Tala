@@ -12,6 +12,7 @@ const resumenCatalogo = document.getElementById("resumen-catalogo");
 const contadorCarrito = document.getElementById("contador-carrito");
 
 let productosCatalogo = [];
+let promocionesCatalogo = [];
 
 
 /*
@@ -22,41 +23,146 @@ async function cargarProductos() {
 
     try {
 
-        const respuesta = await fetch(PRODUCTOS_URL);
+        const respuestas = await Promise.all([
+            fetch(PRODUCTOS_URL),
+            fetch(PROMOCIONES_URL)
+        ]);
 
-        const datos = await respuesta.json();
+        const respuestaProductos = respuestas[0];
+        const respuestaPromociones = respuestas[1];
 
-        if (!respuesta.ok) {
+        const datosProductos =
+            await respuestaProductos.json();
+
+        const datosPromociones =
+            await respuestaPromociones.json();
+
+        if (!respuestaProductos.ok) {
             TodoTala.toast(
-                datos.error || "No se pudieron cargar los productos"
+                datosProductos.error ||
+                "No se pudieron cargar los productos"
             );
             return;
         }
 
-        productosCatalogo = datos.map(function (producto) {
+        if (!respuestaPromociones.ok) {
+            TodoTala.toast(
+                datosPromociones.error ||
+                "No se pudieron cargar las promociones"
+            );
+            return;
+        }
 
-            return {
-                id: Number(producto.id_producto),
-                id_comercio: Number(producto.id_comercio),
-                id_categoria: Number(producto.id_categoria),
+        promocionesCatalogo =
+            datosPromociones;
 
-                nombre: producto.nombre,
-                marca: producto.marca || "",
-                precio: Number(producto.precio),
-                descripcion: producto.descripcion || "",
-                stock: Number(producto.stock),
-                imagen: producto.imagen,
-                visible: Number(producto.visible) === 1,
+        productosCatalogo =
+            datosProductos.map(function (producto) {
 
-                comercio: producto.comercio || "",
-                categoria: producto.categoria || ""
-            };
-        });
+                const precioBase =
+                    Number(producto.precio);
+
+                const promocion =
+                    promocionesCatalogo.find(
+                        function (promo) {
+                            return (
+                                Number(promo.id_producto) ===
+                                Number(producto.id_producto)
+                            );
+                        }
+                    );
+
+                let precioFinal = precioBase;
+
+                if (promocion) {
+
+                    const valor =
+                        Number(promocion.valor);
+
+                    if (
+                        promocion.tipo ===
+                        "porcentaje"
+                    ) {
+                        precioFinal =
+                            precioBase *
+                            (
+                                1 -
+                                valor / 100
+                            );
+
+                        precioFinal =
+                            Math.round(
+                                precioFinal * 100
+                            ) / 100;
+                    }
+
+                    if (
+                        promocion.tipo ===
+                        "precio"
+                    ) {
+                        precioFinal = valor;
+                    }
+                }
+
+                return {
+                    id:
+                        Number(
+                            producto.id_producto
+                        ),
+
+                    id_comercio:
+                        Number(
+                            producto.id_comercio
+                        ),
+
+                    id_categoria:
+                        Number(
+                            producto.id_categoria
+                        ),
+
+                    nombre:
+                        producto.nombre,
+
+                    marca:
+                        producto.marca || "",
+
+                    precio_base:
+                        precioBase,
+
+                    precio:
+                        precioFinal,
+
+                    descripcion:
+                        producto.descripcion || "",
+
+                    stock:
+                        Number(producto.stock),
+
+                    imagen:
+                        producto.imagen,
+
+                    visible:
+                        Number(
+                            producto.visible
+                        ) === 1,
+
+                    comercio:
+                        producto.comercio || "",
+
+                    categoria:
+                        producto.categoria || "",
+
+                    promocion:
+                        promocion || null
+                };
+            });
 
         cargarFiltros();
         renderizarCatalogo();
 
     } catch (error) {
+
+        console.error(error);
 
         TodoTala.toast(
             "No se pudo conectar con el servidor"
@@ -121,7 +227,70 @@ Por ahora promociones todavía no están conectadas
 al catálogo real.
 */
 function tienePromocion(producto) {
-    return false;
+    return producto.promocion !== null;
+}
+
+
+function mostrarPrecio(producto) {
+
+    if (!tienePromocion(producto)) {
+
+        return (
+            '<p class="product-price-row">' +
+                '<span class="product-price">' +
+                    TodoTala.formatearPrecio(
+                        producto.precio
+                    ) +
+                '</span>' +
+            '</p>'
+        );
+    }
+
+    let textoPromocion =
+        producto.promocion.nombre;
+
+    if (
+        producto.promocion.tipo ===
+        "porcentaje"
+    ) {
+        textoPromocion +=
+            " (" +
+            Number(
+                producto.promocion.valor
+            ) +
+            "%)";
+    }
+
+    return (
+        '<p class="product-price-row">' +
+
+            '<span ' +
+            'style="' +
+                'text-decoration: line-through;' +
+                'opacity: 0.6;' +
+                'margin-right: 8px;' +
+            '">' +
+
+                TodoTala.formatearPrecio(
+                    producto.precio_base
+                ) +
+
+            '</span>' +
+
+            '<span class="product-price">' +
+
+                TodoTala.formatearPrecio(
+                    producto.precio
+                ) +
+
+            '</span>' +
+
+        '</p>' +
+
+        '<p class="muted">' +
+            textoPromocion +
+        '</p>'
+    );
 }
 
 
@@ -452,13 +621,7 @@ function renderizarCatalogo() {
                             producto.categoria +
                         '</p>' +
 
-                        '<p class="product-price-row">' +
-                            '<span class="product-price">' +
-                                TodoTala.formatearPrecio(
-                                    producto.precio
-                                ) +
-                            '</span>' +
-                        '</p>' +
+                        mostrarPrecio(producto) +
 
                         '<nav class="product-card__actions">' +
 

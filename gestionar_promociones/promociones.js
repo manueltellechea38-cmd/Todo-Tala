@@ -1,161 +1,560 @@
-const listaPromociones = document.getElementById("lista-promos");
-const panelNuevaPromo = document.getElementById("panel-nueva");
-const usuarioPromo = TodoTala.usuarioActual();
-const selectorProducto = document.getElementById("producto-promo");
+const listaPromociones =
+    document.getElementById("lista-promos");
 
-/* Devuelve el producto relacionado con una promoción. */
-function buscarProducto(datos, promo) {
-    return datos.productos.find(function (producto) {
-        return producto.id === promo.productoId;
-    });
-}
+const panelNuevaPromo =
+    document.getElementById("panel-nueva");
 
-/* Aplica el precio correspondiente cuando una promoción está activa. */
-function aplicarPromocion(promo, producto) {
-    if (!producto) return;
+const selectorProducto =
+    document.getElementById("producto-promo");
 
-    const precioBase = promo.precioBase || producto.precioAnterior || producto.precio;
-    promo.precioBase = precioBase;
-    producto.precioAnterior = precioBase;
+let promocionesActuales = [];
+let productosActuales = [];
 
-    if (promo.tipo === "porcentaje") {
-        producto.precio = Math.round(precioBase * (1 - promo.valor / 100));
-    } else {
-        producto.precio = promo.valor;
+
+/*
+Carga los productos del comercio
+para mostrarlos en el selector.
+*/
+async function cargarProductos() {
+
+    try {
+
+        const respuesta = await fetch(
+            PRODUCTOS_URL + "?gestion=1",
+            {
+                method: "GET",
+                headers: {
+                    "Authorization":
+                        "Bearer " + obtenerToken()
+                }
+            }
+        );
+
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok) {
+
+            TodoTala.toast(
+                datos.error ||
+                "No se pudieron cargar los productos"
+            );
+
+            return;
+        }
+
+        productosActuales = datos;
+
+        if (productosActuales.length === 0) {
+
+            selectorProducto.innerHTML =
+                '<option value="">' +
+                'No hay productos disponibles' +
+                '</option>';
+
+            return;
+        }
+
+        selectorProducto.innerHTML =
+            productosActuales.map(
+                function (producto) {
+
+                    return (
+                        '<option value="' +
+                        producto.id_producto +
+                        '">' +
+                        producto.nombre +
+                        '</option>'
+                    );
+                }
+            ).join("");
+
+    } catch (error) {
+
+        TodoTala.toast(
+            "No se pudo conectar con el servidor"
+        );
     }
 }
 
-/* Restaura el precio normal cuando la promoción termina o se desactiva. */
-function quitarPromocion(promo, producto) {
-    if (!producto) return;
-    const precioBase = promo.precioBase || producto.precioAnterior;
-    if (precioBase) producto.precio = precioBase;
-    producto.precioAnterior = null;
-}
 
-/* Carga los productos del comercio en el selector. */
-function cargarProductos() {
-    const datos = TodoTala.obtenerDatos();
-    const productos = datos.productos.filter(function (producto) {
-        return producto.comercioId === usuarioPromo.comercioId;
-    });
+/*
+Carga las promociones del comercio.
+*/
+async function cargarPromociones() {
 
-    selectorProducto.innerHTML = productos.map(function (producto) {
-        return '<option value="' + producto.id + '">' + producto.nombre + '</option>';
-    }).join("");
-}
+    try {
 
-/* Actualiza vencimientos y muestra las promociones del comercio. */
-function renderizarPromociones() {
-    const datos = TodoTala.obtenerDatos();
-    const hoy = new Date().toISOString().slice(0, 10);
+        const respuesta = await fetch(
+            PROMOCIONES_URL + "?gestion=1",
+            {
+                method: "GET",
+                headers: {
+                    "Authorization":
+                        "Bearer " + obtenerToken()
+                }
+            }
+        );
 
-    datos.promociones.forEach(function (promo) {
-        const producto = buscarProducto(datos, promo);
-        if (promo.activa && promo.fin < hoy) {
-            promo.activa = false;
-            quitarPromocion(promo, producto);
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok) {
+
+            TodoTala.toast(
+                datos.error ||
+                "No se pudieron cargar las promociones"
+            );
+
+            return;
         }
-    });
 
-    TodoTala.guardarDatos(datos);
+        promocionesActuales = datos;
 
-    const promociones = datos.promociones.filter(function (promo) {
-        return promo.comercioId === usuarioPromo.comercioId;
-    });
+        renderizarPromociones();
 
-    if (promociones.length === 0) {
-        listaPromociones.innerHTML = '<p class="empty-state">Todavía no hay promociones.</p>';
+    } catch (error) {
+
+        TodoTala.toast(
+            "No se pudo conectar con el servidor"
+        );
+    }
+}
+
+
+/*
+Devuelve el texto del descuento.
+*/
+function detallePromocion(promo) {
+
+    if (promo.tipo === "porcentaje") {
+
+        return Number(promo.valor) + "%";
+    }
+
+    return TodoTala.formatearPrecio(
+        Number(promo.valor)
+    );
+}
+
+
+/*
+Muestra las promociones.
+*/
+function renderizarPromociones() {
+
+    if (promocionesActuales.length === 0) {
+
+        listaPromociones.innerHTML =
+            '<p class="empty-state">' +
+            'Todavía no hay promociones.' +
+            '</p>';
+
         return;
     }
 
-    listaPromociones.innerHTML = promociones.map(function (promo) {
-        const producto = buscarProducto(datos, promo);
-        const detalle = promo.tipo === "porcentaje" ? promo.valor + "%" : TodoTala.formatearPrecio(promo.valor);
+    listaPromociones.innerHTML =
+        promocionesActuales.map(
+            function (promo) {
 
-        return '<article class="promo-row" data-promo="' + promo.id + '">' +
-            '<section class="promo-info"><p><strong>' + promo.nombre + '</strong> <span class="' + (promo.activa ? 'badge badge--success' : 'badge') + '">' + (promo.activa ? 'Activa' : 'Inactiva') + '</span></p><p class="muted">' + (producto ? producto.nombre : "Producto") + ' · ' + detalle + ' · ' + promo.inicio + ' a ' + promo.fin + '</p></section>' +
-            '<nav class="promo-actions"><button class="btn btn--secondary" data-toggle type="button">' + (promo.activa ? 'Desactivar' : 'Activar') + '</button><button class="btn btn--danger" data-eliminar type="button">Eliminar</button></nav>' +
-        '</article>';
-    }).join("");
+                const activa =
+                    promo.estado === "Activa";
 
-    /* Conecta las acciones de cada promoción. */
-    document.querySelectorAll("[data-promo]").forEach(function (fila) {
-        const id = Number(fila.dataset.promo);
-        const promo = datos.promociones.find(function (item) { return item.id === id; });
-        const producto = buscarProducto(datos, promo);
+                return (
+                    '<article class="promo-row" ' +
+                    'data-promo="' +
+                    promo.id_promocion +
+                    '">' +
 
-        fila.querySelector("[data-toggle]").addEventListener("click", function () {
-            promo.activa = !promo.activa;
-            if (promo.activa) aplicarPromocion(promo, producto);
-            else quitarPromocion(promo, producto);
-            TodoTala.guardarDatos(datos);
-            renderizarPromociones();
+                        '<section class="promo-info">' +
+
+                            '<p>' +
+
+                                '<strong>' +
+                                    promo.nombre +
+                                '</strong> ' +
+
+                                '<span class="' +
+                                    (
+                                        activa
+                                            ? 'badge badge--success'
+                                            : 'badge'
+                                    ) +
+                                '">' +
+
+                                    (
+                                        activa
+                                            ? 'Activa'
+                                            : 'Inactiva'
+                                    ) +
+
+                                '</span>' +
+
+                            '</p>' +
+
+                            '<p class="muted">' +
+                                promo.producto +
+                                ' · ' +
+                                detallePromocion(promo) +
+                                ' · ' +
+                                (promo.fecha_inicio || "Sin inicio") +
+                                ' a ' +
+                                (promo.fecha_fin || "Sin fin") +
+                            '</p>' +
+
+                        '</section>' +
+
+                        '<nav class="promo-actions">' +
+
+                            '<button ' +
+                            'class="btn btn--secondary" ' +
+                            'data-toggle ' +
+                            'type="button">' +
+
+                                (
+                                    activa
+                                        ? 'Desactivar'
+                                        : 'Activar'
+                                ) +
+
+                            '</button>' +
+
+                            '<button ' +
+                            'class="btn btn--danger" ' +
+                            'data-eliminar ' +
+                            'type="button">' +
+                                'Eliminar' +
+                            '</button>' +
+
+                        '</nav>' +
+
+                    '</article>'
+                );
+            }
+        ).join("");
+
+
+    /*
+    Botones de cada promoción.
+    */
+    document
+        .querySelectorAll("[data-promo]")
+        .forEach(function (fila) {
+
+            const idPromocion =
+                Number(fila.dataset.promo);
+
+            const promo =
+                promocionesActuales.find(
+                    function (item) {
+
+                        return Number(
+                            item.id_promocion
+                        ) === idPromocion;
+                    }
+                );
+
+            if (!promo) {
+                return;
+            }
+
+            fila
+                .querySelector("[data-toggle]")
+                .addEventListener(
+                    "click",
+                    function () {
+
+                        cambiarEstadoPromocion(
+                            promo
+                        );
+                    }
+                );
+
+            fila
+                .querySelector("[data-eliminar]")
+                .addEventListener(
+                    "click",
+                    function () {
+
+                        eliminarPromocion(
+                            idPromocion
+                        );
+                    }
+                );
         });
-
-        fila.querySelector("[data-eliminar]").addEventListener("click", function () {
-            if (promo.activa) quitarPromocion(promo, producto);
-            datos.promociones = datos.promociones.filter(function (item) { return item.id !== id; });
-            TodoTala.guardarDatos(datos);
-            renderizarPromociones();
-        });
-    });
 }
 
-/* Abre o cierra el formulario. */
-document.getElementById("btn-crear").addEventListener("click", function () {
-    panelNuevaPromo.hidden = !panelNuevaPromo.hidden;
-});
 
-/* Crea una nueva promoción y aplica su precio si queda activa. */
-document.getElementById("form-promocion").addEventListener("submit", function (evento) {
-    evento.preventDefault();
+/*
+Activa o desactiva una promoción.
+*/
+async function cambiarEstadoPromocion(promo) {
 
-    const nombre = document.getElementById("nombre-promo").value.trim();
-    const productoId = Number(selectorProducto.value);
-    const tipo = document.getElementById("tipo-promo").value;
-    const valor = Number(document.getElementById("valor-promo").value);
-    const inicio = document.getElementById("inicio").value;
-    const fin = document.getElementById("fin").value;
-    const activa = document.getElementById("activa").value === "true";
-    const valida = nombre && productoId && valor > 0 && inicio && fin && fin >= inicio;
+    const nuevoEstado =
+        promo.estado === "Activa"
+            ? "Inactiva"
+            : "Activa";
 
-    document.getElementById("error-promo").classList.toggle("is-visible", !valida);
-    if (!valida) return;
+    try {
 
-    const datos = TodoTala.obtenerDatos();
-    const producto = datos.productos.find(function (item) { return item.id === productoId && item.comercioId === usuarioPromo.comercioId; });
-    if (!producto) return;
+        const respuesta = await fetch(
+            PROMOCIONES_URL +
+            "?id=" +
+            promo.id_promocion,
+            {
+                method: "PUT",
 
-    /* Evita dos promociones activas al mismo tiempo sobre el mismo producto. */
-    datos.promociones.forEach(function (promoAnterior) {
-        if (promoAnterior.productoId === productoId && promoAnterior.activa) {
-            promoAnterior.activa = false;
-            quitarPromocion(promoAnterior, producto);
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                    "Authorization":
+                        "Bearer " +
+                        obtenerToken()
+                },
+
+                body: JSON.stringify({
+                    estado: nuevoEstado
+                })
+            }
+        );
+
+        const datos =
+            await respuesta.json();
+
+        if (!respuesta.ok) {
+
+            TodoTala.toast(
+                datos.error ||
+                "No se pudo actualizar la promoción"
+            );
+
+            return;
         }
-    });
 
-    const nuevaPromo = {
-        id: Date.now(),
-        comercioId: usuarioPromo.comercioId,
-        nombre: nombre,
-        tipo: tipo,
-        valor: valor,
-        productoId: productoId,
-        inicio: inicio,
-        fin: fin,
-        activa: activa,
-        precioBase: producto.precio
-    };
+        TodoTala.toast(
+            nuevoEstado === "Activa"
+                ? "Promoción activada"
+                : "Promoción desactivada"
+        );
 
-    datos.promociones.push(nuevaPromo);
-    if (activa) aplicarPromocion(nuevaPromo, producto);
+        cargarPromociones();
 
-    TodoTala.guardarDatos(datos);
-    evento.target.reset();
-    panelNuevaPromo.hidden = true;
-    renderizarPromociones();
-});
+    } catch (error) {
 
-cargarProductos();
-renderizarPromociones();
+        TodoTala.toast(
+            "No se pudo conectar con el servidor"
+        );
+    }
+}
+
+
+/*
+Elimina una promoción.
+*/
+async function eliminarPromocion(idPromocion) {
+
+    try {
+
+        const respuesta = await fetch(
+            PROMOCIONES_URL +
+            "?id=" +
+            idPromocion,
+            {
+                method: "DELETE",
+
+                headers: {
+                    "Authorization":
+                        "Bearer " +
+                        obtenerToken()
+                }
+            }
+        );
+
+        const datos =
+            await respuesta.json();
+
+        if (!respuesta.ok) {
+
+            TodoTala.toast(
+                datos.error ||
+                "No se pudo eliminar la promoción"
+            );
+
+            return;
+        }
+
+        TodoTala.toast(
+            "Promoción eliminada"
+        );
+
+        cargarPromociones();
+
+    } catch (error) {
+
+        TodoTala.toast(
+            "No se pudo conectar con el servidor"
+        );
+    }
+}
+
+
+/*
+Abre o cierra el formulario.
+*/
+document
+    .getElementById("btn-crear")
+    .addEventListener(
+        "click",
+        function () {
+
+            panelNuevaPromo.hidden =
+                !panelNuevaPromo.hidden;
+        }
+    );
+
+
+/*
+Crea una promoción nueva.
+*/
+document
+    .getElementById("form-promocion")
+    .addEventListener(
+        "submit",
+        async function (evento) {
+
+            evento.preventDefault();
+
+            const nombre =
+                document
+                    .getElementById("nombre-promo")
+                    .value
+                    .trim();
+
+            const idProducto =
+                Number(
+                    selectorProducto.value
+                );
+
+            const tipo =
+                document
+                    .getElementById("tipo-promo")
+                    .value;
+
+            const valor =
+                Number(
+                    document
+                        .getElementById("valor-promo")
+                        .value
+                );
+
+            const inicio =
+                document
+                    .getElementById("inicio")
+                    .value;
+
+            const fin =
+                document
+                    .getElementById("fin")
+                    .value;
+
+            const estado =
+                document
+                    .getElementById("activa")
+                    .value === "true"
+                    ? "Activa"
+                    : "Inactiva";
+
+            const valida =
+                nombre !== "" &&
+                idProducto > 0 &&
+                valor > 0 &&
+                inicio !== "" &&
+                fin !== "" &&
+                fin >= inicio;
+
+            document
+                .getElementById("error-promo")
+                .classList
+                .toggle(
+                    "is-visible",
+                    !valida
+                );
+
+            if (!valida) {
+                return;
+            }
+
+            const nuevaPromo = {
+                id_producto: idProducto,
+                nombre: nombre,
+                tipo: tipo,
+                valor: valor,
+                fecha_inicio: inicio,
+                fecha_fin: fin,
+                estado: estado
+            };
+
+            try {
+
+                const respuesta = await fetch(
+                    PROMOCIONES_URL,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                "Bearer " +
+                                obtenerToken()
+                        },
+
+                        body: JSON.stringify(
+                            nuevaPromo
+                        )
+                    }
+                );
+
+                const datos =
+                    await respuesta.json();
+
+                if (!respuesta.ok) {
+
+                    TodoTala.toast(
+                        datos.error ||
+                        "No se pudo crear la promoción"
+                    );
+
+                    return;
+                }
+
+                TodoTala.toast(
+                    "Promoción creada correctamente"
+                );
+
+                evento.target.reset();
+
+                panelNuevaPromo.hidden = true;
+
+                cargarPromociones();
+
+            } catch (error) {
+
+                TodoTala.toast(
+                    "No se pudo conectar con el servidor"
+                );
+            }
+        }
+    );
+
+
+/*
+Inicio.
+*/
+async function iniciarPromociones() {
+
+    await cargarProductos();
+    await cargarPromociones();
+}
+
+iniciarPromociones();

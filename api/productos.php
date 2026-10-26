@@ -16,7 +16,9 @@ function obtenerIdComercio($conexion, $usuario) {
                 WHERE id_jefe = ?";
 
         $consulta = $conexion->prepare($sql);
-        $consulta->execute([$usuario["id_persona"]]);
+        $consulta->execute([
+            $usuario["id_persona"]
+        ]);
 
     } else {
 
@@ -25,14 +27,18 @@ function obtenerIdComercio($conexion, $usuario) {
                 WHERE id_persona = ?";
 
         $consulta = $conexion->prepare($sql);
-        $consulta->execute([$usuario["id_persona"]]);
+        $consulta->execute([
+            $usuario["id_persona"]
+        ]);
     }
 
-    $comercio = $consulta->fetch(PDO::FETCH_ASSOC);
+    $comercio =
+        $consulta->fetch(PDO::FETCH_ASSOC);
 
     if (!$comercio) {
         responder(404, [
-            "error" => "No se encontro el comercio del usuario"
+            "error" =>
+                "No se encontro el comercio del usuario"
         ]);
     }
 
@@ -56,24 +62,24 @@ if ($metodo === "GET") {
 
     $parametros = [];
 
-    $sql = "SELECT
-                p.id_producto,
-                p.id_comercio,
-                p.id_categoria,
-                p.nombre,
-                p.marca,
-                p.precio,
-                p.descripcion,
-                p.stock,
-                p.imagen,
-                p.visible,
-                ca.nombre AS categoria,
-                co.nombre AS comercio
-            FROM producto p
-            INNER JOIN categoria ca
-                ON ca.id_categoria = p.id_categoria
-            INNER JOIN comercio co
-                ON co.id_comercio = p.id_comercio";
+ $sql = "SELECT
+            p.id_producto,
+            p.id_comercio,
+            p.id_categoria,
+            p.nombre,
+            p.marca,
+            p.precio,
+            p.descripcion,
+            p.stock,
+            p.imagen,
+            p.visible,
+            ca.nombre AS categoria,
+            co.nombre AS comercio
+        FROM producto p
+        INNER JOIN categoria ca
+            ON ca.id_categoria = p.id_categoria
+        INNER JOIN comercio co
+            ON co.id_comercio = p.id_comercio";
 
     if ($gestion) {
 
@@ -298,10 +304,24 @@ if ($metodo === "PUT") {
     El producto debe pertenecer al comercio
     del usuario autenticado.
     */
-    $sql = "SELECT *
-            FROM producto
-            WHERE id_producto = ?
-              AND id_comercio = ?";
+    $sql = "SELECT
+            p.id_producto,
+            p.id_comercio,
+            p.id_categoria,
+            p.nombre,
+            p.marca,
+            p.precio,
+            p.descripcion,
+            p.stock,
+            p.imagen,
+            p.visible,
+            ca.nombre AS categoria,
+            co.nombre AS comercio
+        FROM producto p
+        INNER JOIN categoria ca
+            ON ca.id_categoria = p.id_categoria
+        INNER JOIN comercio co
+            ON co.id_comercio = p.id_comercio";
 
     $consulta = $conexion->prepare($sql);
 
