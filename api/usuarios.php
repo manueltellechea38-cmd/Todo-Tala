@@ -4,36 +4,36 @@ require_once "comun.php";
 require_once "conexion.php";
 require_once "seguridad.php";
 
-/*
-Para consultar usuarios es obligatorio iniciar sesion.
-*/
 $usuarioActual = requerirLogin($conexion);
 
-if ($_SERVER["REQUEST_METHOD"] !== "GET") {
-    responder(405, [
-        "error" => "Metodo no permitido"
-    ]);
-}
+$metodo = $_SERVER["REQUEST_METHOD"];
+
 
 /*
-Si se envia un id, solamente se puede consultar
-el propio usuario.
+GET
+
+Devuelve solamente los datos
+del usuario autenticado.
 */
-if (isset($_GET["id"])) {
+if ($metodo === "GET") {
 
-    $id = intval($_GET["id"]);
+    if (isset($_GET["id"])) {
 
-    if ((int) $usuarioActual["id_persona"] !== $id) {
-        responder(403, [
-            "error" => "No tenes permisos para consultar ese usuario"
-        ]);
+        $id = intval($_GET["id"]);
+
+        if (
+            (int) $usuarioActual["id_persona"] !==
+            $id
+        ) {
+            responder(403, [
+                "error" =>
+                    "No tenes permisos para consultar ese usuario"
+            ]);
+        }
     }
-}
 
-/*
-Devuelve solamente los datos de la cuenta autenticada.
-*/
-$sql = "SELECT
+    $consulta = $conexion->prepare(
+        "SELECT
             id_persona,
             nombre,
             cedula,
@@ -42,21 +42,116 @@ $sql = "SELECT
             fecha_nacimiento,
             fecha_registro,
             activo
-        FROM usuario
-        WHERE id_persona = ?";
+         FROM usuario
+         WHERE id_persona = ?"
+    );
 
-$consulta = $conexion->prepare($sql);
+    $consulta->execute([
+        $usuarioActual["id_persona"]
+    ]);
 
-$consulta->execute([
-    $usuarioActual["id_persona"]
-]);
+    $usuario =
+        $consulta->fetch(PDO::FETCH_ASSOC);
 
-$usuario = $consulta->fetch(PDO::FETCH_ASSOC);
+    if (!$usuario) {
+        responder(404, [
+            "error" => "Usuario no encontrado"
+        ]);
+    }
 
-if (!$usuario) {
-    responder(404, [
-        "error" => "Usuario no encontrado"
+    responder(200, $usuario);
+}
+
+
+/*
+PUT
+
+Permite modificar los datos personales
+del usuario autenticado.
+*/
+if ($metodo === "PUT") {
+
+    $datos = json_decode(
+        file_get_contents("php://input"),
+        true
+    );
+
+    $nombre =
+        trim($datos["nombre"] ?? "");
+
+    $correo =
+        trim($datos["correo"] ?? "");
+
+    $fechaNacimiento =
+        $datos["fecha_nacimiento"] ?? null;
+
+    if ($nombre === "") {
+        responder(400, [
+            "error" => "El nombre es obligatorio"
+        ]);
+    }
+
+    if (
+        $correo === "" ||
+        !filter_var(
+            $correo,
+            FILTER_VALIDATE_EMAIL
+        )
+    ) {
+        responder(400, [
+            "error" => "Correo invalido"
+        ]);
+    }
+
+    /*
+    Verifica que el correo no pertenezca
+    a otro usuario.
+    */
+    $consulta = $conexion->prepare(
+        "SELECT id_persona
+         FROM usuario
+         WHERE correo = ?
+           AND id_persona <> ?"
+    );
+
+    $consulta->execute([
+        $correo,
+        $usuarioActual["id_persona"]
+    ]);
+
+    if ($consulta->fetch(PDO::FETCH_ASSOC)) {
+        responder(409, [
+            "error" =>
+                "Ese correo ya esta registrado"
+        ]);
+    }
+
+    if ($fechaNacimiento === "") {
+        $fechaNacimiento = null;
+    }
+
+    $consulta = $conexion->prepare(
+        "UPDATE usuario
+         SET nombre = ?,
+             correo = ?,
+             fecha_nacimiento = ?
+         WHERE id_persona = ?"
+    );
+
+    $consulta->execute([
+        $nombre,
+        $correo,
+        $fechaNacimiento,
+        $usuarioActual["id_persona"]
+    ]);
+
+    responder(200, [
+        "mensaje" =>
+            "Perfil actualizado correctamente"
     ]);
 }
 
-responder(200, $usuario);
+
+responder(405, [
+    "error" => "Metodo no permitido"
+]);

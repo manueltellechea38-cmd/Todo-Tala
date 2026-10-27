@@ -1,52 +1,251 @@
-const usuarioPerfil = TodoTala.usuarioActual();
-const formularioPerfil = document.getElementById("form-edicion");
+const formularioPerfil =
+    document.getElementById("form-edicion");
 
-/* Carga los datos del usuario que inició sesión. */
-function renderizarPerfil() {
-    const datos = TodoTala.obtenerDatos();
-    const usuario = datos.usuarios.find(function (item) { return item.id === usuarioPerfil.id; });
+let usuarioPerfil = null;
 
-    document.getElementById("nombre-visible").textContent = usuario.nombre;
-    document.getElementById("email-visible").textContent = usuario.correo;
-    document.getElementById("cedula-visible").textContent = usuario.cedula;
-    document.getElementById("fecha-visible").textContent = usuario.fechaNacimiento || "No indicada";
-    document.getElementById("avatar").textContent = usuario.nombre.split(" ").slice(0, 2).map(function (parte) { return parte.charAt(0); }).join("").toUpperCase();
 
-    document.getElementById("nombre").value = usuario.nombre;
-    document.getElementById("email").value = usuario.correo;
-    document.getElementById("fecha-nacimiento").value = usuario.fechaNacimiento || "";
+/*
+Carga los datos reales del usuario desde MySQL.
+*/
+async function cargarPerfil() {
+
+    const token = obtenerToken();
+
+    if (!token) {
+        return;
+    }
+
+    try {
+
+        const respuesta = await fetch(
+            USUARIOS_URL,
+            {
+                headers: {
+                    "Authorization":
+                        "Bearer " + token
+                }
+            }
+        );
+
+        const datos =
+            await respuesta.json();
+
+        if (!respuesta.ok) {
+
+            TodoTala.toast(
+                datos.error ||
+                "No se pudo cargar el perfil"
+            );
+
+            return;
+        }
+
+        usuarioPerfil = datos;
+
+        renderizarPerfil();
+
+    } catch (error) {
+
+        console.error(error);
+
+        TodoTala.toast(
+            "No se pudo conectar con el servidor"
+        );
+    }
 }
 
-/* Muestra u oculta el formulario de edición. */
-document.getElementById("btn-editar").addEventListener("click", function () {
-    formularioPerfil.hidden = !formularioPerfil.hidden;
-});
 
-/* Guarda los cambios del perfil. */
-formularioPerfil.addEventListener("submit", function (evento) {
-    evento.preventDefault();
+/*
+Muestra los datos del usuario.
+*/
+function renderizarPerfil() {
 
-    const datos = TodoTala.obtenerDatos();
-    const usuario = datos.usuarios.find(function (item) { return item.id === usuarioPerfil.id; });
-    const nombre = document.getElementById("nombre").value.trim();
-    const correo = document.getElementById("email").value.trim();
-    const correoOcupado = datos.usuarios.some(function (item) {
-        return item.id !== usuario.id && item.correo.toLowerCase() === correo.toLowerCase();
-    });
-    const valido = nombre !== "" && correo.includes("@") && correo.includes(".") && !correoOcupado;
+    if (!usuarioPerfil) {
+        return;
+    }
 
-    document.getElementById("error-perfil").classList.toggle("is-visible", !valido);
-    if (!valido) return;
+    document
+        .getElementById("nombre-visible")
+        .textContent =
+            usuarioPerfil.nombre;
 
-    usuario.nombre = nombre;
-    usuario.correo = correo;
-    usuario.fechaNacimiento = document.getElementById("fecha-nacimiento").value;
+    document
+        .getElementById("email-visible")
+        .textContent =
+            usuarioPerfil.correo;
 
-    TodoTala.guardarDatos(datos);
-    formularioPerfil.hidden = true;
-    renderizarPerfil();
-    TodoTala.toast("Perfil actualizado.");
-});
+    document
+        .getElementById("cedula-visible")
+        .textContent =
+            usuarioPerfil.cedula ||
+            "No indicada";
+
+    document
+        .getElementById("fecha-visible")
+        .textContent =
+            usuarioPerfil.fecha_nacimiento ||
+            "No indicada";
+
+    document
+        .getElementById("avatar")
+        .textContent =
+            usuarioPerfil.nombre
+                .split(" ")
+                .slice(0, 2)
+                .map(function (parte) {
+                    return parte
+                        .charAt(0)
+                        .toUpperCase();
+                })
+                .join("");
+
+    document
+        .getElementById("nombre")
+        .value =
+            usuarioPerfil.nombre;
+
+    document
+        .getElementById("email")
+        .value =
+            usuarioPerfil.correo;
+
+    document
+        .getElementById("fecha-nacimiento")
+        .value =
+            usuarioPerfil.fecha_nacimiento || "";
+}
+
+
+/*
+Muestra u oculta el formulario.
+*/
+document
+    .getElementById("btn-editar")
+    .addEventListener(
+        "click",
+        function () {
+
+            formularioPerfil.hidden =
+                !formularioPerfil.hidden;
+        }
+    );
+
+
+/*
+Guarda los cambios en MySQL.
+*/
+formularioPerfil.addEventListener(
+    "submit",
+    async function (evento) {
+
+        evento.preventDefault();
+
+        const token = obtenerToken();
+
+        if (!token) {
+            return;
+        }
+
+        const nombre =
+            document
+                .getElementById("nombre")
+                .value
+                .trim();
+
+        const correo =
+            document
+                .getElementById("email")
+                .value
+                .trim();
+
+        const fechaNacimiento =
+            document
+                .getElementById(
+                    "fecha-nacimiento"
+                )
+                .value;
+
+        if (
+            nombre === "" ||
+            correo === ""
+        ) {
+
+            document
+                .getElementById("error-perfil")
+                .classList
+                .add("is-visible");
+
+            return;
+        }
+
+        try {
+
+            const respuesta = await fetch(
+                USUARIOS_URL,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            "Bearer " + token
+                    },
+
+                    body:
+                        JSON.stringify({
+                            nombre: nombre,
+                            correo: correo,
+                            fecha_nacimiento:
+                                fechaNacimiento
+                        })
+                }
+            );
+
+            const datos =
+                await respuesta.json();
+
+            if (!respuesta.ok) {
+
+                document
+                    .getElementById("error-perfil")
+                    .classList
+                    .add("is-visible");
+
+                TodoTala.toast(
+                    datos.error ||
+                    "No se pudo actualizar el perfil"
+                );
+
+                return;
+            }
+
+            document
+                .getElementById("error-perfil")
+                .classList
+                .remove("is-visible");
+
+            formularioPerfil.hidden = true;
+
+            TodoTala.toast(
+                "Perfil actualizado"
+            );
+
+            await cargarPerfil();
+
+        } catch (error) {
+
+            console.error(error);
+
+            TodoTala.toast(
+                "No se pudo conectar con el servidor"
+            );
+        }
+    }
+);
+
+
 /*
 Carga los comercios seguidos desde MySQL.
 */
@@ -104,25 +303,21 @@ async function cargarComerciosSeguidos() {
 
                     return (
                         '<article class="profile-data">' +
-
                             '<strong>' +
                                 comercio.nombre +
                             '</strong>' +
-
                             '<p class="muted">' +
                                 (
                                     comercio.direccion ||
                                     "Sin dirección"
                                 ) +
                             '</p>' +
-
                             '<p class="muted">' +
                                 (
                                     comercio.horario ||
                                     "Horario no indicado"
                                 ) +
                             '</p>' +
-
                         '</article>'
                     );
                 }
@@ -137,11 +332,26 @@ async function cargarComerciosSeguidos() {
         );
     }
 }
-document.getElementById("btn-salir").addEventListener("click", async function () {
-    await TodoTala.cerrarSesion();
 
-    TodoTala.abrir(
-        "pantalla_login/todo_tala_pantalla_login.html"
+
+/*
+Cerrar sesión.
+*/
+document
+    .getElementById("btn-salir")
+    .addEventListener(
+        "click",
+        async function () {
+
+            await TodoTala.cerrarSesion();
+
+            TodoTala.abrir(
+                "pantalla_login/" +
+                "todo_tala_pantalla_login.html"
+            );
+        }
     );
-});
+
+
+cargarPerfil();
 cargarComerciosSeguidos();
