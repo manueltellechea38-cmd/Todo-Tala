@@ -1,24 +1,119 @@
 # Todo Tala
 
-Versión actual: 0.6.0
+Versión: 1.0.0
 
-Plataforma web para consultar productos de comercios, realizar pedidos para retiro y administrar comercios locales.
+Todo Tala es una plataforma web para comercios locales de Tala.
 
-## Estructura actual
+## Tecnologías
 
-- `pantalla_login`: inicio de sesión.
-- `pantalla_registro`: registro de clientes y jefes.
-- `pantalla_inicio`: inicio del cliente.
-- `catalogo_cliente`: catálogo y filtros.
-- `detalle_producto`: detalle de cada producto.
-- `carrito_pedidos`: carrito y confirmación de pedidos.
-- `mis_pedidos`: seguimiento de pedidos del cliente.
-- `perfil_cliente`: datos del cliente.
-- `panel_comercio`: panel de jefe y empleado.
-- `gestionar_productos`: productos y stock del comercio.
-- `gestionar_promociones`: promociones.
-- `gestionar_empleados`: empleados del comercio, solo para jefe.
-- `pedidos_recibidos`: gestión de pedidos del comercio.
-- `assets`: funciones y estilos compartidos.
+- HTML5
+- CSS3
+- JavaScript
+- Fetch y async/await
+- PHP
+- MySQL
+- PDO
+- JSON
+- Postman
+- Git y GitHub
 
-La aplicación distingue los permisos de Cliente, Jefe y Empleado desde la sesión iniciada.
+No se utilizan frameworks.
+
+## Arquitectura
+
+Frontend HTML/CSS/JavaScript
+        |
+        | fetch + JSON
+        v
+API PHP
+        |
+        | PDO
+        v
+MySQL
+
+Los datos principales del sistema se almacenan en MySQL.
+
+localStorage se utiliza solamente para:
+- mantener la sesión del navegador;
+- recordar el modo claro u oscuro.
+
+## Roles
+
+### Cliente
+Puede consultar productos, promociones y stock, buscar, usar favoritos, seguir comercios, utilizar el carrito, realizar pedidos, consultar sus pedidos y modificar su perfil.
+
+### Jefe
+Puede gestionar productos, stock, promociones, pedidos y empleados de su comercio.
+
+### Empleado
+Puede gestionar productos, stock, promociones y pedidos. No puede administrar empleados.
+
+## Backend
+
+Las APIs se encuentran en la carpeta:
+
+api/
+
+Principales endpoints:
+
+- login.php
+- logout.php
+- registro.php
+- usuarios.php
+- comercios.php
+- mi_comercio.php
+- empleados.php
+- productos.php
+- promociones.php
+- carrito.php
+- pedidos.php
+- favoritos.php
+- comercios_seguidos.php
+
+Las rutas protegidas utilizan Bearer Token.
+
+## Ejecutar el proyecto
+
+Todo Tala necesita PHP y MySQL.
+
+Live Server solo no puede ejecutar el backend.
+
+Primera instalación:
+
+powershell -ExecutionPolicy Bypass -File .\api\preparar-entorno.ps1
+
+Iniciar API:
+
+powershell -ExecutionPolicy Bypass -File .\api\iniciar-api.ps1
+
+API:
+http://localhost:3000
+
+Iniciar frontend:
+
+php -S localhost:8081 -t .
+
+Frontend:
+http://localhost:8081
+
+## Postman
+
+Colección:
+
+api/postman/TodoTala.postman_collection.json
+
+Está organizada por:
+- Autenticación
+- Usuarios
+- Comercios
+- Empleados
+- Productos
+- Promociones
+- Carrito
+- Pedidos
+- Favoritos
+- Comercios seguidos
+
+## Interfaz
+
+La versión 1.0 incluye modo oscuro predeterminado, modo claro y diseño adaptable para computadora, tablet y celular.

@@ -53,7 +53,7 @@
     display: grid;
     place-items: center;
     border-radius: 9px;
-    background: #eef2f7;
+    background: var(--superficie-3);
     color: var(--color-primary);
     font-weight: 800;
 }

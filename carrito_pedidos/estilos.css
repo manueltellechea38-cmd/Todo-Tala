@@ -24,7 +24,7 @@
 
 .important-note {
     padding: 14px;
-    border: 1px solid #ecd78e;
+    border: 1px solid var(--advertencia-borde);
     border-radius: 12px;
     background: var(--color-warning-soft);
 }
@@ -46,7 +46,7 @@
     align-items: flex-start;
     gap: 10px;
     padding: 13px;
-    background: #f8fafc;
+    background: var(--superficie-2);
 }
 
 .commerce-group__header p {
@@ -82,7 +82,7 @@
     height: 34px;
     border: 1px solid var(--color-border);
     border-radius: 8px;
-    background: white;
+    background: var(--superficie-3);
 }
 
 .commerce-subtotal {
@@ -103,7 +103,7 @@
     padding: 16px;
     border: 1px solid var(--color-border);
     border-radius: 12px;
-    background: #fbfcfe;
+    background: var(--superficie-2);
 }
 
 .summary-row {

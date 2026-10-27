@@ -1,148 +1,337 @@
 {
   "info": {
-    "_postman_id": "854398fc-16d6-48c9-9212-b1783182ab3b",
-    "name": "Todo Tala API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "58259269",
-    "_collection_link": "https://go.postman.co/collection/58259269-854398fc-16d6-48c9-9212-b1783182ab3b?source=collection_link"
+    "_postman_id": "todo-tala-api-v1",
+    "name": "Todo Tala API v1.0",
+    "description": "Colección de las APIs reales de Todo Tala. Frontend HTML/CSS/JS, backend PHP y base de datos MySQL.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "item": [
+
+  "variable": [
     {
-      "name": "Promociones",
+      "key": "base_url",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "cliente_email",
+      "value": "cliente.navegador@todotala.test"
+    },
+    {
+      "key": "cliente_password",
+      "value": "Prueba1234"
+    },
+    {
+      "key": "jefe_email",
+      "value": "jefe.navegador@todotala.test"
+    },
+    {
+      "key": "jefe_password",
+      "value": "Prueba1234"
+    },
+    {
+      "key": "id_producto",
+      "value": "3"
+    },
+    {
+      "key": "id_promocion",
+      "value": "2"
+    },
+    {
+      "key": "id_pedido",
+      "value": "4"
+    },
+    {
+      "key": "id_comercio",
+      "value": "3"
+    },
+    {
+      "key": "id_empleado",
+      "value": "1"
+    }
+  ],
+
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+
+  "item": [
+
+    {
+      "name": "01 - Autenticacion",
       "item": [
+
         {
-          "name": "Obtener todas las promociones",
+          "name": "Login Cliente",
+          "auth": {
+            "type": "noauth"
+          },
           "request": {
-            "method": "GET",
-            "header": [],
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{cliente_email}}\",\n  \"password\": \"{{cliente_password}}\"\n}"
+            },
             "url": {
-              "raw": "{{base_url}}/promociones.php",
+              "raw": "{{base_url}}/login.php",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
-                "promociones.php"
+                "login.php"
               ]
-            }
-          },
-          "response": []
+            },
+            "description": "Inicia sesión como cliente. Copiar el token de la respuesta a la variable token."
+          }
         },
+
         {
-          "name": "Obtener promoción por ID",
+          "name": "Login Jefe",
+          "auth": {
+            "type": "noauth"
+          },
           "request": {
-            "method": "GET",
-            "header": [],
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{jefe_email}}\",\n  \"password\": \"{{jefe_password}}\"\n}"
+            },
             "url": {
-              "raw": "{{base_url}}/promociones.php?id=1",
+              "raw": "{{base_url}}/login.php",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
-                "promociones.php"
-              ],
-              "query": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
+                "login.php"
               ]
-            }
-          },
-          "response": []
+            },
+            "description": "Inicia sesión como jefe. Copiar el token de la respuesta a la variable token."
+          }
         },
+
         {
-          "name": "Obtener promociones de un comercio",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/promociones.php?comercio_id=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "promociones.php"
-              ],
-              "query": [
-                {
-                  "key": "comercio_id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Crear promoción",
+          "name": "Logout",
           "request": {
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/promociones.php",
+              "raw": "{{base_url}}/logout.php",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
-                "promociones.php"
+                "logout.php"
               ]
             }
-          },
-          "response": []
+          }
         },
+
         {
-          "name": "Actualizar promoción",
+          "name": "Registrar Cliente",
+          "auth": {
+            "type": "noauth"
+          },
           "request": {
-            "method": "PUT",
-            "header": [],
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cliente Prueba\",\n  \"cedula\": \"49999991\",\n  \"correo\": \"cliente.prueba@todotala.test\",\n  \"password\": \"Prueba1234\",\n  \"rol\": \"cliente\",\n  \"fecha_nacimiento\": \"2005-01-01\"\n}"
+            },
             "url": {
-              "raw": "{{base_url}}/promociones.php?id=1",
+              "raw": "{{base_url}}/registro.php",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
-                "promociones.php"
-              ],
-              "query": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
+                "registro.php"
               ]
             }
-          },
-          "response": []
+          }
         },
+
         {
-          "name": "Eliminar promoción",
+          "name": "Registrar Jefe y Comercio",
+          "auth": {
+            "type": "noauth"
+          },
           "request": {
-            "method": "DELETE",
-            "header": [],
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Jefe Prueba\",\n  \"cedula\": \"49999992\",\n  \"correo\": \"jefe.prueba@todotala.test\",\n  \"password\": \"Prueba1234\",\n  \"rol\": \"jefe\",\n  \"fecha_nacimiento\": \"2000-01-01\",\n  \"comercio\": {\n    \"nombre\": \"Comercio Prueba\",\n    \"ruc\": \"219999999999\",\n    \"telefono\": \"099999999\",\n    \"direccion\": \"Tala\",\n    \"horario\": \"08:00 a 18:00\"\n  }\n}"
+            },
             "url": {
-              "raw": "{{base_url}}/promociones.php?id=1",
+              "raw": "{{base_url}}/registro.php",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
-                "promociones.php"
-              ],
-              "query": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
+                "registro.php"
               ]
             }
-          },
-          "response": []
+          }
         }
       ]
     },
+
     {
-      "name": "Empleados",
+      "name": "02 - Usuarios",
       "item": [
+
         {
-          "name": "Obtener todos los empleados",
+          "name": "Obtener mi perfil",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/usuarios.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuarios.php"
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Actualizar mi perfil",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cliente Navegador\",\n  \"correo\": \"cliente.navegador@todotala.test\",\n  \"fecha_nacimiento\": \"2005-01-01\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/usuarios.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuarios.php"
+              ]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "03 - Comercios",
+      "item": [
+
+        {
+          "name": "Listar comercios",
+          "auth": {
+            "type": "noauth"
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/comercios.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "comercios.php"
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Obtener comercio por ID",
+          "auth": {
+            "type": "noauth"
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/comercios.php?id={{id_comercio}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "comercios.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_comercio}}"
+                }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Mi comercio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/mi_comercio.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mi_comercio.php"
+              ]
+            },
+            "description": "Solo Jefe o Empleado."
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "04 - Empleados",
+      "item": [
+
+        {
+          "name": "Listar empleados",
           "request": {
             "method": "GET",
             "header": [],
@@ -154,61 +343,25 @@
               "path": [
                 "empleados.php"
               ]
-            }
-          },
-          "response": []
+            },
+            "description": "Solo Jefe."
+          }
         },
-        {
-          "name": "Obtener empleado por ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/empleados.php?id=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "empleados.php"
-              ],
-              "query": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Obtener empleados de un comercio",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/empleados.php?comercio_id=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "empleados.php"
-              ],
-              "query": [
-                {
-                  "key": "comercio_id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
+
         {
           "name": "Crear empleado",
           "request": {
             "method": "POST",
-            "header": [],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Empleado Prueba\",\n  \"cedula\": \"49999993\",\n  \"correo\": \"empleado.prueba@todotala.test\",\n  \"password\": \"Prueba1234\",\n  \"fecha_nacimiento\": \"2005-01-01\"\n}"
+            },
             "url": {
               "raw": "{{base_url}}/empleados.php",
               "host": [
@@ -218,39 +371,16 @@
                 "empleados.php"
               ]
             }
-          },
-          "response": []
+          }
         },
-        {
-          "name": "Actualizar empleado",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/empleados.php?id=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "empleados.php"
-              ],
-              "query": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
+
         {
           "name": "Eliminar empleado",
           "request": {
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/empleados.php?id=1",
+              "raw": "{{base_url}}/empleados.php?id={{id_empleado}}",
               "host": [
                 "{{base_url}}"
               ],
@@ -260,367 +390,24 @@
               "query": [
                 {
                   "key": "id",
-                  "value": "1"
+                  "value": "{{id_empleado}}"
                 }
               ]
             }
-          },
-          "response": []
+          }
         }
       ]
     },
+
     {
-      "name": "Comercios",
+      "name": "05 - Productos",
       "item": [
+
         {
-          "name": "Obtener todos los comercios",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/comercios.php",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "comercios.php"
-              ]
-            }
+          "name": "Listar productos publicos",
+          "auth": {
+            "type": "noauth"
           },
-          "response": []
-        },
-        {
-          "name": "Obtener comercio por ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/comercios.php?id=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "comercios.php"
-              ],
-              "query": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Crear comercio",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/comercios.php",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "comercios.php"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Actualizar comercio",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/comercios.php?id=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "comercios.php"
-              ],
-              "query": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Eliminar comercio",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/comercios.php?id=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "comercios.php"
-              ],
-              "query": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Usuarios",
-      "item": [
-        {
-          "name": "Obtener todos los usuarios",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/usuarios.php",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "usuarios.php"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Obtener usuario por ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/usuarios.php?id=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "usuarios.php"
-              ],
-              "query": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Crear usuario",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/usuarios.php",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "usuarios.php"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Actualizar usuario",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/usuarios.php?id=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "usuarios.php"
-              ],
-              "query": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Eliminar usuario",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/usuarios.php?id=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "usuarios.php"
-              ],
-              "query": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Pedidos",
-      "item": [
-        {
-          "name": "Obtener todos los pedidos",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/pedidos.php",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "pedidos.php"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Obtener pedido por ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/pedidos.php?id=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "pedidos.php"
-              ],
-              "query": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Obtener pedidos de un cliente",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/pedidos.php?cliente_id=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "pedidos.php"
-              ],
-              "query": [
-                {
-                  "key": "cliente_id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Obtener pedidos de un comercio",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/pedidos.php?comercio_id=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "pedidos.php"
-              ],
-              "query": [
-                {
-                  "key": "comercio_id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Crear pedido",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/pedidos.php",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "pedidos.php"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Actualizar pedido",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/pedidos.php?id=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "pedidos.php"
-              ],
-              "query": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Productos",
-      "item": [
-        {
-          "name": "Obtener todos los productos",
           "request": {
             "method": "GET",
             "header": [],
@@ -633,16 +420,19 @@
                 "productos.php"
               ]
             }
-          },
-          "response": []
+          }
         },
+
         {
           "name": "Obtener producto por ID",
+          "auth": {
+            "type": "noauth"
+          },
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/productos.php?id=1",
+              "raw": "{{base_url}}/productos.php?id={{id_producto}}",
               "host": [
                 "{{base_url}}"
               ],
@@ -652,122 +442,49 @@
               "query": [
                 {
                   "key": "id",
+                  "value": "{{id_producto}}"
+                }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Productos de mi comercio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/productos.php?gestion=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "productos.php"
+              ],
+              "query": [
+                {
+                  "key": "gestion",
                   "value": "1"
                 }
               ]
             }
-          },
-          "response": []
+          }
         },
-        {
-          "name": "Buscar producto por nombre",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/productos.php?nombre=Teclado",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "productos.php"
-              ],
-              "query": [
-                {
-                  "key": "nombre",
-                  "value": "Teclado"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Ordenar productos por nombre",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/productos.php?orden=nombre",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "productos.php"
-              ],
-              "query": [
-                {
-                  "key": "orden",
-                  "value": "nombre"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Ordenar productos por precio",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/productos.php?orden=precio",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "productos.php"
-              ],
-              "query": [
-                {
-                  "key": "orden",
-                  "value": "precio"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Ordenar productos por precio descendente",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/productos.php?orden=precio&direccion=desc",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "productos.php"
-              ],
-              "query": [
-                {
-                  "key": "orden",
-                  "value": "precio"
-                },
-                {
-                  "key": "direccion",
-                  "value": "desc"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
+
         {
           "name": "Crear producto",
           "request": {
             "method": "POST",
-            "header": [],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"nombre\": \"Teclado\",\r\n  \"precio\": 1200\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
+              "raw": "{\n  \"id_categoria\": 3,\n  \"nombre\": \"Producto Postman\",\n  \"marca\": \"Marca Prueba\",\n  \"precio\": 1000,\n  \"descripcion\": \"Producto creado desde Postman\",\n  \"stock\": 10,\n  \"imagen\": null,\n  \"visible\": true\n}"
             },
             "url": {
               "raw": "{{base_url}}/productos.php",
@@ -778,25 +495,25 @@
                 "productos.php"
               ]
             }
-          },
-          "response": []
+          }
         },
+
         {
           "name": "Actualizar producto",
           "request": {
             "method": "PUT",
-            "header": [],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"nombre\": \"Teclado Gamer\",\r\n  \"precio\": 1500\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
+              "raw": "{\n  \"nombre\": \"Producto actualizado\",\n  \"precio\": 950,\n  \"stock\": 12,\n  \"visible\": true\n}"
             },
             "url": {
-              "raw": "{{base_url}}/productos.php?id=1",
+              "raw": "{{base_url}}/productos.php?id={{id_producto}}",
               "host": [
                 "{{base_url}}"
               ],
@@ -806,20 +523,20 @@
               "query": [
                 {
                   "key": "id",
-                  "value": "1"
+                  "value": "{{id_producto}}"
                 }
               ]
             }
-          },
-          "response": []
+          }
         },
+
         {
           "name": "Eliminar producto",
           "request": {
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/productos.php?id=1",
+              "raw": "{{base_url}}/productos.php?id={{id_producto}}",
               "host": [
                 "{{base_url}}"
               ],
@@ -829,12 +546,742 @@
               "query": [
                 {
                   "key": "id",
+                  "value": "{{id_producto}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "06 - Promociones",
+      "item": [
+
+        {
+          "name": "Promociones publicas",
+          "auth": {
+            "type": "noauth"
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/promociones.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "promociones.php"
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Promocion de un producto",
+          "auth": {
+            "type": "noauth"
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/promociones.php?id_producto={{id_producto}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "promociones.php"
+              ],
+              "query": [
+                {
+                  "key": "id_producto",
+                  "value": "{{id_producto}}"
+                }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Gestionar promociones de mi comercio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/promociones.php?gestion=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "promociones.php"
+              ],
+              "query": [
+                {
+                  "key": "gestion",
                   "value": "1"
                 }
               ]
             }
-          },
-          "response": []
+          }
+        },
+
+        {
+          "name": "Crear promocion",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_producto\": {{id_producto}},\n  \"nombre\": \"Promocion Postman\",\n  \"tipo\": \"porcentaje\",\n  \"valor\": 10,\n  \"fecha_inicio\": \"2026-10-27\",\n  \"fecha_fin\": \"2026-11-10\",\n  \"estado\": \"Inactiva\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/promociones.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "promociones.php"
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Actualizar promocion",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"Activa\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/promociones.php?id={{id_promocion}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "promociones.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_promocion}}"
+                }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Eliminar promocion",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/promociones.php?id={{id_promocion}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "promociones.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_promocion}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "07 - Carrito",
+      "item": [
+
+        {
+          "name": "Ver carrito",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/carrito.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carrito.php"
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Agregar producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_producto\": {{id_producto}},\n  \"cantidad\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/carrito.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carrito.php"
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Cambiar cantidad",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cantidad\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/carrito.php?id={{id_producto}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carrito.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_producto}}"
+                }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Eliminar producto",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/carrito.php?id={{id_producto}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carrito.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_producto}}"
+                }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Vaciar carrito",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/carrito.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carrito.php"
+              ]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "08 - Pedidos",
+      "item": [
+
+        {
+          "name": "Listar mis pedidos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/pedidos.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos.php"
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Obtener pedido por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/pedidos.php?id={{id_pedido}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_pedido}}"
+                }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Confirmar carrito y crear pedido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"observacion\": \"Retiro por la tarde\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos.php"
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Cliente - Cancelar pedido",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"Cancelado\",\n  \"motivo_cancelacion\": \"Ya no lo necesito\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos.php?id={{id_pedido}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_pedido}}"
+                }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Comercio - Aceptar pedido",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"Aceptado\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos.php?id={{id_pedido}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_pedido}}"
+                }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Comercio - En preparacion",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"En preparación\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos.php?id={{id_pedido}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_pedido}}"
+                }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Comercio - Listo para retirar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"Listo para retirar\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos.php?id={{id_pedido}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_pedido}}"
+                }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Comercio - Entregar con codigo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"Entregado\",\n  \"codigo_retiro\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos.php?id={{id_pedido}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_pedido}}"
+                }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Comercio - Rechazar pedido",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"Rechazado\",\n  \"motivo_cancelacion\": \"Sin disponibilidad\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos.php?id={{id_pedido}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_pedido}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "09 - Favoritos",
+      "item": [
+
+        {
+          "name": "Listar favoritos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/favoritos.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "favoritos.php"
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Consultar si es favorito",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/favoritos.php?id={{id_producto}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "favoritos.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_producto}}"
+                }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Agregar favorito",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_producto\": {{id_producto}}\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/favoritos.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "favoritos.php"
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Eliminar favorito",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/favoritos.php?id={{id_producto}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "favoritos.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_producto}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "10 - Comercios seguidos",
+      "item": [
+
+        {
+          "name": "Listar comercios seguidos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/comercios_seguidos.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "comercios_seguidos.php"
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Consultar si sigo un comercio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/comercios_seguidos.php?id={{id_comercio}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "comercios_seguidos.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_comercio}}"
+                }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Seguir comercio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_comercio\": {{id_comercio}}\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/comercios_seguidos.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "comercios_seguidos.php"
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Dejar de seguir comercio",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/comercios_seguidos.php?id={{id_comercio}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "comercios_seguidos.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_comercio}}"
+                }
+              ]
+            }
+          }
         }
       ]
     }

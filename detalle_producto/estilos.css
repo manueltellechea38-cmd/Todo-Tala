@@ -21,7 +21,7 @@
     display: grid;
     place-items: center;
     border-radius: 14px;
-    background: #eef2f7;
+    background: var(--superficie-3);
     color: var(--color-primary);
     font-size: 3rem;
     font-weight: 800;
@@ -74,7 +74,7 @@
 .quantity-control button {
     height: 40px;
     border: 0;
-    background: #eef1f5;
+    background: var(--superficie-3);
 }
 
 .quantity-control span {

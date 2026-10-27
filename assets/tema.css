@@ -1,0 +1,120 @@
+/*
+Todo Tala
+Paleta central de temas.
+
+Este archivo solamente define colores.
+Los componentes se diseñan en estilos_globales.css.
+*/
+
+
+/* =========================
+   OSCURO - PREDETERMINADO
+   ========================= */
+
+:root {
+    color-scheme: dark;
+
+    --fondo: #0b1118;
+    --fondo-secundario: #0e1621;
+
+    --superficie: #131d29;
+    --superficie-2: #182433;
+    --superficie-3: #223146;
+
+    --input: #0f1823;
+
+    --texto: #f4f7fb;
+    --texto-secundario: #a7b4c5;
+
+    --borde: #2d3b4d;
+
+    --azul: #3b82f6;
+    --azul-hover: #2563eb;
+    --azul-suave: #172c4d;
+
+    --verde: #4ade80;
+    --verde-suave: #142d20;
+
+    --rojo: #f87171;
+    --rojo-suave: #35191d;
+
+    --amarillo: #f3c969;
+    --amarillo-suave: #302818;
+    --advertencia-borde: #6b5826;
+
+    --sombra:
+        0 14px 38px
+        rgba(0, 0, 0, 0.32);
+
+
+    /*
+    Compatibilidad con los CSS anteriores.
+
+    Los archivos de las pantallas todavía pueden
+    usar --color-*, pero ahora apuntan al tema real.
+    */
+
+    --color-primary: var(--azul);
+    --color-primary-dark: var(--azul-hover);
+    --color-primary-soft: var(--azul-suave);
+
+    --color-accent: var(--amarillo);
+
+    --color-background: var(--fondo);
+    --color-surface: var(--superficie);
+
+    --color-text: var(--texto);
+    --color-muted: var(--texto-secundario);
+
+    --color-border: var(--borde);
+
+    --color-success: var(--verde);
+    --color-success-soft: var(--verde-suave);
+
+    --color-danger: var(--rojo);
+    --color-danger-soft: var(--rojo-suave);
+
+    --color-warning: var(--amarillo);
+    --color-warning-soft: var(--amarillo-suave);
+}
+
+
+/* =========================
+   CLARO
+   ========================= */
+
+html[data-tema="claro"] {
+    color-scheme: light;
+
+    --fondo: #eef3f8;
+    --fondo-secundario: #e7edf5;
+
+    --superficie: #ffffff;
+    --superficie-2: #f7f9fc;
+    --superficie-3: #edf2f8;
+
+    --input: #ffffff;
+
+    --texto: #172033;
+    --texto-secundario: #667386;
+
+    --borde: #d8e0ea;
+
+    --azul: #2563eb;
+    --azul-hover: #1d4ed8;
+    --azul-suave: #eaf2ff;
+
+    --verde: #238636;
+    --verde-suave: #eaf7ed;
+
+    --rojo: #c9362b;
+    --rojo-suave: #fff0ef;
+
+    --amarillo: #916100;
+    --amarillo-suave: #fff6df;
+    --advertencia-borde: #ecd78e;
+
+    --sombra:
+        0 12px 32px
+        rgba(30, 45, 65, 0.10);
+}

@@ -21,7 +21,7 @@
     padding: 16px;
     border: 1px solid var(--color-border);
     border-radius: 12px;
-    background: #f8fafc;
+    background: var(--superficie-2);
 }
 
 .metric strong {
@@ -32,7 +32,7 @@
 
 .stock-warning {
     padding: 14px;
-    border: 1px solid #ecd78e;
+    border: 1px solid var(--advertencia-borde);
     border-radius: 12px;
     background: var(--color-warning-soft);
 }
