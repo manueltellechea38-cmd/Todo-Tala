@@ -47,7 +47,96 @@ formularioPerfil.addEventListener("submit", function (evento) {
     renderizarPerfil();
     TodoTala.toast("Perfil actualizado.");
 });
+/*
+Carga los comercios seguidos desde MySQL.
+*/
+async function cargarComerciosSeguidos() {
 
+    const lista =
+        document.getElementById(
+            "lista-comercios-seguidos"
+        );
+
+    const token = obtenerToken();
+
+    if (!token) {
+        return;
+    }
+
+    try {
+
+        const respuesta = await fetch(
+            COMERCIOS_SEGUIDOS_URL,
+            {
+                headers: {
+                    "Authorization":
+                        "Bearer " + token
+                }
+            }
+        );
+
+        const comercios =
+            await respuesta.json();
+
+        if (!respuesta.ok) {
+
+            TodoTala.toast(
+                comercios.error ||
+                "No se pudieron cargar los comercios"
+            );
+
+            return;
+        }
+
+        if (comercios.length === 0) {
+
+            lista.innerHTML =
+                '<p class="muted">' +
+                'Todavía no seguís ningún comercio.' +
+                '</p>';
+
+            return;
+        }
+
+        lista.innerHTML =
+            comercios.map(
+                function (comercio) {
+
+                    return (
+                        '<article class="profile-data">' +
+
+                            '<strong>' +
+                                comercio.nombre +
+                            '</strong>' +
+
+                            '<p class="muted">' +
+                                (
+                                    comercio.direccion ||
+                                    "Sin dirección"
+                                ) +
+                            '</p>' +
+
+                            '<p class="muted">' +
+                                (
+                                    comercio.horario ||
+                                    "Horario no indicado"
+                                ) +
+                            '</p>' +
+
+                        '</article>'
+                    );
+                }
+            ).join("");
+
+    } catch (error) {
+
+        console.error(error);
+
+        TodoTala.toast(
+            "No se pudo conectar con el servidor"
+        );
+    }
+}
 document.getElementById("btn-salir").addEventListener("click", async function () {
     await TodoTala.cerrarSesion();
 
@@ -55,3 +144,4 @@ document.getElementById("btn-salir").addEventListener("click", async function ()
         "pantalla_login/todo_tala_pantalla_login.html"
     );
 });
+cargarComerciosSeguidos();

@@ -9,3 +9,4 @@ const CARRITO_URL = API_BASE + "/carrito.php";
 const PEDIDOS_URL = API_BASE + "/pedidos.php";
 const PROMOCIONES_URL = API_BASE + "/promociones.php";
 const FAVORITOS_URL = API_BASE + "/favoritos.php";
+const COMERCIOS_SEGUIDOS_URL = API_BASE + "/comercios_seguidos.php";

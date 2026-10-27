@@ -5,7 +5,7 @@ let producto = null;
 let promocion = null;
 let esFavorito = false;
 let cantidad = 1;
-
+let comercioSeguido = false;
 
 /*
 Calcula el precio final teniendo en cuenta
@@ -168,6 +168,9 @@ async function cargarDetalle() {
             comercio:
                 datosProducto.comercio || "",
 
+            id_comercio:
+               Number(datosProducto.id_comercio),
+
             descripcion:
                 datosProducto.descripcion || "",
 
@@ -211,13 +214,37 @@ async function cargarDetalle() {
                 promocion
             );
 
-        if (respuestaFavorito.ok) {
-            esFavorito =
-                Boolean(
-                    datosFavorito.favorito
-                );
-        }
+if (respuestaFavorito.ok) {
+    esFavorito =
+        Boolean(
+            datosFavorito.favorito
+        );
+}
 
+const respuestaComercioSeguido =
+    await fetch(
+        COMERCIOS_SEGUIDOS_URL +
+        "?id=" +
+        producto.id_comercio,
+        {
+            headers: {
+                "Authorization":
+                    "Bearer " + token
+            }
+        }
+    );
+
+const datosComercioSeguido =
+    await respuestaComercioSeguido.json();
+
+if (respuestaComercioSeguido.ok) {
+    comercioSeguido =
+        Boolean(
+            datosComercioSeguido.seguido
+        );
+}
+
+renderizarDetalle();
         renderizarDetalle();
 
     } catch (error) {
@@ -326,6 +353,12 @@ function renderizarDetalle() {
             esFavorito
                 ? "♥"
                 : "♡";
+    document
+        .getElementById("btn-seguir-comercio")
+        .textContent =
+            comercioSeguido
+                ? "Dejar de seguir"
+                : "Seguir comercio";
 }
 
 
@@ -551,6 +584,94 @@ document
             }
         }
     );
+document
+    .getElementById("btn-seguir-comercio")
+    .addEventListener(
+        "click",
+        async function () {
 
+            const token = obtenerToken();
+
+            if (!token || !producto) {
+                return;
+            }
+
+            try {
+
+                let respuesta;
+
+                if (comercioSeguido) {
+
+                    respuesta = await fetch(
+                        COMERCIOS_SEGUIDOS_URL +
+                        "?id=" +
+                        producto.id_comercio,
+                        {
+                            method: "DELETE",
+                            headers: {
+                                "Authorization":
+                                    "Bearer " + token
+                            }
+                        }
+                    );
+
+                } else {
+
+                    respuesta = await fetch(
+                        COMERCIOS_SEGUIDOS_URL,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                "Authorization":
+                                    "Bearer " + token
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    id_comercio:
+                                        producto.id_comercio
+                                })
+                        }
+                    );
+                }
+
+                const datos =
+                    await respuesta.json();
+
+                if (!respuesta.ok) {
+
+                    TodoTala.toast(
+                        datos.error ||
+                        "No se pudo actualizar el comercio"
+                    );
+
+                    return;
+                }
+
+                comercioSeguido =
+                    !comercioSeguido;
+
+                renderizarDetalle();
+
+                TodoTala.toast(
+                    comercioSeguido
+                        ? "Ahora seguís este comercio"
+                        : "Dejaste de seguir este comercio"
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                TodoTala.toast(
+                    "No se pudo conectar con el servidor"
+                );
+            }
+        }
+    );
 
 cargarDetalle();
