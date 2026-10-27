@@ -1,145 +1,76 @@
 <?php
 
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-
-if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
-    http_response_code(204);
-    exit;
-}
-
+require_once "comun.php";
 require_once "conexion.php";
 
-$metodo = $_SERVER["REQUEST_METHOD"];
-
-// Traemos los datos
-if ($metodo === "GET") {
-
-    if (isset($_GET["id"])) {
-        $id = intval($_GET["id"]);
-
-        $consulta = $conexion->prepare(
-            "SELECT * FROM comercio WHERE id_comercio = ?"
-        );
-
-        $consulta->execute([$id]);
-
-        echo json_encode($consulta->fetch(PDO::FETCH_ASSOC));
-        exit;
-    }
-
-    $consulta = $conexion->query("SELECT * FROM comercio");
-
-    echo json_encode($consulta->fetchAll(PDO::FETCH_ASSOC));
-    exit;
+if ($_SERVER["REQUEST_METHOD"] !== "GET") {
+    responder(405, [
+        "error" => "Metodo no permitido"
+    ]);
 }
 
-// Creamos un comercio
-if ($metodo === "POST") {
 
-    $datos = json_decode(file_get_contents("php://input"), true);
+/*
+GET PUBLICO
 
-    $sql = "INSERT INTO comercio
-            (id_jefe, nombre, ruc, telefono, direccion, horario)
-            VALUES (?, ?, ?, ?, ?, ?)";
+Permite consultar comercios.
+No permite crear, editar ni eliminar.
+*/
+if (isset($_GET["id"])) {
 
-    $consulta = $conexion->prepare($sql);
+    $idComercio =
+        intval($_GET["id"]);
 
-    $consulta->execute([
-        $datos["id_jefe"],
-        $datos["nombre"],
-        $datos["ruc"],
-        $datos["telefono"] ?? null,
-        $datos["direccion"] ?? null,
-        $datos["horario"] ?? null
-    ]);
-
-    echo json_encode([
-        "mensaje" => "Comercio creado correctamente",
-        "id" => $conexion->lastInsertId()
-    ]);
-
-    exit;
-}
-
-// Actualizamos un comercio
-if ($metodo === "PUT") {
-
-    if (!isset($_GET["id"])) {
-        http_response_code(400);
-        echo json_encode(["error" => "Falta el id"]);
-        exit;
+    if ($idComercio <= 0) {
+        responder(400, [
+            "error" => "Comercio invalido"
+        ]);
     }
-
-    $id = intval($_GET["id"]);
-    $datos = json_decode(file_get_contents("php://input"), true);
 
     $consulta = $conexion->prepare(
-        "SELECT * FROM comercio WHERE id_comercio = ?"
+        "SELECT
+            id_comercio,
+            nombre,
+            telefono,
+            direccion,
+            horario
+         FROM comercio
+         WHERE id_comercio = ?"
     );
-
-    $consulta->execute([$id]);
-    $actual = $consulta->fetch(PDO::FETCH_ASSOC);
-
-    if (!$actual) {
-        http_response_code(404);
-        echo json_encode(["error" => "Comercio no encontrado"]);
-        exit;
-    }
-
-    $sql = "UPDATE comercio
-            SET nombre = ?,
-                ruc = ?,
-                telefono = ?,
-                direccion = ?,
-                horario = ?
-            WHERE id_comercio = ?";
-
-    $consulta = $conexion->prepare($sql);
 
     $consulta->execute([
-        $datos["nombre"] ?? $actual["nombre"],
-        $datos["ruc"] ?? $actual["ruc"],
-        $datos["telefono"] ?? $actual["telefono"],
-        $datos["direccion"] ?? $actual["direccion"],
-        $datos["horario"] ?? $actual["horario"],
-        $id
+        $idComercio
     ]);
 
-    echo json_encode([
-        "mensaje" => "Comercio actualizado correctamente"
-    ]);
+    $comercio =
+        $consulta->fetch(PDO::FETCH_ASSOC);
 
-    exit;
-}
-
-// Eliminamos un comercio
-if ($metodo === "DELETE") {
-
-    if (!isset($_GET["id"])) {
-        http_response_code(400);
-        echo json_encode(["error" => "Falta el id"]);
-        exit;
+    if (!$comercio) {
+        responder(404, [
+            "error" => "Comercio no encontrado"
+        ]);
     }
 
-    $id = intval($_GET["id"]);
-
-    $consulta = $conexion->prepare(
-        "DELETE FROM comercio WHERE id_comercio = ?"
-    );
-
-    $consulta->execute([$id]);
-
-    echo json_encode([
-        "mensaje" => "Comercio eliminado correctamente"
-    ]);
-
-    exit;
+    responder(200, $comercio);
 }
 
-http_response_code(405);
-echo json_encode(["error" => "Método no permitido"]);
 
-?>
+/*
+Lista publica de comercios.
+No expone datos internos como id_jefe.
+*/
+$consulta = $conexion->query(
+    "SELECT
+        id_comercio,
+        nombre,
+        telefono,
+        direccion,
+        horario
+     FROM comercio
+     ORDER BY nombre"
+);
+
+responder(
+    200,
+    $consulta->fetchAll(PDO::FETCH_ASSOC)
+);
