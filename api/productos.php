@@ -305,23 +305,18 @@ if ($metodo === "PUT") {
     del usuario autenticado.
     */
     $sql = "SELECT
-            p.id_producto,
-            p.id_comercio,
-            p.id_categoria,
-            p.nombre,
-            p.marca,
-            p.precio,
-            p.descripcion,
-            p.stock,
-            p.imagen,
-            p.visible,
-            ca.nombre AS categoria,
-            co.nombre AS comercio
-        FROM producto p
-        INNER JOIN categoria ca
-            ON ca.id_categoria = p.id_categoria
-        INNER JOIN comercio co
-            ON co.id_comercio = p.id_comercio";
+                id_producto,
+                id_categoria,
+                nombre,
+                marca,
+                precio,
+                descripcion,
+                stock,
+                imagen,
+                visible
+            FROM producto
+            WHERE id_producto = ?
+              AND id_comercio = ?";
 
     $consulta = $conexion->prepare($sql);
 
