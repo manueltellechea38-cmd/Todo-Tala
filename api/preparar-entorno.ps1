@@ -89,15 +89,35 @@ Write-Host "conexion.php creado." -ForegroundColor Green
 $env:MYSQL_PWD = $mysqlPass
 
 try {
-    $comandoImportar = "`"$mysql`" --default-character-set=utf8mb4 -u root < `"$dbFile`""
-    cmd /c $comandoImportar
+    # Si ya existe una instalacion, no reimportar el SQL:
+    # asi se conservan los usuarios, productos y pedidos creados.
+    $tablas = & $mysql --batch --skip-column-names -u root -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'baseplataforma' AND table_name = 'usuario';"
 
     if ($LASTEXITCODE -ne 0) {
-        throw "MySQL devolvio un error al cargar la base."
+        throw "No se pudo consultar MySQL."
+    }
+
+    if (($tablas | Out-String).Trim() -eq "0") {
+        Write-Host "Creando la base de datos por primera vez..." -ForegroundColor Cyan
+
+        $comandoImportar = "`"$mysql`" --default-character-set=utf8mb4 -u root < `"$dbFile`""
+        cmd /c $comandoImportar
+
+        if ($LASTEXITCODE -ne 0) {
+            throw "MySQL devolvio un error al cargar la base."
+        }
+    } else {
+        Write-Host "La base de datos ya existe; se conservaran sus datos." -ForegroundColor Yellow
     }
 }
 finally {
     Remove-Item Env:\MYSQL_PWD -ErrorAction SilentlyContinue
+}
+
+# Completa las columnas nuevas sin borrar informacion existente.
+php (Join-Path $PSScriptRoot "actualizar-esquema.php")
+if ($LASTEXITCODE -ne 0) {
+    throw "No se pudo actualizar la estructura de MySQL."
 }
 
 Write-Host ""
