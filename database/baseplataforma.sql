@@ -1,4 +1,4 @@
--- Todo Tala v0.6.0
+-- Todo Tala v1.0.0
 
 create database if not exists baseplataforma;
 use baseplataforma;
@@ -126,6 +126,7 @@ CREATE TABLE carrito_producto (
 CREATE TABLE promocion (
     id_promocion INT AUTO_INCREMENT PRIMARY KEY,
     id_producto INT NOT NULL,
+    nombre VARCHAR(100) NOT NULL DEFAULT 'Promocion',
     tipo VARCHAR(50) NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
     fecha_inicio DATE,
@@ -147,6 +148,7 @@ CREATE TABLE pedido (
     id_comercio INT NOT NULL,
     fecha_pedido DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     estado VARCHAR(50) NOT NULL,
+    observacion VARCHAR(255) NULL,
     codigo_retiro VARCHAR(20) UNIQUE,
     motivo_cancelacion VARCHAR(255),
     fecha_listo DATETIME,
@@ -402,9 +404,9 @@ VALUES
 
 
 INSERT INTO promocion
-(id_promocion, id_producto, tipo, valor, fecha_inicio, fecha_fin, estado)
+(id_promocion, id_producto, nombre, tipo, valor, fecha_inicio, fecha_fin, estado)
 VALUES
-(1, 1, 'porcentaje', 10.00, '2026-10-01', '2026-10-31', 'Activa');
+(1, 1, 'Descuento en arroz', 'porcentaje', 10.00, '2026-10-01', '2026-10-31', 'Activa');
 
 
 INSERT INTO pedido
