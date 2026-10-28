@@ -117,3 +117,31 @@ Está organizada por:
 ## Interfaz
 
 La versión 1.0 incluye modo oscuro predeterminado, modo claro y diseño adaptable para computadora, tablet y celular.
+
+## Publicación de productos para todos los clientes
+
+1. Registrar una cuenta nueva de **Jefe** con su comercio.
+2. Iniciar sesión como ese jefe y entrar a **Productos → Nuevo producto**.
+3. Guardar el producto con los datos requeridos. Se publica inicialmente como visible.
+4. Cerrar sesión y entrar con cualquier cuenta de **Cliente** de la misma instalación.
+5. Abrir **Catálogo**. Allí se muestran los productos visibles de todos los comercios, no solo los del cliente o de un jefe específico.
+
+La pantalla **Inicio** muestra solamente una selección de hasta cuatro productos. Para consultar todos, abrir **Catálogo**.
+
+## Primera instalación y actualizaciones
+
+En PowerShell, desde la carpeta raíz del proyecto:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\api\preparar-entorno.ps1
+```
+
+Este comando puede ejecutarse también si la base ya existe: conserva cuentas, comercios y productos; únicamente completa columnas faltantes que utiliza la API.
+
+Después, iniciar la API y el frontend en dos consolas distintas según las instrucciones anteriores.
+
+## Importante: instalaciones en diferentes computadoras
+
+Cada descarga del ZIP usa **su propio MySQL local** de forma predeterminada. Un jefe y un cliente **en esa misma instalación** comparten los productos guardados en esa base de datos.
+
+Para que un comercio en una computadora publique y los clientes de **otras computadoras** vean esos mismos productos, todos deben utilizar una **única API y base de datos compartidas** (por ejemplo, publicadas en un servidor). Descargar el mismo ZIP en varias computadoras **no sincroniza** sus bases MySQL automáticamente.
