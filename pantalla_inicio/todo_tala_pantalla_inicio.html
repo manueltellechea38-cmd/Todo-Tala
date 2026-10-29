@@ -7,6 +7,42 @@
     <title>Todo Tala | Inicio</title>
     <link rel="stylesheet" href="estilos.css?v=1.0.0">
     <link rel="stylesheet" href="../assets/tema.css?v=1.0.0">
+
+<style id="fotos-completas-final">
+.preview-card .product-placeholder {
+    display: grid !important;
+    place-items: center !important;
+    height: 150px !important;
+    min-height: 150px !important;
+    overflow: hidden !important;
+}
+.preview-card .product-placeholder img {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+}
+.product-card .product-image {
+    display: grid !important;
+    place-items: center !important;
+    height: 210px !important;
+    min-height: 210px !important;
+    flex: 0 0 210px !important;
+    overflow: hidden !important;
+}
+.product-card .product-image img {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+}
+</style>
 </head>
 <body>
     <main class="app-page home-page">
@@ -56,11 +92,11 @@
 
             <!-- Barra inferior con cinco accesos iguales. -->
             <nav class="bottom-nav" aria-label="Navegación del cliente">
-                <a class="active" href="todo_tala_pantalla_inicio.html">Inicio</a>
-                <a href="../resultados_busqueda/todo_tala_resultados_busqueda.html">Buscar</a>
-                <a href="../catalogo_cliente/todo_tala_catalogo_cliente.html">Catálogo</a>
-                <a href="../mis_pedidos/todo_tala_mis_pedidos.html">Pedidos</a>
-                <a href="../perfil_cliente/tala_perfil_cliente.html">Perfil</a>
+                <a class="active" href="todo_tala_pantalla_inicio.html"><span aria-hidden="true">🏠</span><span>Inicio</span></a>
+                <a href="../resultados_busqueda/todo_tala_resultados_busqueda.html"><span aria-hidden="true">🔎</span><span>Buscar</span></a>
+                <a href="../catalogo_cliente/todo_tala_catalogo_cliente.html"><span aria-hidden="true">🛍️</span><span>Catálogo</span></a>
+                <a href="../mis_pedidos/todo_tala_mis_pedidos.html"><span aria-hidden="true">🧾</span><span>Pedidos</span></a>
+                <a href="../favoritos_cliente/todo_tala_favoritos.html"><span aria-hidden="true">⭐</span><span>Favoritos</span></a><a href="../perfil_cliente/tala_perfil_cliente.html"><span aria-hidden="true">👤</span><span>Perfil</span></a>
             </nav>
         </section>
     </main>

@@ -270,10 +270,16 @@ function renderizarDetalle() {
     const estado =
         TodoTala.estadoStock(producto);
 
-    document
-        .getElementById("imagen-producto")
-        .textContent =
-            producto.imagenTexto;
+    const contenedorImagen = document.getElementById("imagen-producto");
+    if (producto.imagen) {
+        const foto = document.createElement("img");
+        foto.src = UPLOADS_URL + encodeURIComponent(producto.imagen);
+        foto.alt = "Foto de " + producto.nombre;
+        foto.loading = "lazy";
+        contenedorImagen.replaceChildren(foto);
+    } else {
+        contenedorImagen.textContent = producto.imagenTexto;
+    }
 
     document
         .getElementById("nombre-producto")

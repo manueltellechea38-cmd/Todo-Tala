@@ -349,7 +349,7 @@ function ejecutarBusqueda() {
                     '">' +
 
                         '<figure class="result-image">' +
-                            producto.imagenTexto +
+                            (producto.imagen ? '<img src="' + UPLOADS_URL + encodeURIComponent(producto.imagen) + '" alt="Foto del producto" loading="lazy">' : producto.imagenTexto) +
                         '</figure>' +
 
                         '<section class="result-info">' +

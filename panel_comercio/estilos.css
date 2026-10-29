@@ -75,3 +75,8 @@
         grid-template-columns: 1fr;
     }
 }
+
+.panel-card {
+    width: 100%;
+    max-width: none;
+}

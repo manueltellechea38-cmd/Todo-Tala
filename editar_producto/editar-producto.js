@@ -1,6 +1,25 @@
 const idEditar = Number(TodoTala.parametro("id"));
 
 const botonEliminar = document.getElementById("btn-eliminar");
+const inputImagen = document.getElementById("imagen");
+const imagenActual = document.getElementById("imagen-actual");
+const vistaPrevia = document.getElementById("vista-previa");
+
+inputImagen.addEventListener("change", function () {
+    const archivo = inputImagen.files[0];
+    vistaPrevia.hidden = true;
+
+    if (!archivo) return;
+
+    if (!["image/jpeg", "image/png", "image/webp"].includes(archivo.type) || archivo.size > 2 * 1024 * 1024) {
+        inputImagen.value = "";
+        TodoTala.toast("Elegí una imagen JPG, PNG o WEBP de hasta 2 MB");
+        return;
+    }
+
+    vistaPrevia.src = URL.createObjectURL(archivo);
+    vistaPrevia.hidden = false;
+});
 
 let productoEditar = null;
 let confirmarEliminacion = false;
@@ -10,7 +29,34 @@ Carga el producto desde la API.
 La API comprueba que pertenezca al comercio
 del jefe o empleado autenticado.
 */
+async function cargarCategorias() {
+    const selector = document.getElementById("categoria");
+    selector.disabled = true;
+
+    try {
+        const respuesta = await fetch(CATEGORIAS_URL);
+        const categorias = await respuesta.json();
+
+        if (!respuesta.ok || !Array.isArray(categorias)) {
+            throw new Error("No se pudieron cargar las categorías");
+        }
+
+        selector.replaceChildren(new Option("Seleccioná una categoría", ""));
+
+        categorias.forEach(function (categoria) {
+            selector.add(new Option(categoria.nombre, categoria.id_categoria));
+        });
+
+        selector.disabled = false;
+        return true;
+    } catch (error) {
+        selector.replaceChildren(new Option("Error al cargar categorías", ""));
+        TodoTala.toast("No se pudieron cargar las categorías");
+        return false;
+    }
+}
 async function cargarProducto() {
+    if (!(await cargarCategorias())) return;
 
     if (!idEditar) {
         TodoTala.irA(
@@ -51,6 +97,11 @@ async function cargarProducto() {
         }
 
         productoEditar = datos;
+
+        if (productoEditar.imagen) {
+            imagenActual.src = UPLOADS_URL + encodeURIComponent(productoEditar.imagen);
+            imagenActual.hidden = false;
+        }
 
         document.getElementById("nombre").value =
             productoEditar.nombre;
@@ -210,6 +261,29 @@ document
                     );
 
                     return;
+                }
+
+                if (inputImagen.files[0]) {
+                    const datosImagen = new FormData();
+                    datosImagen.append("imagen", inputImagen.files[0]);
+
+                    const respuestaImagen = await fetch(
+                        API_BASE + "/imagen.php?id=" + encodeURIComponent(idEditar),
+                        {
+                            method: "POST",
+                            headers: {
+                                "Authorization": "Bearer " + obtenerToken()
+                            },
+                            body: datosImagen
+                        }
+                    );
+
+                    const resultadoImagen = await respuestaImagen.json();
+
+                    if (!respuestaImagen.ok) {
+                        TodoTala.toast(resultadoImagen.error || "No se pudo reemplazar la foto");
+                        return;
+                    }
                 }
 
                 TodoTala.toast(

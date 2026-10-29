@@ -12,3 +12,6 @@ const PROMOCIONES_URL = API_BASE + "/promociones.php";
 const FAVORITOS_URL = API_BASE + "/favoritos.php";
 const COMERCIOS_SEGUIDOS_URL = API_BASE + "/comercios_seguidos.php";
 const MI_COMERCIO_URL = API_BASE + "/mi_comercio.php";
+const CATEGORIAS_URL = API_BASE + "/categorias.php";
+
+const UPLOADS_URL = API_BASE + "/uploads/";

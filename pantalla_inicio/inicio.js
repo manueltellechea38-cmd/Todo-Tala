@@ -209,6 +209,9 @@ async function cargarInicio() {
                                 producto.visible
                             ) === 1,
 
+                        imagen:
+                            producto.imagen || null,
+
                         imagenTexto:
                             obtenerIniciales(
                                 producto.nombre
@@ -371,9 +374,12 @@ function tarjetaProducto(producto) {
         producto.id +
         '" tabindex="0">' +
 
-            '<span class="product-placeholder">' +
-                producto.imagenTexto +
-            '</span>' +
+            (producto.imagen
+                ? '<span class="product-placeholder"><img src="' +
+                    UPLOADS_URL + encodeURIComponent(producto.imagen) +
+                    '" alt="Foto del producto" loading="lazy"></span>'
+                : '<span class="product-placeholder">' +
+                    producto.imagenTexto + '</span>') +
 
             '<span class="' +
             estado.clase +

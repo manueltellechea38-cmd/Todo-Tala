@@ -584,10 +584,9 @@ function renderizarCatalogo() {
             const stock =
                 TodoTala.estadoStock(producto);
 
-            const imagenTexto =
-                producto.imagen
-                    ? "Imagen"
-                    : "Sin imagen";
+            const imagenTexto = producto.imagen
+                ? '<img src="' + UPLOADS_URL + encodeURIComponent(producto.imagen) + '" alt="Foto del producto" loading="lazy">' 
+                : '<span aria-label="Sin foto">📷</span>';
 
             return (
                 '<article class="product-card" ' +

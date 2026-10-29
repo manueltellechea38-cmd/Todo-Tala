@@ -1,0 +1,71 @@
+@import url("../assets/estilos_globales.css");
+
+.favorites-card {
+    width: 100%;
+    max-width: none;
+}
+
+.favorites-content {
+    display: grid;
+    gap: 28px;
+}
+
+.favorites-content h2 {
+    margin-bottom: 12px;
+}
+
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+}
+
+.favorite-card {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 14px;
+    align-items: center;
+    padding: 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background: var(--superficie-2);
+}
+
+.favorite-image {
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.favorite-image--empty {
+    display: grid;
+    place-items: center;
+    background: var(--superficie-3);
+    font-size: 1.8rem;
+}
+
+.favorite-card__content {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+}
+
+.favorite-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+@media (max-width: 520px) {
+    .favorite-card {
+        grid-template-columns: 64px minmax(0, 1fr);
+        padding: 10px;
+    }
+
+    .favorite-image {
+        width: 64px;
+        height: 64px;
+    }
+}

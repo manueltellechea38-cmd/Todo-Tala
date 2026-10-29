@@ -30,12 +30,7 @@
 
                     <label class="form-group form-grid__full">Nombre *<input id="nombre" type="text"></label>
                     <label class="form-group">Marca *<input id="marca" type="text"></label>
-                    <label class="form-group">Categoría *<select id="categoria">
-    <option value="1">Alimentos</option>
-    <option value="2">Limpieza</option>
-    <option value="3">Electronica</option>
-    <option value="4">Ropa</option>
-</select></label>
+                    <label class="form-group">Categoría *<select id="categoria" required><option value="">Cargando categorías...</option></select></label>
                     <label class="form-group">Precio *<input id="precio" type="number" min="0"></label>
                     <label class="form-group">Stock *<input id="stock" type="number" min="0"></label>
                     <label class="form-group form-grid__full">Descripción<textarea id="descripcion"></textarea></label>
@@ -45,11 +40,11 @@
             </section>
 
             <nav class="commerce-nav" aria-label="Navegación del comercio">
-                <a href="../panel_comercio/todo_tala_panel_comercio.html">Panel</a>
-                <a class="active" href="../gestionar_productos/todo_tala_gestion_productos.html">Productos</a>
-                <a href="../pedidos_recibidos/todo_tala_pedidos_recibidos.html">Pedidos</a>
-                <a href="../gestionar_promociones/todo_tala_gestion_promociones.html">Promociones</a>
-                <a data-solo-jefe href="../gestionar_empleados/todo_tala_gestion_empleados.html">Empleados</a>
+                <a href="../panel_comercio/todo_tala_panel_comercio.html"><span aria-hidden="true">🏠</span><span>Panel</span></a>
+                <a class="active" href="../gestionar_productos/todo_tala_gestion_productos.html"><span aria-hidden="true">📦</span><span>Productos</span></a>
+                <a href="../pedidos_recibidos/todo_tala_pedidos_recibidos.html"><span aria-hidden="true">🧾</span><span>Pedidos</span></a>
+                <a href="../gestionar_promociones/todo_tala_gestion_promociones.html"><span aria-hidden="true">🏷️</span><span>Promociones</span></a>
+                <a data-solo-jefe href="../gestionar_empleados/todo_tala_gestion_empleados.html"><span aria-hidden="true">👥</span><span>Empleados</span></a>
             </nav>
         </section>
     </main>

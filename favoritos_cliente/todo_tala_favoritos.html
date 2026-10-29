@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Tala | Favoritos</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="../assets/tema.css">
+</head>
+<body>
+    <main class="app-page">
+        <section class="app-card favorites-card">
+            <header class="app-header">
+                <div>
+                    <h1>Favoritos</h1>
+                    <p class="muted">Tus productos guardados y comercios que seguís.</p>
+                </div>
+            </header>
+
+            <div class="content favorites-content">
+                <section aria-labelledby="titulo-productos-favoritos">
+                    <h2 id="titulo-productos-favoritos">Productos favoritos</h2>
+                    <div id="lista-productos-favoritos" class="favorites-grid">
+                        <p class="muted">Cargando productos...</p>
+                    </div>
+                </section>
+
+                <section aria-labelledby="titulo-comercios-seguidos">
+                    <h2 id="titulo-comercios-seguidos">Comercios que seguís</h2>
+                    <div id="lista-comercios-seguidos" class="favorites-grid">
+                        <p class="muted">Cargando comercios...</p>
+                    </div>
+                </section>
+            </div>
+
+            <nav class="bottom-nav" aria-label="Navegación del cliente">
+                <a href="../pantalla_inicio/todo_tala_pantalla_inicio.html"><span aria-hidden="true">🏠</span><span>Inicio</span></a>
+                <a href="../resultados_busqueda/todo_tala_resultados_busqueda.html"><span aria-hidden="true">🔎</span><span>Buscar</span></a>
+                <a href="../catalogo_cliente/todo_tala_catalogo_cliente.html"><span aria-hidden="true">🛍️</span><span>Catálogo</span></a>
+                <a class="active" href="todo_tala_favoritos.html"><span aria-hidden="true">⭐</span><span>Favoritos</span></a>
+                <a href="../mis_pedidos/todo_tala_mis_pedidos.html"><span aria-hidden="true">🧾</span><span>Pedidos</span></a>
+                <a href="../favoritos_cliente/todo_tala_favoritos.html"><span aria-hidden="true">⭐</span><span>Favoritos</span></a><a href="../perfil_cliente/tala_perfil_cliente.html"><span aria-hidden="true">👤</span><span>Perfil</span></a>
+            </nav>
+        </section>
+    </main>
+
+    <script src="../assets/config.js"></script>
+    <script src="../assets/sesion.js"></script>
+    <script src="../assets/app.js"></script>
+    <script src="../assets/acceso.js"></script>
+    <script src="favoritos.js"></script>
+    <script src="../assets/tema.js"></script>
+</body>
+</html>

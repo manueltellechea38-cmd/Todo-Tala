@@ -122,6 +122,10 @@ function renderizarProductos() {
     listaProductos.innerHTML = productos
         .map(function (producto) {
 
+            const miniatura = producto.imagen
+                ? `<img class="product-thumbnail" src="${UPLOADS_URL}${encodeURIComponent(producto.imagen)}" alt="Foto de ${producto.nombre}">`
+                : `<span class="product-thumbnail product-thumbnail--empty" aria-label="Sin foto">📷</span>`;
+
             const stockBajo =
                 Number(producto.stock) <= 5
                     ? '<span class="badge badge--warning">Stock bajo: ' +
@@ -139,6 +143,8 @@ function renderizarProductos() {
             return `
                 <article class="product-row"
                     data-id="${producto.id_producto}">
+
+                    ${miniatura}
 
                     <section class="product-info">
 
