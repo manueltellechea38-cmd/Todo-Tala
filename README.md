@@ -1,6 +1,6 @@
 # Todo Tala
 
-Versión: 1.0.0
+Versión: 1.3
 
 Todo Tala es una plataforma web para comercios locales de Tala.
 
@@ -64,6 +64,8 @@ Principales endpoints:
 - mi_comercio.php
 - empleados.php
 - productos.php
+- categorias.php
+- imagen.php
 - promociones.php
 - carrito.php
 - pedidos.php
@@ -114,9 +116,9 @@ Está organizada por:
 - Favoritos
 - Comercios seguidos
 
-## Interfaz
+## Interfaz y novedades de la versión 1.3
 
-La versión 1.0 incluye modo oscuro predeterminado, modo claro y diseño adaptable para computadora, tablet y celular.
+Incluye carga y reemplazo de imágenes de productos, categorías ampliadas, acceso a favoritos y comercios seguidos, navegación con iconos y mejoras en la presentación de las fotos dentro del catálogo. Mantiene el modo oscuro predeterminado, modo claro y diseño adaptable para computadora, tablet y celular.
 
 ## Publicación de productos para todos los clientes
 
