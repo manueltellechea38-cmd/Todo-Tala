@@ -39,6 +39,18 @@ try {
         "observacion VARCHAR(255) NULL AFTER estado"
     );
 
+    agregarColumnaSiFalta(
+        $conexion,
+        "sesiones",
+        "rol_activo",
+        "rol_activo ENUM('cliente','jefe','empleado') NULL DEFAULT NULL AFTER id_persona"
+    );
+
+    $conexion->exec(
+        "INSERT IGNORE INTO cliente (id_persona)
+         SELECT id_persona FROM usuario"
+    );
+
     echo "Estructura de MySQL actualizada correctamente.\n";
 } catch (PDOException $e) {
     fwrite(STDERR, "No se pudo actualizar la base de datos.\n");

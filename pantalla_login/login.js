@@ -46,7 +46,7 @@ formularioLogin.addEventListener("submit", async function (evento) {
             },
             body: JSON.stringify({
                 email: correo,
-                password: password
+                password: password, rol: document.getElementById("rol-ingreso").value
             })
         });
 

@@ -137,7 +137,7 @@ async function eliminarEmpleado(id) {
         }
 
         TodoTala.toast(
-            "Empleado eliminado correctamente"
+            datos.mensaje || "Empleado desvinculado correctamente"
         );
 
         await cargarEmpleados();
@@ -188,7 +188,7 @@ formularioEmpleado.addEventListener(
             cedula.length >= 7 &&
             correo.includes("@") &&
             correo.includes(".") &&
-            password.length >= 8;
+            (password === "" || password.length >= 8);
 
         if (!valido) {
 
@@ -249,7 +249,7 @@ formularioEmpleado.addEventListener(
             );
 
             TodoTala.toast(
-                "Empleado creado correctamente"
+                datos.mensaje || "Empleado registrado correctamente"
             );
 
             await cargarEmpleados();
@@ -267,3 +267,17 @@ formularioEmpleado.addEventListener(
 Al abrir la pantalla cargamos los empleados desde MySQL.
 */
 cargarEmpleados();
+/* Si ya tiene cuenta, no se solicita otra contraseña. */
+const campoPasswordEmpleado = document.getElementById("password");
+
+if (campoPasswordEmpleado) {
+    campoPasswordEmpleado.removeAttribute("required");
+    campoPasswordEmpleado.placeholder = "Solo para cuentas nuevas";
+
+    const notaEmpleado = document.createElement("p");
+    notaEmpleado.className = "helper";
+    notaEmpleado.textContent =
+        "Si la persona ya tiene cuenta, ingresá su misma cédula y correo y dejá la contraseña vacía. Conserva su contraseña original.";
+
+    campoPasswordEmpleado.parentElement.appendChild(notaEmpleado);
+}

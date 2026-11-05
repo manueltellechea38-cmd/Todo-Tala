@@ -179,9 +179,30 @@ try {
     /*
     Creamos una nueva sesión y obtenemos el token.
     */
+    $roles = rolesDisponibles($conexion, $usuario["id_persona"]);
+
+    if (count($roles) === 0) {
+        responder(403, ["error" => "La cuenta no tiene roles disponibles"]);
+    }
+
+    $rolSolicitado = isset($datos["rol"]) && is_string($datos["rol"])
+        ? trim($datos["rol"])
+        : "";
+
+    $rolElegido = $rolSolicitado !== ""
+        ? $rolSolicitado
+        : (in_array($usuario["rol"], $roles, true)
+            ? $usuario["rol"]
+            : $roles[0]);
+
+    if (!in_array($rolElegido, $roles, true)) {
+        responder(403, ["error" => "No tenés permiso para ingresar con ese rol"]);
+    }
+
     $token = crearSesion(
         $conexion,
-        $usuario["id_persona"]
+        $usuario["id_persona"],
+        $rolElegido
     );
 
     responder(200, [
@@ -192,7 +213,8 @@ try {
             "id_persona" => (int) $usuario["id_persona"],
             "nombre" => $usuario["nombre"],
             "correo" => $usuario["correo"],
-            "rol" => $usuario["rol"]
+            "rol" => $rolElegido,
+            "roles_disponibles" => $roles
         ]
     ]);
 

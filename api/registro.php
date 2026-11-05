@@ -258,6 +258,10 @@ try {
             $direccion,
             $horario
         ]);
+        $consulta = $conexion->prepare(
+            "INSERT INTO cliente (id_persona) VALUES (?)"
+        );
+        $consulta->execute([$idPersona]);
     }
 
     $conexion->commit();

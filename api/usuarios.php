@@ -59,6 +59,12 @@ if ($metodo === "GET") {
         ]);
     }
 
+    $usuario["rol"] = $usuarioActual["rol"];
+    $usuario["roles_disponibles"] = rolesDisponibles(
+        $conexion,
+        $usuarioActual["id_persona"]
+    );
+
     responder(200, $usuario);
 }
 

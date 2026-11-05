@@ -25,6 +25,7 @@ CREATE TABLE usuario (
 CREATE TABLE sesiones (
     token_hash CHAR(64) PRIMARY KEY,
     id_persona INT NOT NULL,
+    rol_activo ENUM('cliente','jefe','empleado') NULL DEFAULT NULL,
     expira_en DATETIME NOT NULL,
     creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_persona) REFERENCES usuario(id_persona) ON DELETE CASCADE
@@ -373,6 +374,8 @@ INSERT INTO empleado
 (id_persona, id_comercio)
 VALUES
 (3, 1);
+INSERT IGNORE INTO cliente (id_persona)
+SELECT id_persona FROM usuario;
 
 
 INSERT INTO categoria

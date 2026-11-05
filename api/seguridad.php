@@ -4,6 +4,26 @@ const DURACION_SESION = 7200; // 2 horas
 
 const ROLES = ['cliente', 'empleado', 'jefe'];
 
+/* Roles asociados a una misma persona. */
+function rolesDisponibles($conexion, $idPersona) {
+    $consulta = $conexion->prepare(
+        "SELECT
+            EXISTS(SELECT 1 FROM cliente WHERE id_persona = ?) AS cliente,
+            EXISTS(SELECT 1 FROM comercio WHERE id_jefe = ?) AS jefe,
+            EXISTS(SELECT 1 FROM empleado WHERE id_persona = ?) AS empleado"
+    );
+    $consulta->execute([$idPersona, $idPersona, $idPersona]);
+    $fila = $consulta->fetch(PDO::FETCH_ASSOC);
+
+    $roles = [];
+    foreach (["cliente", "jefe", "empleado"] as $rol) {
+        if ($fila && (int)$fila[$rol] === 1) {
+            $roles[] = $rol;
+        }
+    }
+    return $roles;
+}
+
 /* Lee el token enviado en Authorization: Bearer TOKEN */
 function obtenerToken() {
     $cabecera = $_SERVER["HTTP_AUTHORIZATION"] ?? "";
@@ -21,7 +41,10 @@ function hashToken($token) {
 }
 
 /* Crea una sesión para el usuario y devuelve el token original. */
-function crearSesion($conexion, $idPersona) {
+function crearSesion($conexion, $idPersona, $rolActivo) {
+    if (!in_array($rolActivo, rolesDisponibles($conexion, $idPersona), true)) {
+        throw new RuntimeException("Rol no autorizado");
+    }
     $token = bin2hex(random_bytes(32));
 
     $expira = date(
@@ -30,14 +53,15 @@ function crearSesion($conexion, $idPersona) {
     );
 
     $sql = "INSERT INTO sesiones
-            (token_hash, id_persona, expira_en)
-            VALUES (?, ?, ?)";
+            (token_hash, id_persona, rol_activo, expira_en)
+            VALUES (?, ?, ?, ?)";
 
     $consulta = $conexion->prepare($sql);
 
     $consulta->execute([
         hashToken($token),
         $idPersona,
+        $rolActivo,
         $expira
     ]);
 
@@ -56,7 +80,7 @@ function usuarioActual($conexion) {
                 u.id_persona,
                 u.nombre,
                 u.correo,
-                u.rol
+                COALESCE(s.rol_activo, u.rol) AS rol
             FROM sesiones s
             INNER JOIN usuario u
                 ON u.id_persona = s.id_persona
@@ -73,7 +97,17 @@ function usuarioActual($conexion) {
 
     $usuario = $consulta->fetch(PDO::FETCH_ASSOC);
 
-    return $usuario ?: null;
+    if (!$usuario) return null;
+
+    if (!in_array(
+        $usuario["rol"],
+        rolesDisponibles($conexion, $usuario["id_persona"]),
+        true
+    )) {
+        return null;
+    }
+
+    return $usuario;
 }
 
 /* Obliga a que exista una sesión válida. */

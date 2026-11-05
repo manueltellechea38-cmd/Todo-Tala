@@ -1,5 +1,31 @@
 <?php
 
+/* Codigo alfanumerico seguro de retiro */
+function generarCodigoRetiroSeguro() {
+    $letras = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+    $numeros = '23456789';
+    $todos = $letras . $numeros;
+
+    $caracteres = [
+        $letras[random_int(0, strlen($letras) - 1)],
+        $numeros[random_int(0, strlen($numeros) - 1)]
+    ];
+
+    for ($i = 2; $i < 10; $i++) {
+        $caracteres[] = $todos[random_int(0, strlen($todos) - 1)];
+    }
+
+    for ($i = count($caracteres) - 1; $i > 0; $i--) {
+        $j = random_int(0, $i);
+        $temporal = $caracteres[$i];
+        $caracteres[$i] = $caracteres[$j];
+        $caracteres[$j] = $temporal;
+    }
+
+    return implode('', $caracteres);
+}
+
+
 require_once "comun.php";
 require_once "conexion.php";
 require_once "seguridad.php";
@@ -735,11 +761,7 @@ if ($metodo === "PUT") {
             */
             do {
 
-                $codigo =
-                    (string) random_int(
-                        100000,
-                        999999
-                    );
+                $codigo = generarCodigoRetiroSeguro();
 
                 $consulta = $conexion->prepare(
                     "SELECT id_pedido
@@ -785,7 +807,7 @@ if ($metodo === "PUT") {
 
             $codigoIngresado =
                 isset($datos["codigo_retiro"])
-                    ? trim($datos["codigo_retiro"])
+                    ? strtoupper(trim($datos["codigo_retiro"]))
                     : "";
 
             if (
