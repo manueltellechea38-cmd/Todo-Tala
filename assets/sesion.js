@@ -22,7 +22,7 @@ function guardarSesion(datos) {
         vence: Date.now() + datos.expira_en * 1000
     };
 
-    localStorage.setItem(
+    sessionStorage.setItem(
         CLAVE_SESION,
         JSON.stringify(sesion)
     );
@@ -32,7 +32,7 @@ function guardarSesion(datos) {
 function leerSesion() {
     try {
         const sesion = JSON.parse(
-            localStorage.getItem(CLAVE_SESION)
+            sessionStorage.getItem(CLAVE_SESION)
         );
 
         if (
@@ -47,7 +47,7 @@ function leerSesion() {
         /* Si el contenido está dañado se considera que no hay sesión. */
     }
 
-    localStorage.removeItem(CLAVE_SESION);
+    sessionStorage.removeItem(CLAVE_SESION);
 
     return null;
 }
@@ -65,7 +65,7 @@ function obtenerUsuario() {
 }
 
 function cerrarSesionLocal() {
-    localStorage.removeItem(CLAVE_SESION);
+    sessionStorage.removeItem(CLAVE_SESION);
 }
 
 function puede(accion) {
