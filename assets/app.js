@@ -1,11 +1,11 @@
-window.TodoTala =
+﻿window.TodoTala =
     window.TodoTala || {};
 
 
 /*
-Versión actual del proyecto.
+VersiÃ³n actual del proyecto.
 La cambiaremos a 1.0.0 cuando cerremos
-Postman y documentación.
+Postman y documentaciÃ³n.
 */
 TodoTala.VERSION =
     "1.0.0";
@@ -29,7 +29,7 @@ TodoTala.formatearPrecio =
 
 
 /*
-Lee un parámetro de la URL.
+Lee un parÃ¡metro de la URL.
 
 Ejemplo:
 ?id=3
@@ -104,7 +104,7 @@ TodoTala.toast =
 
 
 /*
-Devuelve el usuario de la sesión actual.
+Devuelve el usuario de la sesiÃ³n actual.
 
 Los datos vienen de sesion.js.
 Ya no usa usuarios simulados.
@@ -124,8 +124,8 @@ TodoTala.usuarioActual =
 
 
 /*
-Cierra la sesión en la API
-y también en el navegador.
+Cierra la sesiÃ³n en la API
+y tambiÃ©n en el navegador.
 */
 TodoTala.cerrarSesion =
     async function () {
@@ -157,7 +157,7 @@ TodoTala.cerrarSesion =
 
                 /*
                 Aunque el servidor no responda,
-                se cierra la sesión local.
+                se cierra la sesiÃ³n local.
                 */
             }
         }
@@ -173,7 +173,7 @@ TodoTala.cerrarSesion =
 
 /*
 Devuelve el estado visual
-según el stock del producto.
+segÃºn el stock del producto.
 */
 TodoTala.estadoStock =
     function (producto) {
@@ -198,7 +198,7 @@ TodoTala.estadoStock =
 
             return {
                 texto:
-                    "Últimas " + stock,
+                    "Ãšltimas " + stock,
 
                 clase:
                     "badge badge--warning"
@@ -253,7 +253,7 @@ TodoTala.claseEstado =
             [
                 "Pendiente",
                 "Aceptado",
-                "En preparación"
+                "En preparaciÃ³n"
             ].includes(estado)
         ) {
 
@@ -299,3 +299,124 @@ TodoTala.ajustarNavegacionComercio =
                 }
             );
     };
+/* =========================
+   CAMPANITA DE NOTIFICACIONES
+   ========================= */
+
+(function () {
+    const scriptActual = document.currentScript;
+    const raizProyecto = new URL("../", scriptActual.src);
+
+    function iniciarCampanita() {
+        const usuario =
+            typeof obtenerUsuario === "function"
+                ? obtenerUsuario()
+                : null;
+
+        const token =
+            typeof obtenerToken === "function"
+                ? obtenerToken()
+                : null;
+
+        if (!usuario || !token) return;
+
+        const botonSalir = document.querySelector("#btn-salir");
+
+        const contenedor =
+            botonSalir?.parentElement ||
+            document.querySelector(".top-nav") ||
+            document.querySelector(".app-header");
+
+        if (!contenedor) return;
+
+        if (document.getElementById("campanita-notificaciones")) {
+            return;
+        }
+
+        const enlace = document.createElement("a");
+        enlace.id = "campanita-notificaciones";
+        enlace.className = "campanita-notificaciones";
+        enlace.href = new URL(
+            "notificaciones/todo_tala_notificaciones.html",
+            raizProyecto
+        ).href;
+
+        enlace.setAttribute(
+            "aria-label",
+            "Notificaciones"
+        );
+
+        enlace.innerHTML = `
+    <svg
+        width="21"
+        height="21"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+    >
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+        <path d="M10 21h4"></path>
+    </svg>
+    <span class="campanita-contador" hidden></span>
+`;
+
+        contenedor.insertBefore(
+            enlace,
+            botonSalir || null
+        );
+
+        enlace.style.marginLeft = contenedor.matches(".top-nav") ? "0" : "auto";
+
+        const contador =
+            enlace.querySelector(".campanita-contador");
+
+        async function actualizarContador() {
+            try {
+                const respuesta = await fetch(
+                    NOTIFICACIONES_URL,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Authorization": "Bearer " + token
+                        },
+                        cache: "no-store"
+                    }
+                );
+
+                if (!respuesta.ok) {
+                    throw new Error("No se pudo consultar el contador.");
+                }
+
+                const datos = await respuesta.json();
+                const cantidad = Number(datos.sin_leer || 0);
+
+                contador.hidden = cantidad <= 0;
+                contador.textContent = "";
+
+                enlace.setAttribute(
+                    "aria-label",
+                    cantidad > 0
+                        ? "Notificaciones, " + cantidad + " sin leer"
+                        : "Notificaciones"
+                );
+            } catch (error) {
+                console.error(
+                    "Error al actualizar notificaciones:",
+                    error
+                );
+            }
+        }
+
+        actualizarContador();
+        window.setInterval(actualizarContador, 30000);
+    }
+
+    iniciarCampanita();
+})();
+
+
+

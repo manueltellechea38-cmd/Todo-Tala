@@ -29,6 +29,7 @@ function generarCodigoRetiroSeguro() {
 require_once "comun.php";
 require_once "conexion.php";
 require_once "seguridad.php";
+require_once "notificaciones_funciones.php";
 
 $usuario = requerirLogin($conexion);
 $metodo = $_SERVER["REQUEST_METHOD"];
@@ -446,6 +447,13 @@ $consulta->execute([
                 "id_pedido" => $idPedido,
                 "id_comercio" => $idComercio
             ];
+
+            notificarComercio(
+                $conexion,
+                (int) $idComercio,
+                "Nuevo pedido #" . $idPedido . " recibido.",
+                "pedido_nuevo"
+            );
         }
 
         /*
@@ -549,7 +557,7 @@ if ($metodo === "PUT") {
             $conexion->beginTransaction();
 
             $consulta = $conexion->prepare(
-                "SELECT id_pedido, estado
+                "SELECT id_pedido, estado, id_comercio
                  FROM pedido
                  WHERE id_pedido = ?
                    AND id_cliente = ?
@@ -628,6 +636,15 @@ if ($metodo === "PUT") {
                 $idPedido
             ]);
 
+            
+            notificarComercio(
+                $conexion,
+                (int) $pedido["id_comercio"],
+                "El cliente canceló el pedido #" . $idPedido .
+                    ". Motivo: " . $motivo,
+                "pedido_cancelado"
+            );
+
             $conexion->commit();
 
             responder(200, [
@@ -684,14 +701,7 @@ if ($metodo === "PUT") {
         al comercio autenticado.
         */
         $consulta = $conexion->prepare(
-            "SELECT
-                id_pedido,
-                estado,
-                codigo_retiro
-             FROM pedido
-             WHERE id_pedido = ?
-               AND id_comercio = ?
-             FOR UPDATE"
+            "SELECT id_pedido, id_cliente, estado, codigo_retiro FROM pedido WHERE id_pedido = ? AND id_comercio = ? FOR UPDATE"
         );
 
         $consulta->execute([
@@ -917,6 +927,23 @@ if ($metodo === "PUT") {
                 "Cambio de estado no permitido"
             );
         }
+
+        
+        $tipoNotificacion = in_array(
+            $nuevoEstado,
+            ["Cancelado", "Rechazado"],
+            true
+        )
+            ? "pedido_cancelado"
+            : "estado_pedido";
+
+        crearNotificacion(
+            $conexion,
+            (int) $pedido["id_cliente"],
+            "Tu pedido #" . $idPedido .
+                " cambió al estado: " . $nuevoEstado . ".",
+            $tipoNotificacion
+        );
 
         $conexion->commit();
 

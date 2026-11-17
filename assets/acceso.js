@@ -65,7 +65,8 @@ TodoTala.controlarAcceso = function () {
         "resultados_busqueda",
         "carrito_pedidos",
         "mis_pedidos",
-        "perfil_cliente"
+        "perfil_cliente",
+        "notificaciones"
     ];
 
     const paginasComercio = [
@@ -75,7 +76,8 @@ TodoTala.controlarAcceso = function () {
         "gestionar_productos",
         "gestionar_promociones",
         "pedidos_recibidos",
-        "gestionar_empleados"
+        "gestionar_empleados",
+        "notificaciones"
     ];
 
     const estaEnCliente = paginasCliente.some(function (carpeta) {
@@ -87,6 +89,10 @@ TodoTala.controlarAcceso = function () {
     });
 
     /* Un cliente no puede abrir herramientas internas del comercio. */
+    if (ruta.includes("/notificaciones/")) {
+        return;
+    }
+
     if (usuario.rol === "cliente" && estaEnComercio) {
         TodoTala.abrir("pantalla_inicio/todo_tala_pantalla_inicio.html");
         return;

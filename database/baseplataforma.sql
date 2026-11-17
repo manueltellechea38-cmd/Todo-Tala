@@ -73,9 +73,20 @@ CREATE TABLE empleado (
 
 CREATE TABLE categoria (
     id_categoria INT AUTO_INCREMENT PRIMARY KEY,
+    id_comercio INT NULL,
     descripcion VARCHAR(200),
-    nombre VARCHAR(100) NOT NULL UNIQUE
+    nombre VARCHAR(100) NOT NULL,
+    nombre_general VARCHAR(100)
+        CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci
+        GENERATED ALWAYS AS (
+            CASE WHEN id_comercio IS NULL THEN nombre ELSE NULL END
+        ) STORED,
+    UNIQUE KEY uq_categoria_nombre_general (nombre_general),
+    UNIQUE KEY uq_categoria_comercio_nombre (id_comercio, nombre),
+    CONSTRAINT fk_categoria_comercio
+        FOREIGN KEY (id_comercio) REFERENCES comercio(id_comercio)
 );
+
 
 
 CREATE TABLE producto (
@@ -230,9 +241,19 @@ CREATE TABLE notificacion (
     id_notificacion INT AUTO_INCREMENT PRIMARY KEY,
     id_persona INT NOT NULL,
     mensaje VARCHAR(255) NOT NULL,
+    tipo VARCHAR(40) NOT NULL DEFAULT 'general',
     fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     leida BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (id_persona) REFERENCES usuario(id_persona)
+);
+
+CREATE TABLE preferencia_notificacion (
+    id_persona INT PRIMARY KEY,
+    pedidos_nuevos BOOLEAN NOT NULL DEFAULT TRUE,
+    pedidos_cancelados BOOLEAN NOT NULL DEFAULT TRUE,
+    estados_pedido BOOLEAN NOT NULL DEFAULT TRUE,
+    FOREIGN KEY (id_persona) REFERENCES usuario(id_persona)
+        ON DELETE CASCADE
 );
 
 
@@ -600,10 +621,10 @@ CALL consultar_productos_comercio(1);
 -- =========================
 -- USUARIOS Y PERMISOS DE MYSQL
 -- Se dejan como ejemplo porque cada integrante puede usar una configuracion distinta.
--- No se deben subir contraseñas reales a GitHub.
+-- No se deben subir contraseÃ±as reales a GitHub.
 -- =========================
 
--- CREATE USER 'todo_tala_api'@'localhost' IDENTIFIED BY 'CAMBIAR_CONTRASEÑA';
+-- CREATE USER 'todo_tala_api'@'localhost' IDENTIFIED BY 'CAMBIAR_CONTRASEÃ‘A';
 
 -- GRANT SELECT, INSERT, UPDATE, DELETE
 -- ON baseplataforma.*

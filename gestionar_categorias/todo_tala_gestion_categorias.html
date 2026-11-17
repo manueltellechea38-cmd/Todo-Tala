@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Tala | Categorías</title>
+    <link rel="stylesheet" href="estilos.css?v=1.0.0">
+    <link rel="stylesheet" href="../assets/tema.css?v=1.0.0">
+</head>
+<body>
+    <main class="app-page">
+        <section class="app-card categories-card">
+            <header class="app-header">
+                <section class="app-header__title">
+                    <a class="icon-button back-link" href="../panel_comercio/todo_tala_panel_comercio.html" aria-label="Volver">←</a>
+                    <section>
+                        <h1>Categorías</h1>
+                        <p class="muted">Organizá los productos de tu comercio.</p>
+                    </section>
+                </section>
+                <button id="btn-crear" class="btn btn--primary" type="button">Nueva categoría</button>
+            </header>
+
+            <section class="content categories-content">
+                <section id="panel-nueva" class="new-category-panel" hidden>
+                    <h2 id="titulo-formulario">Nueva categoría</h2>
+                    <form id="form-categoria" class="form-grid">
+                        <label class="form-group form-grid__full">
+                            Nombre *
+                            <input id="nombre-categoria" type="text" maxlength="100" required>
+                        </label>
+                        <label class="form-group form-grid__full">
+                            Descripción
+                            <textarea id="descripcion-categoria" maxlength="200" rows="3"></textarea>
+                        </label>
+                        <p id="error-categoria" class="error-message form-grid__full"></p>
+                        <section class="form-actions form-grid__full">
+                            <button class="btn btn--primary" type="submit" id="btn-guardar">Guardar categoría</button>
+                            <button class="btn btn--secondary" type="button" id="btn-cancelar">Cancelar</button>
+                        </section>
+                    </form>
+                </section>
+
+                <section>
+                    <h2>Categorías de tu comercio</h2>
+                    <p class="muted">Estas categorías las pueden utilizar el jefe y los empleados del comercio.</p>
+                    <div id="lista-propias" class="category-list"></div>
+                </section>
+
+                <section>
+                    <h2>Categorías generales</h2>
+                    <p class="muted">Están disponibles para todos los comercios y no se pueden modificar.</p>
+                    <div id="lista-generales" class="category-list"></div>
+                </section>
+            </section>
+
+            <nav class="commerce-nav" aria-label="Navegación del comercio">
+                <a href="../panel_comercio/todo_tala_panel_comercio.html"><span aria-hidden="true">⌂</span><span>Panel</span></a>
+                <a href="../gestionar_productos/todo_tala_gestion_productos.html"><span aria-hidden="true">▣</span><span>Productos</span></a>
+                <a href="../pedidos_recibidos/todo_tala_pedidos_recibidos.html"><span aria-hidden="true">▤</span><span>Pedidos</span></a>
+                <a href="../gestionar_promociones/todo_tala_gestion_promociones.html"><span aria-hidden="true">🏷</span><span>Promociones</span></a>
+                <a class="active" href="todo_tala_gestion_categorias.html"><span aria-hidden="true">▦</span><span>Categorías</span></a>
+                <a data-solo-jefe href="../gestionar_empleados/todo_tala_gestion_empleados.html"><span aria-hidden="true">♙</span><span>Empleados</span></a>
+            </nav>
+        </section>
+    </main>
+
+    <script src="../assets/config.js?v=1.0.0"></script>
+    <script src="../assets/sesion.js?v=1.0.0"></script>
+    <script src="../assets/app.js?v=1.0.0"></script>
+    <script src="../assets/acceso.js?v=1.0.0"></script>
+    <script src="categorias.js?v=1.0.0"></script>
+    <script src="../assets/tema.js?v=1.0.0"></script>
+</body>
+</html>

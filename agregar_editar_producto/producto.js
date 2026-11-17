@@ -48,7 +48,12 @@ async function cargarCategorias() {
     selector.disabled = true;
 
     try {
-        const respuesta = await fetch(CATEGORIAS_URL);
+        const respuesta = await fetch(CATEGORIAS_URL, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + obtenerToken()
+            }
+        });
         const categorias = await respuesta.json();
 
         if (!respuesta.ok || !Array.isArray(categorias)) {

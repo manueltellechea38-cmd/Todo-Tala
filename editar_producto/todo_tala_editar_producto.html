@@ -14,20 +14,20 @@
             <!-- Encabezado de edición. -->
             <header class="app-header">
                 <section class="app-header__title">
-                    <a class="icon-button back-link" href="../gestionar_productos/todo_tala_gestion_productos.html" aria-label="Volver">←</a>
+                    <a class="icon-button back-link" href="../gestionar_productos/todo_tala_gestion_productos.html" aria-label="Volver">&#8592;</a>
                     <h1>Editar producto</h1>
                 </section>
             </header>
 
             <section class="content">
                 <form id="form-editar" class="form-grid" novalidate>
-                    <label class="image-upload form-grid__full" for="imagen">
-                        Foto del producto
+                    <section class="image-upload form-grid__full">
+                        <strong>Foto del producto</strong>
                         <img id="imagen-actual" class="image-preview" alt="Foto actual del producto" hidden>
-                        <input id="imagen" type="file" accept="image/jpeg,image/png,image/webp">
+                        <input id="imagen" type="file" accept="image/jpeg,image/png,image/webp" hidden>
                         <img id="vista-previa" class="image-preview" alt="Vista previa de la nueva foto" hidden>
-                        <span class="helper">JPG, PNG o WEBP. Máximo 2 MB.</span>
-                    </label>
+                        <span class="helper">JPG, PNG o WEBP. Máximo 2 MB. Podés tomar una foto o elegir una imagen.</span>
+                    </section>
                     <label class="form-group form-grid__full">Nombre *<input id="nombre" type="text"></label>
                     <label class="form-group">Marca *<input id="marca" type="text"></label>
                     <label class="form-group">Categoría *<select id="categoria" required><option value="">Cargando categorías...</option></select></label>
@@ -42,11 +42,11 @@
             </section>
 
             <nav class="commerce-nav" aria-label="Navegación del comercio">
-                <a href="../panel_comercio/todo_tala_panel_comercio.html"><span aria-hidden="true">🏠</span><span>Panel</span></a>
-                <a class="active" href="../gestionar_productos/todo_tala_gestion_productos.html"><span aria-hidden="true">📦</span><span>Productos</span></a>
-                <a href="../pedidos_recibidos/todo_tala_pedidos_recibidos.html"><span aria-hidden="true">🧾</span><span>Pedidos</span></a>
-                <a href="../gestionar_promociones/todo_tala_gestion_promociones.html"><span aria-hidden="true">🏷️</span><span>Promociones</span></a>
-                <a data-solo-jefe href="../gestionar_empleados/todo_tala_gestion_empleados.html"><span aria-hidden="true">👥</span><span>Empleados</span></a>
+                <a href="../panel_comercio/todo_tala_panel_comercio.html"><span aria-hidden="true">&#127968;</span><span>Panel</span></a>
+                <a class="active" href="../gestionar_productos/todo_tala_gestion_productos.html"><span aria-hidden="true">&#128230;</span><span>Productos</span></a>
+                <a href="../pedidos_recibidos/todo_tala_pedidos_recibidos.html"><span aria-hidden="true">&#129534;</span><span>Pedidos</span></a>
+                <a href="../gestionar_promociones/todo_tala_gestion_promociones.html"><span aria-hidden="true">&#127991;&#65039;</span><span>Promociones</span></a>
+                <a data-solo-jefe href="../gestionar_empleados/todo_tala_gestion_empleados.html"><span aria-hidden="true">&#128101;</span><span>Empleados</span></a>
             </nav>
         </section>
     </main>
@@ -56,6 +56,8 @@
 <script src="../assets/app.js?v=1.0.0"></script>
 <script src="../assets/acceso.js?v=1.0.0"></script>
 <script src="editar-producto.js?v=1.0.0"></script>
+<script src="../assets/camara-producto.js?v=1.0.0"></script>
     <script src="../assets/tema.js?v=1.0.0"></script>
 </body>
 </html>
+

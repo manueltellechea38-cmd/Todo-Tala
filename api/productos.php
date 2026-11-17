@@ -242,14 +242,15 @@ if ($metodo === "POST") {
     $consulta = $conexion->prepare(
         "SELECT id_categoria
          FROM categoria
-         WHERE id_categoria = ?"
+         WHERE id_categoria = ?
+           AND (id_comercio IS NULL OR id_comercio = ?)"
     );
 
-    $consulta->execute([$idCategoria]);
+    $consulta->execute([$idCategoria, $idComercio]);
 
     if (!$consulta->fetch()) {
         responder(400, [
-            "error" => "La categoria no existe"
+            "error" => "La categoria no existe o no pertenece a tu comercio"
         ]);
     }
 
@@ -386,14 +387,15 @@ if ($metodo === "PUT") {
     $consulta = $conexion->prepare(
         "SELECT id_categoria
          FROM categoria
-         WHERE id_categoria = ?"
+         WHERE id_categoria = ?
+           AND (id_comercio IS NULL OR id_comercio = ?)"
     );
 
-    $consulta->execute([$idCategoria]);
+    $consulta->execute([$idCategoria, $idComercio]);
 
     if (!$consulta->fetch()) {
         responder(400, [
-            "error" => "La categoria no existe"
+            "error" => "La categoria no existe o no pertenece a tu comercio"
         ]);
     }
 

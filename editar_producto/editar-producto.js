@@ -5,24 +5,50 @@ const inputImagen = document.getElementById("imagen");
 const imagenActual = document.getElementById("imagen-actual");
 const vistaPrevia = document.getElementById("vista-previa");
 
+let productoEditar = null;
+let confirmarEliminacion = false;
+let quitarImagen = false;
+
+const contenedorImagen = inputImagen.closest(".image-upload");
+const botonQuitarImagen = document.createElement("button");
+
+botonQuitarImagen.type = "button";
+botonQuitarImagen.className = "remove-image-button";
+botonQuitarImagen.textContent = "Quitar foto";
+botonQuitarImagen.hidden = true;
+contenedorImagen.appendChild(botonQuitarImagen);
+
 inputImagen.addEventListener("change", function () {
     const archivo = inputImagen.files[0];
     vistaPrevia.hidden = true;
 
-    if (!archivo) return;
-
-    if (!["image/jpeg", "image/png", "image/webp"].includes(archivo.type) || archivo.size > 2 * 1024 * 1024) {
-        inputImagen.value = "";
-        TodoTala.toast("Elegí una imagen JPG, PNG o WEBP de hasta 2 MB");
+    if (!archivo) {
+        imagenActual.hidden = quitarImagen || !productoEditar || !productoEditar.imagen;
+        botonQuitarImagen.hidden = quitarImagen || !productoEditar || !productoEditar.imagen;
         return;
     }
 
+    if (!["image/jpeg", "image/png", "image/webp"].includes(archivo.type) || archivo.size > 2 * 1024 * 1024) {
+        inputImagen.value = "";
+        imagenActual.hidden = !productoEditar || !productoEditar.imagen;
+        botonQuitarImagen.hidden = !productoEditar || !productoEditar.imagen;
+        TodoTala.toast("Seleccioná una imagen JPG, PNG o WEBP de hasta 2 MB");
+        return;
+    }
+
+    quitarImagen = false;
+    botonQuitarImagen.hidden = true;
     vistaPrevia.src = URL.createObjectURL(archivo);
     vistaPrevia.hidden = false;
 });
 
-let productoEditar = null;
-let confirmarEliminacion = false;
+botonQuitarImagen.addEventListener("click", function () {
+    quitarImagen = true;
+    inputImagen.value = "";
+    imagenActual.hidden = true;
+    vistaPrevia.hidden = true;
+    botonQuitarImagen.hidden = true;
+});
 
 /*
 Carga el producto desde la API.
@@ -34,7 +60,12 @@ async function cargarCategorias() {
     selector.disabled = true;
 
     try {
-        const respuesta = await fetch(CATEGORIAS_URL);
+        const respuesta = await fetch(CATEGORIAS_URL, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + obtenerToken()
+            }
+        });
         const categorias = await respuesta.json();
 
         if (!respuesta.ok || !Array.isArray(categorias)) {
@@ -101,6 +132,7 @@ async function cargarProducto() {
         if (productoEditar.imagen) {
             imagenActual.src = UPLOADS_URL + encodeURIComponent(productoEditar.imagen);
             imagenActual.hidden = false;
+            botonQuitarImagen.hidden = false;
         }
 
         document.getElementById("nombre").value =
@@ -282,6 +314,25 @@ document
 
                     if (!respuestaImagen.ok) {
                         TodoTala.toast(resultadoImagen.error || "No se pudo reemplazar la foto");
+                        return;
+                    }
+                }
+                else if (quitarImagen) {
+                    const respuestaImagen = await fetch(
+                        API_BASE + "/imagen.php?id=" +
+                        encodeURIComponent(idEditar) + "&quitar=1",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Authorization": "Bearer " + obtenerToken()
+                            }
+                        }
+                    );
+
+                    const resultadoImagen = await respuestaImagen.json();
+
+                    if (!respuestaImagen.ok) {
+                        TodoTala.toast(resultadoImagen.error || "No se pudo quitar la foto");
                         return;
                     }
                 }

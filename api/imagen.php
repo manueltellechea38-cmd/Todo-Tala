@@ -35,6 +35,18 @@ if (!$consulta->fetch(PDO::FETCH_ASSOC)) {
     responder(404, ["error" => "Producto no encontrado en tu comercio"]);
 }
 
+if (isset($_GET["quitar"]) && $_GET["quitar"] === "1") {
+    try {
+        $consulta = $conexion->prepare(
+            "UPDATE producto SET imagen = NULL WHERE id_producto = ?"
+        );
+        $consulta->execute([$id]);
+    } catch (Throwable $error) {
+        responder(500, ["error" => "No se pudo quitar la foto"]);
+    }
+
+    responder(200, ["mensaje" => "Foto quitada correctamente"]);
+}
 if (!isset($_FILES["imagen"])) {
     responder(400, [
         "error" => "No se recibio la imagen. Revisa tambien los limites de PHP"

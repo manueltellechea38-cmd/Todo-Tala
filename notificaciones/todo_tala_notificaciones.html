@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Tala | Notificaciones</title>
+    <link rel="stylesheet" href="estilos.css?v=1.0.0">
+    <link rel="stylesheet" href="../assets/tema.css?v=1.0.0">
+</head>
+<body>
+    <main class="app-page">
+        <section class="app-card notifications-card">
+            <header class="app-header">
+                <section>
+                    <h1>Notificaciones</h1>
+                    <p class="muted">Revisá tus avisos y administrá tus preferencias.</p>
+                </section>
+                <span id="contador-no-leidas" class="notification-count">0 sin leer</span>
+            </header>
+
+            <section class="content">
+                <section class="notifications-toolbar">
+                    <h2>Actividad reciente</h2>
+                    <button id="btn-leer-todas" class="btn btn--secondary" type="button">
+                        Marcar todas como leídas
+                    </button>
+                </section>
+
+                <p id="estado-notificaciones" class="muted" role="status">
+                    Cargando notificaciones...
+                </p>
+
+                <section id="lista-notificaciones" class="notification-list"
+                    aria-live="polite"></section>
+
+                <section class="preferences-section">
+                    <h2>Preferencias</h2>
+                    <p class="muted">
+                        Elegí qué avisos querés recibir en esta cuenta.
+                    </p>
+
+                    <label class="preference-option">
+                        <span>
+                            <strong>Pedidos nuevos</strong>
+                            <small>Cuando un cliente realiza un pedido en tu comercio.</small>
+                        </span>
+                        <input type="checkbox" id="pref-pedidos-nuevos">
+                    </label>
+
+                    <label class="preference-option">
+                        <span>
+                            <strong>Pedidos cancelados</strong>
+                            <small>Cuando un pedido es cancelado o rechazado.</small>
+                        </span>
+                        <input type="checkbox" id="pref-pedidos-cancelados">
+                    </label>
+
+                    <label class="preference-option">
+                        <span>
+                            <strong>Cambios de estado</strong>
+                            <small>Cuando un pedido cambia de estado.</small>
+                        </span>
+                        <input type="checkbox" id="pref-estados-pedido">
+                    </label>
+
+                    <p id="estado-preferencias" class="muted" role="status"></p>
+                </section>
+            </section>
+
+            <nav id="notificaciones-nav" class="page-navigation"
+                aria-label="Navegación principal"></nav>
+        </section>
+    </main>
+
+    <script src="../assets/config.js?v=1.0.0"></script>
+    <script src="../assets/sesion.js?v=1.0.0"></script>
+    <script src="../assets/app.js?v=1.0.0"></script>
+    <script src="../assets/acceso.js?v=1.0.0"></script>
+    <script src="notificaciones.js?v=1.0.0"></script>
+    <script src="../assets/tema.js?v=1.0.0"></script>
+</body>
+</html>

@@ -51,6 +51,29 @@ try {
          SELECT id_persona FROM usuario"
     );
 
+    agregarColumnaSiFalta(
+        $conexion,
+        "notificacion",
+        "tipo",
+        "tipo VARCHAR(40) NOT NULL DEFAULT 'general' AFTER mensaje"
+    );
+
+    $conexion->exec(
+        "CREATE TABLE IF NOT EXISTS preferencia_notificacion (
+            id_persona INT PRIMARY KEY,
+            pedidos_nuevos BOOLEAN NOT NULL DEFAULT TRUE,
+            pedidos_cancelados BOOLEAN NOT NULL DEFAULT TRUE,
+            estados_pedido BOOLEAN NOT NULL DEFAULT TRUE,
+            FOREIGN KEY (id_persona)
+                REFERENCES usuario(id_persona)
+                ON DELETE CASCADE
+        )"
+    );
+
+    $conexion->exec(
+        "INSERT IGNORE INTO preferencia_notificacion (id_persona)
+         SELECT id_persona FROM usuario"
+    );
     echo "Estructura de MySQL actualizada correctamente.\n";
 } catch (PDOException $e) {
     fwrite(STDERR, "No se pudo actualizar la base de datos.\n");

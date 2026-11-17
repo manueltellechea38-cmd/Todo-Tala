@@ -33,9 +33,9 @@ MySQL
 
 Los datos principales del sistema se almacenan en MySQL.
 
-localStorage se utiliza solamente para:
-- mantener la sesión del navegador;
-- recordar el modo claro u oscuro.
+sessionStorage se utiliza para mantener la sesión de cada pestaña del navegador.
+
+localStorage se utiliza solamente para recordar el modo claro u oscuro.
 
 ## Roles
 

@@ -1,1 +1,14 @@
 api/conexion.php
+
+# Imagenes cargadas localmente
+api/uploads/*
+
+# Respaldos
+*.backup-*
+*.respaldo-*
+*.respaldo
+
+# Scripts temporales de revision y migracion
+ejecutar-migracion.php
+revisar-estructura.php
+revisar-migracion.php

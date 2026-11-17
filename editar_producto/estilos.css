@@ -54,3 +54,23 @@
     border: 1px solid var(--color-border);
     border-radius: 10px;
 }
+
+.image-preview[hidden] {
+    display: none !important;
+}
+
+.remove-image-button {
+    width: fit-content;
+    min-height: 40px;
+    padding: 9px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 9px;
+    background: var(--superficie-2);
+    color: var(--color-texto);
+    font: inherit;
+    cursor: pointer;
+}
+
+.remove-image-button:hover {
+    border-color: var(--color-primary);
+}

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!-- Todo Tala v1.0.0 -->
 <html lang="es">
 <head>
@@ -14,7 +14,7 @@
             <!-- Encabezado del alta de producto. -->
             <header class="app-header">
                 <section class="app-header__title">
-                    <a class="icon-button back-link" href="../gestionar_productos/todo_tala_gestion_productos.html" aria-label="Volver">←</a>
+                    <a class="icon-button back-link" href="../gestionar_productos/todo_tala_gestion_productos.html" aria-label="Volver">&#8592;</a>
                     <h1>Nuevo producto</h1>
                 </section>
             </header>
@@ -22,11 +22,12 @@
             <section class="content">
                 <form id="form-producto" class="form-grid" novalidate>
                     <!-- Imagen opcional del producto. -->
-                    <label class="image-upload form-grid__full" for="imagen">
-                        Imagen del producto
-                        <input id="imagen" type="file" accept="image/*">
+                    <section class="image-upload form-grid__full">
+                        <strong>Imagen del producto</strong>
+                        <input id="imagen" type="file" accept="image/jpeg,image/png,image/webp" hidden>
                         <img id="vista-previa" class="image-preview" alt="Vista previa del producto">
-                    </label>
+                        <span class="helper">Podés tomar una foto o elegirla desde tus archivos.</span>
+                    </section>
 
                     <label class="form-group form-grid__full">Nombre *<input id="nombre" type="text"></label>
                     <label class="form-group">Marca *<input id="marca" type="text"></label>
@@ -39,7 +40,7 @@
                 </form>
             </section>
 
-            <nav class="commerce-nav" aria-label="Navegación del comercio">
+                        <nav class="commerce-nav" aria-label="Navegación del comercio">
                 <a href="../panel_comercio/todo_tala_panel_comercio.html"><span aria-hidden="true">🏠</span><span>Panel</span></a>
                 <a class="active" href="../gestionar_productos/todo_tala_gestion_productos.html"><span aria-hidden="true">📦</span><span>Productos</span></a>
                 <a href="../pedidos_recibidos/todo_tala_pedidos_recibidos.html"><span aria-hidden="true">🧾</span><span>Pedidos</span></a>
@@ -54,6 +55,9 @@
 <script src="../assets/app.js?v=1.0.0"></script>
 <script src="../assets/acceso.js?v=1.0.0"></script>
 <script src="producto.js?v=1.0.0"></script>
+<script src="../assets/camara-producto.js?v=1.0.0"></script>
     <script src="../assets/tema.js?v=1.0.0"></script>
 </body>
 </html>
+
+
